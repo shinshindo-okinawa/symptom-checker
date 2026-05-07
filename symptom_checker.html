@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>お困りの症状 絞り込み診断</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;background:#f2f4f6;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+.top-bar{width:100%;max-width:480px;background:#06C755;border-radius:16px 16px 0 0;padding:14px 18px;display:flex;align-items:center;gap:10px}
+.top-icon{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:20px}
+.top-title{color:white;font-size:15px;font-weight:700}
+.top-sub{color:rgba(255,255,255,0.85);font-size:11px;margin-top:1px}
+.prog-wrap{width:100%;max-width:480px;background:#d4edda;height:5px}
+.prog-fill{height:100%;background:#06C755;transition:width 0.5s ease}
+.card{width:100%;max-width:480px;background:#fff;border-radius:0 0 16px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);overflow:hidden}
+.step-hdr{padding:18px 20px 14px;border-bottom:1px solid #f0f0f0}
+.step-badge{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:3px 10px;font-size:11px;color:#16a34a;font-weight:600;margin-bottom:10px}
+.step-q{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1.5}
+.step-sub{font-size:12px;color:#888;margin-top:5px}
+.choices{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all 0.15s;text-align:left;width:100%}
+.choice:hover{border-color:#06C755;background:#f0fdf4}
+.choice-icon-box{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.choice-label{font-size:13.5px;font-weight:600;color:#1a1a1a;line-height:1.4}
+.choice-desc{font-size:11.5px;color:#888;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 16px}
+.choice-sm{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 8px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all 0.15s;gap:7px;width:100%}
+.choice-sm:hover{border-color:#06C755;background:#f0fdf4}
+.choice-sm .choice-icon-box{width:32px;height:32px;font-size:15px}
+.choice-sm .choice-label{font-size:12px}
+.result-wrap{padding:16px 16px 20px}
+.urgency-banner{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;border-radius:12px;margin-bottom:16px}
+.urgency-banner.red{background:#fef2f2;border:1.5px solid #fca5a5}
+.urgency-banner.orange{background:#fff7ed;border:1.5px solid #fdba74}
+.urgency-banner.green{background:#f0fdf4;border:1.5px solid #86efac}
+.urgency-icon{font-size:26px;flex-shrink:0;line-height:1}
+.urgency-title{font-size:14px;font-weight:700}
+.urgency-title.red{color:#b91c1c}
+.urgency-title.orange{color:#c2410c}
+.urgency-title.green{color:#15803d}
+.urgency-msg{font-size:12px;margin-top:4px;line-height:1.6}
+.urgency-msg.red{color:#7f1d1d}
+.urgency-msg.orange{color:#7c2d12}
+.urgency-msg.green{color:#14532d}
+.section-label{font-size:10px;font-weight:700;color:#aaa;letter-spacing:0.08em;margin:14px 0 8px;text-transform:uppercase}
+.dcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.dcard-hdr{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer}
+.dcard-hdr:hover{background:#fafafa}
+.dcard-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.dcard-name{font-size:13px;font-weight:700;color:#1a1a1a}
+.dcard-cat{font-size:10.5px;color:#888;margin-top:1px}
+.badge{font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;margin-left:auto}
+.badge-red{background:#fef2f2;color:#b91c1c}
+.badge-orange{background:#fff7ed;color:#c2410c}
+.badge-green{background:#f0fdf4;color:#15803d}
+.dcard-body{display:none;border-top:1px solid #f0f0f0;padding:12px 13px;background:#fafafa}
+.dcard-body.open{display:block}
+.abar{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:9px;margin-bottom:10px}
+.abar.red{background:#fef2f2}.abar.orange{background:#fff7ed}.abar.green{background:#f0fdf4}
+.abar-txt{font-size:11.5px;line-height:1.5}
+.abar-txt.red{color:#7f1d1d}.abar-txt.orange{color:#7c2d12}.abar-txt.green{color:#14532d}
+.dsec{margin-bottom:9px}
+.dlbl{font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.05em;margin-bottom:4px;text-transform:uppercase}
+.dtxt{font-size:12px;color:#333;line-height:1.6}
+.dtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.dtag{font-size:11px;padding:3px 9px;border-radius:20px;background:#fff;border:1px solid #e5e7eb;color:#555}
+.book-timing{background:#f0fdf4;border-radius:8px;padding:9px 11px;font-size:12px;color:#15803d;font-weight:600}
+.book-opt{display:flex;align-items:center;gap:10px;padding:11px 13px;background:#f9fafb;border-radius:11px;margin-bottom:7px;border:1px solid #e5e7eb;cursor:pointer;transition:background 0.12s}
+.book-opt:hover{background:#f0f0f0}
+.book-opt-ic{font-size:18px}
+.book-opt-title{font-size:13px;font-weight:700;color:#1a1a1a}
+.book-opt-sub{font-size:10.5px;color:#888;margin-top:1px}
+.book-opt-urgent{border-color:#fca5a5;background:#fef2f2}
+.book-opt-urgent .book-opt-title{color:#b91c1c}
+.restart-wrap{padding:14px 16px 20px;border-top:1px solid #f0f0f0;margin-top:6px}
+.restart-btn{width:100%;padding:11px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;color:#555;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.restart-btn:hover{background:#f5f5f5}
+.trail{padding:8px 16px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid #f0f0f0;background:#fafafa;min-height:36px;align-items:center}
+.trail-item{font-size:11px;padding:3px 9px;border-radius:20px;background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd}
+.trail-arr{font-size:11px;color:#ccc}
+.prog-info{text-align:right;font-size:11px;color:#bbb;padding:5px 20px 0}
+.intro{padding:20px;text-align:center}
+.intro-icon{font-size:48px;margin-bottom:12px}
+.intro-title{font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.4}
+.intro-desc{font-size:13px;color:#666;line-height:1.7;margin-bottom:18px}
+.intro-notes{background:#f0fdf4;border-radius:10px;padding:12px 14px;text-align:left;margin-bottom:20px}
+.intro-note{font-size:12px;color:#15803d;display:flex;align-items:flex-start;gap:6px;margin-bottom:6px;line-height:1.5}
+.intro-note:last-child{margin-bottom:0}
+.start-btn{width:100%;padding:14px;border-radius:14px;border:none;background:#06C755;color:white;font-size:15px;font-weight:700;cursor:pointer}
+.start-btn:hover{background:#05b34b}
+.emergency-box{background:#fef2f2;border:2px solid #fca5a5;border-radius:14px;padding:18px;margin-bottom:16px;text-align:center}
+.emergency-icon{font-size:40px;margin-bottom:10px}
+.emergency-title{font-size:16px;font-weight:700;color:#b91c1c;margin-bottom:8px}
+.emergency-msg{font-size:13px;color:#7f1d1d;line-height:1.6}
+.emergency-opt{display:flex;align-items:center;gap:10px;padding:13px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:10px}
+.emergency-opt-ic{font-size:22px}
+.emergency-opt-title{font-size:14px;font-weight:700;color:#1a1a1a}
+.emergency-opt-sub{font-size:12px;color:#888;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-icon">&#128269;</div>
+  <div>
+    <div class="top-title">お困りの症状 絞り込み診断</div>
+    <div class="top-sub">やまもと整骨院</div>
+  </div>
+</div>
+<div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+<div class="card">
+  <div class="trail" id="trail"></div>
+  <div class="prog-info" id="prog-info"></div>
+  <div id="main"></div>
+</div>
+
+<script>
+var mainEl = document.getElementById('main');
+var progEl = document.getElementById('prog');
+var trailEl = document.getElementById('trail');
+var progInfo = document.getElementById('prog-info');
+var breadcrumb = [];
+
+/* ===== DISEASE DATA ===== */
+var DISEASES = {
+  gykkuri:{
+    name:'急性腰椎捻挫（ぎっくり腰）',cat:'外傷・急性症状',icon:'&#9889;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1〜3日以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'強い痛みが続く・足のしびれがあれば早急に。動けない場合は往診も対応可能です。',
+    summary:'突然の強い腰痛。椎間関節・筋膜・靭帯の急性炎症が主な原因です。',
+    sx:['突然の激しい腰痛','体幹の動作制限','前屈困難','起き上がり困難'],
+    cause:'重いものを持ち上げる・くしゃみ・不意な動作',
+    tx:'アイシング・安静 → 早期施術で回復を大幅に早められます',
+    book_msg:'&#128197; できれば今日〜明日中のご来院を'
+  },
+  hernia_lumbar:{
+    name:'腰椎椎間板ヘルニア',cat:'椎間板疾患',icon:'&#129460;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'早急な受診が必要',
+    uai:'&#128680;',umsg:'足のしびれ・排尿排便の変化を伴う場合は今すぐ受診してください。馬尾症候群の可能性があります。',
+    summary:'椎間板の髄核が飛び出し神経根を圧迫。腰痛＋足へのしびれが典型。',
+    sx:['腰痛','片側または両側の足・すねのしびれ','前屈で悪化','せき・くしゃみで悪化'],
+    cause:'椎間板の変性・姿勢不良・過負荷',
+    tx:'牽引・神経緩和施術・状態により整形外科と連携',
+    book_msg:'&#128197; 本日または翌営業日のご来院を強くお勧めします'
+  },
+  stenosis:{
+    name:'腰部脊柱管狭窄症',cat:'脊椎変性疾患',icon:'&#128694;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'早めの精査が必要',
+    uai:'&#128680;',umsg:'歩行困難が進行している場合、整形外科との連携が必要になる場合があります。',
+    summary:'脊柱管が狭まり神経が圧迫される。歩行で悪化・休憩で改善する間欠性跛行が特徴。',
+    sx:['歩行で下肢痛・しびれが出る','座ると楽になる','両足のしびれ','腰痛は軽いこともある'],
+    cause:'加齢による骨・靭帯の変性',
+    tx:'姿勢改善・筋力強化・整形外科連携',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  muscle_lumbar:{
+    name:'腰部筋筋膜症（慢性腰痛）',cat:'筋肉・筋膜疾患',icon:'&#128543;',ibg:'#fafafa',
+    urgency:'green',ulabel:'1週間以内の受診でOK',
+    uai:'&#9989;',umsg:'緊急性は高くありませんが、放置すると慢性化します。生活習慣の改善と施術で多くは改善します。',
+    summary:'筋肉・筋膜の慢性的な緊張・炎症。デスクワークや姿勢不良が主な要因。',
+    sx:['じわじわした腰の鈍痛','長時間座位で悪化','朝の腰の重さ','動き始めに痛む'],
+    cause:'長時間の同一姿勢・運動不足・ストレス',
+    tx:'筋膜リリース・姿勢改善指導・インナーマッスルトレーニング',
+    book_msg:'&#128197; お早めのご来院で慢性化を防ぎましょう'
+  },
+  piriformis:{
+    name:'梨状筋症候群',cat:'神経絞扼',icon:'&#128308;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'ヘルニアとの鑑別が重要です。適切な施術で多くの場合は改善します。',
+    summary:'梨状筋が坐骨神経を圧迫し、お尻〜足にしびれや痛みが放散する。',
+    sx:['お尻の深部痛','太もも・すねへの放散痛','長時間座位で悪化','股関節の動作制限'],
+    cause:'筋肉の過緊張・長時間の座位・外傷',
+    tx:'梨状筋ストレッチ・トリガーポイント施術',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  straight_neck:{
+    name:'ストレートネック（スマホ首）',cat:'姿勢異常',icon:'&#128241;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1〜2週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'放置すると頸椎症・椎間板ヘルニアへ進行する可能性があります。早めのケアが重要です。',
+    summary:'頸椎の正常な前弯が失われた状態。スマホ・PCの長時間使用が主因。',
+    sx:['首・肩のこり','後頭部の重さ・頭痛','目の疲れ','長時間のスクリーン使用で悪化'],
+    cause:'スマホ・PC長時間使用・前傾姿勢',
+    tx:'頸部ストレッチ・姿勢矯正・スクリーン環境改善指導',
+    book_msg:'&#128197; 1〜2週間以内のご来院をお勧めします'
+  },
+  trapezius:{
+    name:'僧帽筋症候群（肩こり）',cat:'筋肉疾患',icon:'&#128170;',ibg:'#fafafa',
+    urgency:'green',ulabel:'1週間以内の受診でOK',
+    uai:'&#9989;',umsg:'緊急性は高くありませんが、頭痛・吐き気を伴う場合は早めに受診してください。',
+    summary:'首・肩まわりの筋肉が慢性的に緊張した状態。最も多い筋骨格症状の一つ。',
+    sx:['肩・首のこり','後頸部の張り','頭重感','目の疲れを伴うことも'],
+    cause:'ストレス・長時間の同一姿勢・冷え・運動不足',
+    tx:'筋膜リリース・温熱療法・ストレッチ指導',
+    book_msg:'&#128197; お気軽にご来院ください'
+  },
+  cervical_hernia:{
+    name:'頸椎椎間板ヘルニア',cat:'椎間板疾患',icon:'&#9889;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'早急な受診が必要',
+    uai:'&#128680;',umsg:'両側のしびれ・歩行障害・排尿障害を伴う場合は脊髄症の可能性。今すぐ受診を。',
+    summary:'頸椎の椎間板が神経根を圧迫。片側の手・腕へのしびれが典型。',
+    sx:['片側の手・腕・指のしびれ','頸部痛','首の動作制限','指先の感覚異常'],
+    cause:'椎間板変性・姿勢不良・外傷',
+    tx:'牽引・神経緩和施術・整形外科連携',
+    book_msg:'&#128197; 本日または翌営業日のご来院を強くお勧めします'
+  },
+  toc:{
+    name:'胸郭出口症候群',cat:'神経絞扼',icon:'&#9995;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'長期化すると筋萎縮が生じる場合があります。早めの施術が重要です。',
+    summary:'鎖骨下で腕神経叢が絞扼される。腕を挙げると症状が悪化することが多い。',
+    sx:['腕・手のしびれ','腕を挙げると悪化','肩の痛み','握力低下'],
+    cause:'なで肩・筋力不足・反復動作',
+    tx:'肩甲帯ストレッチ・姿勢改善・筋力強化',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  wry_neck:{
+    name:'急性頸部痛（寝違え）',cat:'急性症状',icon:'&#127769;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'早めの受診を推奨（1〜2日以内）',
+    uai:'&#9888;&#65039;',umsg:'早期施術で回復が大幅に早まります。放置すると数週間長引くことがあります。',
+    summary:'就寝中の不良姿勢や急激な動作で頸部の筋肉・関節に炎症が起きる。',
+    sx:['首の強い痛み','首が動かせない','一側に傾く','押すと痛む'],
+    cause:'不良睡眠姿勢・急激な頸部回旋',
+    tx:'頸部モビリゼーション・温熱・鍼灸',
+    book_msg:'&#128197; 今日〜明日のご来院をお勧めします'
+  },
+  pfp:{
+    name:'膝蓋大腿関節症（PFP症候群）',cat:'関節疾患',icon:'&#129461;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1〜2週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'放置すると慢性化しやすいです。早めの施術と筋力トレーニングで多くは改善します。',
+    summary:'お皿（膝蓋骨）と大腿骨の間の軟骨が障害される。若い女性・ランナーに多い。',
+    sx:['膝前面の鈍痛','階段下りで悪化','長時間座位後の痛み','しゃがむと痛む'],
+    cause:'筋力不均衡・オーバーユース・扁平足',
+    tx:'大腿四頭筋強化・テーピング・インソール',
+    book_msg:'&#128197; 1〜2週間以内のご来院をお勧めします'
+  },
+  jumper_knee:{
+    name:'膝蓋腱炎（ジャンパー膝）',cat:'腱疾患',icon:'&#9889;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'無理に動かし続けると腱断裂のリスクがあります。運動量の調整と施術が重要です。',
+    summary:'膝蓋腱に繰り返しのストレスで炎症が起きる。スポーツ選手に多い。',
+    sx:['膝蓋骨直下の押すと痛む','階段上りで悪化','ジャンプ・着地で痛む','運動後に悪化'],
+    cause:'スポーツの過負荷・急激な運動量の増加',
+    tx:'超音波治療・ストレッチ・運動制限指導',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  oa_knee:{
+    name:'変形性膝関節症',cat:'変性疾患',icon:'&#129460;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'早めの精査が必要',
+    uai:'&#128680;',umsg:'進行性の疾患です。早期介入で進行を遅らせられます。整形外科との連携が必要な場合があります。',
+    summary:'膝の軟骨が摩耗・変性する疾患。中高年に多く、放置すると進行する。',
+    sx:['動き始めの痛み','階段昇降痛','膝の腫れ','O脚の悪化','可動域制限'],
+    cause:'加齢・肥満・O脚・過去の外傷',
+    tx:'筋力強化・体重管理指導・関節モビリゼーション・整形外科連携',
+    book_msg:'&#128197; なるべく早いご来院をお勧めします'
+  },
+  mcl:{
+    name:'内側側副靭帯損傷',cat:'靭帯外傷',icon:'&#9889;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'できるだけ早急な受診が必要',
+    uai:'&#128680;',umsg:'半月板・前十字靭帯の合併損傷の可能性があります。II度以上は固定が必要です。',
+    summary:'膝内側の靭帯の伸張・断裂。スポーツでの外反ストレスで多く発生。',
+    sx:['膝内側の強い圧痛','腫脹・熱感','膝の不安定感','内外転動作での痛み'],
+    cause:'外反強制・スポーツ外傷・接触プレー',
+    tx:'RICE処置・固定・段階的リハビリ',
+    book_msg:'&#128197; 本日または翌営業日のご来院を強くお勧めします'
+  },
+  goose_foot:{
+    name:'鵞足炎',cat:'腱・滑液包炎',icon:'&#127939;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'放置すると慢性化します。原因（姿勢・筋力不均衡）の改善が重要です。',
+    summary:'膝内側やや下方の鵞足部に炎症。ランナーや変形性膝関節症に合併することが多い。',
+    sx:['膝内側下方の押すと痛む','階段昇降で悪化','慢性化しやすい','ランニング後に悪化'],
+    cause:'ランニング・過負荷・O脚・変形性膝関節症',
+    tx:'アイシング・ストレッチ・超音波治療',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  plantar:{
+    name:'足底筋膜炎',cat:'腱・筋膜疾患',icon:'&#128099;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'慢性化すると骨棘が形成されることもあります。早期施術とインソールで多くは改善します。',
+    summary:'足底の筋膜に微細断裂・炎症が生じる。朝一歩目の踵痛が典型的。',
+    sx:['起床後一歩目の踵痛','長時間立位後の痛み','裸足で歩くと悪化','踵内側の圧痛'],
+    cause:'扁平足・体重増加・長時間の立位・オーバートレーニング',
+    tx:'インソール・ストレッチ・超音波・テーピング',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  },
+  ankle_sprain:{
+    name:'足関節外側靭帯損傷（捻挫）',cat:'靭帯外傷',icon:'&#127744;',ibg:'#fef2f2',
+    urgency:'red',ulabel:'できるだけ早急な受診が必要',
+    uai:'&#128680;',umsg:'骨折との鑑別が必要です。靭帯断裂の場合は固定・リハビリが不可欠。不安定性を残すと再受傷リスクが高まります。',
+    summary:'足首の外側靭帯の伸張・断裂。最も多い足関節外傷。',
+    sx:['外くるぶし周囲の腫脹・痛み','体重をかけると痛い','皮下出血','足首の不安定感'],
+    cause:'内反強制・スポーツ外傷・段差での踏み外し',
+    tx:'RICE処置 → 固定 → 段階的リハビリ → バランストレーニング',
+    book_msg:'&#128197; 本日または翌営業日のご来院を強くお勧めします'
+  },
+  achilles:{
+    name:'アキレス腱炎',cat:'腱疾患',icon:'&#9889;',ibg:'#fff7ed',
+    urgency:'orange',ulabel:'1週間以内の受診を推奨',
+    uai:'&#9888;&#65039;',umsg:'腱断裂予防のために無理な運動は禁物です。超音波検査での評価が推奨されます。',
+    summary:'アキレス腱に炎症が生じた状態。踵上方の痛みが特徴。',
+    sx:['踵の上部の痛み','起床時・運動開始時に悪化','ウォームアップで一時的に楽になる','圧痛'],
+    cause:'ランニング過負荷・急激な運動増加・不適切な靴',
+    tx:'負荷軽減・超音波治療・ヒールリフト',
+    book_msg:'&#128197; 1週間以内のご来院をお勧めします'
+  }
+};
+
+/* ===== FLOW DEFINITION ===== */
+/* choices: {icon, ibg, label, desc, next, diseases} */
+/* diseases = array of DISEASES keys shown at result */
+var FLOW = {
+  start:{
+    q:'どの部位がお辛いですか？',
+    sub:'最も気になる部位を選んでください',
+    badge:'STEP 1 &#47; 部位選択',
+    p:10, grid:false,
+    choices:[
+      {icon:'&#128308;',ibg:'#fff0f0',label:'腰・お尻',desc:'ぎっくり腰・慢性的な腰痛など',next:'low_type',diseases:[]},
+      {icon:'&#128309;',ibg:'#f0f4ff',label:'首・肩',desc:'肩こり・首の痛み・しびれなど',next:'neck_type',diseases:[]},
+      {icon:'&#128993;',ibg:'#fffbf0',label:'膝・太もも',desc:'膝の痛み・腫れ・不安定感など',next:'knee_type',diseases:[]},
+      {icon:'&#128994;',ibg:'#f0fff4',label:'足首・足の裏',desc:'捻挫・かかとの痛みなど',next:'ankle_type',diseases:[]}
+    ]
+  },
+  low_type:{
+    q:'腰の痛みはどのタイプですか？',sub:'最もあてはまるものを選んでください',
+    badge:'STEP 2 &#47; 症状タイプ',p:25,grid:false,
+    choices:[
+      {icon:'&#9889;',ibg:'#fff7ed',label:'急に強く痛み始めた',desc:'ぎっくり腰・急性の腰痛',next:'low_acute',diseases:[]},
+      {icon:'&#128543;',ibg:'#fafafa',label:'じわじわ長く続いている',desc:'慢性的な腰の鈍痛',next:'low_chronic',diseases:[]},
+      {icon:'&#129461;',ibg:'#fef2f2',label:'足・すねにしびれがある',desc:'神経症状が疑われる',next:'low_nerve_check',diseases:[]},
+      {icon:'&#128694;',ibg:'#fef2f2',label:'歩くと辛くなる',desc:'歩行で悪化・休憩で改善',next:'low_walk',diseases:[]}
+    ]
+  },
+  low_acute:{
+    q:'いつから痛みますか？',sub:'',
+    badge:'STEP 3 &#47; 発症時期',p:42,grid:true,
+    choices:[
+      {icon:'&#128197;',ibg:'#fff7ed',label:'今日〜3日以内',desc:'',next:'result',diseases:['gykkuri','hernia_lumbar']},
+      {icon:'&#128198;',ibg:'#fafafa',label:'4日〜1週間',desc:'',next:'result',diseases:['gykkuri','hernia_lumbar','muscle_lumbar']},
+      {icon:'&#128202;',ibg:'#fafafa',label:'2週間以上',desc:'',next:'result',diseases:['hernia_lumbar','muscle_lumbar','piriformis']}
+    ]
+  },
+  low_chronic:{
+    q:'慢性腰痛についてもう少し教えてください',sub:'最もあてはまるものを選んでください',
+    badge:'STEP 3 &#47; 詳細',p:42,grid:false,
+    choices:[
+      {icon:'&#129681;',ibg:'#fafafa',label:'座っていると悪化する',desc:'デスクワーク・長時間座位',next:'result',diseases:['muscle_lumbar','hernia_lumbar']},
+      {icon:'&#127761;',ibg:'#fafafa',label:'朝起き上がるのがつらい',desc:'朝の腰の硬さ',next:'result',diseases:['muscle_lumbar','hernia_lumbar']},
+      {icon:'&#129529;',ibg:'#fafafa',label:'前かがみが特につらい',desc:'前屈で悪化',next:'result',diseases:['hernia_lumbar','muscle_lumbar']},
+      {icon:'&#127769;',ibg:'#fef2f2',label:'夜間も痛む',desc:'安静時・夜間の痛み',next:'result',diseases:['hernia_lumbar','muscle_lumbar']}
+    ]
+  },
+  low_nerve_check:{
+    q:'緊急サインの確認です',sub:'下記の症状はありますか？（重要な確認です）',
+    badge:'STEP 3 &#47; 緊急確認',p:45,grid:false,
+    choices:[
+      {icon:'&#128680;',ibg:'#fef2f2',label:'排尿・排便に変化がある',desc:'失禁・尿閉など',next:'emergency_lumbar',diseases:[]},
+      {icon:'&#9989;',ibg:'#f0fdf4',label:'そのような症状はない',desc:'しびれのみ',next:'result',diseases:['hernia_lumbar','piriformis','stenosis']}
+    ]
+  },
+  low_walk:{
+    q:'歩行で悪化する腰痛について',sub:'',
+    badge:'STEP 3 &#47; 詳細',p:45,grid:true,
+    choices:[
+      {icon:'&#9203;',ibg:'#fef2f2',label:'5分以内で休憩が必要',desc:'',next:'result',diseases:['stenosis','hernia_lumbar']},
+      {icon:'&#128694;',ibg:'#fff7ed',label:'5〜15分で辛くなる',desc:'',next:'result',diseases:['stenosis','piriformis']},
+      {icon:'&#127939;',ibg:'#fafafa',label:'15分以上歩ける',desc:'',next:'result',diseases:['muscle_lumbar','piriformis']}
+    ]
+  },
+  neck_type:{
+    q:'首・肩の症状はどのタイプですか？',sub:'',
+    badge:'STEP 2 &#47; 症状タイプ',p:25,grid:false,
+    choices:[
+      {icon:'&#128187;',ibg:'#fafafa',label:'肩こり・首のこり',desc:'慢性的な緊張感',next:'neck_stiff_detail',diseases:[]},
+      {icon:'&#127769;',ibg:'#fff7ed',label:'首が急に動かせなくなった',desc:'寝違え系の急性症状',next:'result',diseases:['wry_neck']},
+      {icon:'&#9995;',ibg:'#fef2f2',label:'手・腕・指がしびれる',desc:'神経症状が疑われる',next:'neck_numb_side',diseases:[]},
+      {icon:'&#129308;',ibg:'#fff7ed',label:'頭痛を伴う',desc:'頭痛と首の痛みが連動',next:'neck_headache',diseases:[]}
+    ]
+  },
+  neck_stiff_detail:{
+    q:'スクリーン（スマホ・PC）の使用時間は？',sub:'1日あたりのおよその使用時間',
+    badge:'STEP 3 &#47; 生活習慣',p:42,grid:true,
+    choices:[
+      {icon:'&#128241;',ibg:'#fef2f2',label:'6時間以上',desc:'',next:'result',diseases:['straight_neck','trapezius']},
+      {icon:'&#128187;',ibg:'#fff7ed',label:'3〜6時間',desc:'',next:'result',diseases:['trapezius','straight_neck']},
+      {icon:'&#9989;',ibg:'#fafafa',label:'3時間未満',desc:'',next:'result',diseases:['trapezius']}
+    ]
+  },
+  neck_numb_side:{
+    q:'しびれはどちら側ですか？',sub:'',
+    badge:'STEP 3 &#47; 症状確認',p:42,grid:false,
+    choices:[
+      {icon:'&#128072;',ibg:'#fff7ed',label:'片側だけ（左または右）',desc:'神経根症が多い',next:'result',diseases:['cervical_hernia','toc']},
+      {icon:'&#129330;',ibg:'#fef2f2',label:'両側（左右両方）',desc:'脊髄症の可能性',next:'result',diseases:['cervical_hernia']}
+    ]
+  },
+  neck_headache:{
+    q:'頭痛の性質を教えてください',sub:'',
+    badge:'STEP 3 &#47; 頭痛の種類',p:42,grid:true,
+    choices:[
+      {icon:'&#128309;',ibg:'#fafafa',label:'頭全体が締め付けられる',desc:'',next:'result',diseases:['trapezius','straight_neck']},
+      {icon:'&#128308;',ibg:'#fff7ed',label:'ズキズキと脈打つ',desc:'',next:'result',diseases:['trapezius','straight_neck']},
+      {icon:'&#9889;',ibg:'#fef2f2',label:'突然の激しい頭痛',desc:'',next:'emergency_head',diseases:[]}
+    ]
+  },
+  knee_type:{
+    q:'膝の症状はどのタイプですか？',sub:'',
+    badge:'STEP 2 &#47; 症状タイプ',p:25,grid:false,
+    choices:[
+      {icon:'&#129461;',ibg:'#fafafa',label:'膝の前・お皿周りが痛い',desc:'膝蓋骨周囲の痛み',next:'knee_front_detail',diseases:[]},
+      {icon:'&#9664;',ibg:'#fafafa',label:'膝の内側が痛い',desc:'内側の圧痛・腫れ',next:'knee_inner_detail',diseases:[]},
+      {icon:'&#129460;',ibg:'#fff7ed',label:'膝全体が痛い・腫れている',desc:'膝全体の症状',next:'knee_all',diseases:[]},
+      {icon:'&#9889;',ibg:'#fef2f2',label:'スポーツ中に痛めた',desc:'急性の外傷',next:'knee_sports',diseases:[]}
+    ]
+  },
+  knee_front_detail:{
+    q:'膝前面の痛みはいつ悪化しますか？',sub:'',
+    badge:'STEP 3 &#47; 詳細',p:42,grid:true,
+    choices:[
+      {icon:'&#128089;',ibg:'#fff7ed',label:'階段を下りるとき',desc:'',next:'result',diseases:['pfp']},
+      {icon:'&#128088;',ibg:'#fff7ed',label:'階段を上るとき',desc:'',next:'result',diseases:['jumper_knee','pfp']},
+      {icon:'&#129681;',ibg:'#fafafa',label:'長時間座った後',desc:'',next:'result',diseases:['pfp']},
+      {icon:'&#127939;',ibg:'#fff7ed',label:'ジャンプや運動後',desc:'',next:'result',diseases:['jumper_knee']}
+    ]
+  },
+  knee_inner_detail:{
+    q:'膝内側の痛みはいつ起きましたか？',sub:'',
+    badge:'STEP 3 &#47; 発症経緯',p:42,grid:false,
+    choices:[
+      {icon:'&#9889;',ibg:'#fef2f2',label:'急に痛くなった（腫れあり）',desc:'外傷・損傷が疑われる',next:'result',diseases:['mcl','goose_foot']},
+      {icon:'&#128198;',ibg:'#fff7ed',label:'じわじわ悪化してきた',desc:'慢性の過負荷',next:'result',diseases:['goose_foot','oa_knee']}
+    ]
+  },
+  knee_all:{
+    q:'膝全体の症状について教えてください',sub:'',
+    badge:'STEP 3 &#47; 詳細',p:42,grid:false,
+    choices:[
+      {icon:'&#129460;',ibg:'#fef2f2',label:'動き始めが特に痛い（中高年）',desc:'変形性の可能性',next:'result',diseases:['oa_knee']},
+      {icon:'&#128167;',ibg:'#fff7ed',label:'水が溜まっている感じがある',desc:'関節水腫',next:'result',diseases:['oa_knee','mcl']}
+    ]
+  },
+  knee_sports:{
+    q:'スポーツ中の受傷について',sub:'',
+    badge:'STEP 3 &#47; 受傷状況',p:42,grid:false,
+    choices:[
+      {icon:'&#128552;',ibg:'#fef2f2',label:'膝がグラつく・ロックする感じ',desc:'靭帯・半月板損傷の可能性',next:'result',diseases:['mcl']},
+      {icon:'&#128543;',ibg:'#fff7ed',label:'走ったり跳んだりで痛む',desc:'腱の過負荷',next:'result',diseases:['jumper_knee','pfp']}
+    ]
+  },
+  ankle_type:{
+    q:'足首・足の裏の症状はどのタイプですか？',sub:'',
+    badge:'STEP 2 &#47; 症状タイプ',p:25,grid:false,
+    choices:[
+      {icon:'&#127749;',ibg:'#fff7ed',label:'朝一歩目のかかとが痛い',desc:'起床直後の踵痛',next:'result',diseases:['plantar']},
+      {icon:'&#127744;',ibg:'#fef2f2',label:'捻挫をした',desc:'足首を捻った・くじいた',next:'ankle_sprain_timing',diseases:[]},
+      {icon:'&#9889;',ibg:'#fff7ed',label:'踵の上（アキレス腱）が痛い',desc:'アキレス腱の痛み',next:'result',diseases:['achilles']},
+      {icon:'&#128543;',ibg:'#fafafa',label:'足首全体が痛む・腫れている',desc:'全体的な症状',next:'result',diseases:['ankle_sprain','achilles']}
+    ]
+  },
+  ankle_sprain_timing:{
+    q:'捻挫はいつ起きましたか？',sub:'',
+    badge:'STEP 3 &#47; 受傷時期',p:42,grid:true,
+    choices:[
+      {icon:'&#9889;',ibg:'#fef2f2',label:'今日〜24時間以内',desc:'',next:'result',diseases:['ankle_sprain']},
+      {icon:'&#128197;',ibg:'#fff7ed',label:'2〜7日前',desc:'',next:'result',diseases:['ankle_sprain']},
+      {icon:'&#128198;',ibg:'#fafafa',label:'1週間以上前',desc:'',next:'result',diseases:['ankle_sprain','achilles']}
+    ]
+  }
+};
+
+/* ===== STATE ===== */
+var currentStep = 'start';
+var pendingDiseases = [];
+
+/* ===== NAVIGATE ===== */
+function go(stepKey, diseases, label) {
+  breadcrumb.push(label);
+  updateTrail();
+  pendingDiseases = diseases || [];
+  currentStep = stepKey;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateTrail() {
+  var html = '';
+  breadcrumb.forEach(function(b, i) {
+    if(i > 0) html += '<span class="trail-arr">&#x203A;</span>';
+    html += '<span class="trail-item">' + esc(b) + '</span>';
+  });
+  trailEl.innerHTML = html;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ===== RENDER ===== */
+function render() {
+  if(currentStep === 'result') { showResult(pendingDiseases); return; }
+  if(currentStep === 'emergency_lumbar') { showEmergency(false); return; }
+  if(currentStep === 'emergency_head') { showEmergency(true); return; }
+
+  var step = FLOW[currentStep];
+  if(!step) return;
+
+  progEl.style.width = step.p + '%';
+  progInfo.textContent = '進捗 ' + step.p + '%';
+
+  var html = '<div class="step-hdr">'
+    + '<div class="step-badge">&#128269; ' + step.badge + '</div>'
+    + '<div class="step-q">' + step.q + '</div>'
+    + (step.sub ? '<div class="step-sub">' + step.sub + '</div>' : '')
+    + '</div>';
+
+  if(step.grid) {
+    html += '<div class="grid2">';
+    step.choices.forEach(function(c, i) {
+      html += '<button class="choice-sm" id="ch' + i + '">'
+        + '<div class="choice-icon-box" style="background:' + c.ibg + '">' + c.icon + '</div>'
+        + '<div class="choice-label">' + c.label + '</div>'
+        + '</button>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="choices">';
+    step.choices.forEach(function(c, i) {
+      html += '<button class="choice" id="ch' + i + '">'
+        + '<div class="choice-icon-box" style="background:' + c.ibg + '">' + c.icon + '</div>'
+        + '<div><div class="choice-label">' + c.label + '</div>'
+        + (c.desc ? '<div class="choice-desc">' + c.desc + '</div>' : '')
+        + '</div></button>';
+    });
+    html += '</div>';
+  }
+
+  mainEl.innerHTML = html;
+
+  /* attach click handlers by index — no inline onclick, no JSON in attributes */
+  step.choices.forEach(function(c, i) {
+    var btn = document.getElementById('ch' + i);
+    if(btn) {
+      btn.addEventListener('click', (function(choice) {
+        return function() { go(choice.next, choice.diseases, choice.label); };
+      })(c));
+    }
+  });
+}
+
+/* ===== RESULT ===== */
+function showResult(dkeys) {
+  progEl.style.width = '100%';
+  progInfo.textContent = '';
+
+  var diseases = dkeys.map(function(k){ return DISEASES[k] ? Object.assign({key:k},DISEASES[k]) : null; }).filter(Boolean);
+  if(!diseases.length) { init(); return; }
+
+  var rankMap = {red:3,orange:2,green:1};
+  var topUrgency = diseases.reduce(function(best,d){ return rankMap[d.urgency]>rankMap[best]?d.urgency:best; },'green');
+
+  var uc = {
+    red:   {ai:'&#128680;',title:'早急な受診が必要です',msg:'今すぐ〜翌営業日以内のご来院を強くお勧めします。症状が急に悪化したり、新たなしびれ・麻痺が出た場合は救急へ。',cls:'red'},
+    orange:{ai:'&#9888;&#65039;',title:'早めの受診をお勧めします',msg:'1週間以内にご来院ください。放置すると慢性化・悪化の可能性があります。',cls:'orange'},
+    green: {ai:'&#9989;',title:'1週間以内の受診でOKです',msg:'緊急性は高くありませんが、早めのケアで回復が早まります。お気軽にご相談ください。',cls:'green'}
+  }[topUrgency];
+
+  var html = '<div class="result-wrap">'
+    + '<div class="urgency-banner ' + uc.cls + '">'
+    + '<div class="urgency-icon">' + uc.ai + '</div>'
+    + '<div><div class="urgency-title ' + uc.cls + '">' + uc.title + '</div>'
+    + '<div class="urgency-msg ' + uc.cls + '">' + uc.msg + '</div></div></div>'
+    + '<div class="section-label">考えられる状態（タップで詳細表示）</div>'
+    + '<div id="dcards"></div>'
+    + '<div class="section-label">ご予約・ご相談</div>';
+
+  if(topUrgency==='red') {
+    html += '<div class="book-opt book-opt-urgent">'
+      + '<span class="book-opt-ic">&#9889;</span>'
+      + '<div><div class="book-opt-title">本日の緊急枠を確認する</div>'
+      + '<div class="book-opt-sub">お電話ください: 03-XXXX-XXXX</div></div></div>';
+  }
+  html += '<div class="book-opt"><span class="book-opt-ic">&#127760;</span>'
+    + '<div><div class="book-opt-title">ネット予約（24時間受付）</div>'
+    + '<div class="book-opt-sub">空き状況をすぐ確認できます</div></div></div>'
+    + '<div class="book-opt"><span class="book-opt-ic">&#128222;</span>'
+    + '<div><div class="book-opt-title">お電話でのご予約・ご相談</div>'
+    + '<div class="book-opt-sub">受付: 03-XXXX-XXXX（9:00〜19:00）</div></div></div>'
+    + '<div style="font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.6">&#8251;この診断は参考情報です。正確な診断は来院時に行います。</div>'
+    + '</div>'
+    + '<div class="restart-wrap"><button class="restart-btn" id="restart-btn2">&#128260; 最初からやり直す（別の症状を確認する）</button></div>';
+
+  mainEl.innerHTML = html;
+
+  /* build disease cards */
+  var dcardsEl = document.getElementById('dcards');
+  diseases.forEach(function(d, i) {
+    var bclass = d.urgency==='red'?'badge-red':d.urgency==='orange'?'badge-orange':'badge-green';
+    var aclass = d.urgency==='red'?'red':d.urgency==='orange'?'orange':'green';
+    var card = document.createElement('div');
+    card.className = 'dcard';
+    card.innerHTML = '<div class="dcard-hdr" id="dh' + i + '">'
+      + '<div class="dcard-icon" style="background:' + d.ibg + '">' + d.icon + '</div>'
+      + '<div style="flex:1;min-width:0"><div class="dcard-name">' + d.name + '</div>'
+      + '<div class="dcard-cat">' + d.cat + '</div></div>'
+      + '<div class="badge ' + bclass + '">' + d.ulabel + '</div></div>'
+      + '<div class="dcard-body" id="db' + i + '">'
+      + '<div class="abar ' + aclass + '"><span style="font-size:15px;flex-shrink:0">' + d.uai + '</span>'
+      + '<span class="abar-txt ' + aclass + '">' + d.umsg + '</span></div>'
+      + '<div class="dsec"><div class="dlbl">疾患・病態の概要</div><div class="dtxt">' + d.summary + '</div></div>'
+      + '<div class="dsec"><div class="dlbl">主な症状</div><div class="dtags">'
+      + d.sx.map(function(s){ return '<span class="dtag">'+s+'</span>'; }).join('') + '</div></div>'
+      + '<div class="dsec"><div class="dlbl">主な原因</div><div class="dtxt">' + d.cause + '</div></div>'
+      + '<div class="dsec"><div class="dlbl">当院での施術・対応方針</div><div class="dtxt">' + d.tx + '</div></div>'
+      + '<div class="book-timing">' + d.book_msg + '</div></div>';
+
+    card.querySelector('#dh' + i).addEventListener('click', function() {
+      var body = document.getElementById('db' + i);
+      var isOpen = body.classList.contains('open');
+      dcardsEl.querySelectorAll('.dcard-body').forEach(function(b){ b.classList.remove('open'); });
+      if(!isOpen) {
+        body.classList.add('open');
+        body.scrollIntoView({behavior:'smooth', block:'nearest'});
+      }
+    });
+    dcardsEl.appendChild(card);
+  });
+
+  document.getElementById('restart-btn2').addEventListener('click', init);
+}
+
+/* ===== EMERGENCY ===== */
+function showEmergency(isHead) {
+  progEl.style.width = '100%';
+  progInfo.textContent = '';
+  mainEl.innerHTML = '<div style="padding:20px">'
+    + '<div class="emergency-box">'
+    + '<div class="emergency-icon">&#128680;</div>'
+    + '<div class="emergency-title">' + (isHead?'今すぐ救急へ連絡してください':'今すぐ救急・整形外科を受診してください') + '</div>'
+    + '<div class="emergency-msg">' + (isHead
+        ? '突然の激しい頭痛は、くも膜下出血など重篤な疾患の可能性があります。'
+        : '排尿・排便の異常を伴う腰痛は、馬尾症候群が疑われます。神経の圧迫が進行する前に緊急受診が必要です。')
+    + '</div></div>'
+    + '<div class="emergency-opt"><span class="emergency-opt-ic">&#128657;</span>'
+    + '<div><div class="emergency-opt-title">救急車</div><div class="emergency-opt-sub">119番に電話する</div></div></div>'
+    + '<div class="emergency-opt"><span class="emergency-opt-ic">&#127973;</span>'
+    + '<div><div class="emergency-opt-title">救急外来・整形外科</div><div class="emergency-opt-sub">近隣の救急対応病院へ</div></div></div>'
+    + '</div>'
+    + '<div class="restart-wrap"><button class="restart-btn" id="er-restart">&#128260; 最初からやり直す</button></div>';
+  document.getElementById('er-restart').addEventListener('click', init);
+}
+
+/* ===== INTRO ===== */
+function showIntro() {
+  progEl.style.width = '0%';
+  progInfo.textContent = '';
+  trailEl.innerHTML = '';
+  mainEl.innerHTML = '<div class="intro">'
+    + '<div class="intro-icon">&#128269;</div>'
+    + '<div class="intro-title">お困りの症状<br>絞り込み診断</div>'
+    + '<div class="intro-desc">いくつかの質問に答えるだけで、考えられる疾患名・病態と受診の緊急度をお伝えします。</div>'
+    + '<div class="intro-notes">'
+    + '<div class="intro-note"><span>&#9989;</span><span>質問は最大3ステップで完了します</span></div>'
+    + '<div class="intro-note"><span>&#9989;</span><span>疾患名・原因・施術方針をカードで確認できます</span></div>'
+    + '<div class="intro-note"><span>&#9989;</span><span>受診の緊急度（今すぐ・1週間以内・余裕あり）をお伝えします</span></div>'
+    + '<div class="intro-note"><span>&#9888;&#65039;</span><span>この診断は参考情報です。正確な診断は来院時に行います</span></div>'
+    + '</div>'
+    + '<button class="start-btn" id="start-btn">&#128269; 診断をはじめる</button>'
+    + '</div>';
+  document.getElementById('start-btn').addEventListener('click', function() {
+    currentStep = 'start';
+    pendingDiseases = [];
+    render();
+  });
+}
+
+function init() {
+  breadcrumb = [];
+  currentStep = 'start';
+  pendingDiseases = [];
+  showIntro();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+init();
+</script>
+</body>
+</html>
