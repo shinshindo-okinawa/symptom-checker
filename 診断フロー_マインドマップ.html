@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>診断フロー マインドマップ｜心身堂鍼灸・整骨院 読谷院</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;background:#F2F4F6;color:#1a1a1a;min-height:100vh}
+.header{background:#06C755;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.header-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:16px}
+.header-title{color:white;font-size:14px;font-weight:700;line-height:1.3}
+.header-sub{color:rgba(255,255,255,0.85);font-size:10px;margin-top:1px}
+.header-right{margin-left:auto}
+.total-badge{background:rgba(255,255,255,0.2);color:white;font-size:11px;padding:4px 10px;border-radius:20px}
+.update-badge{background:#fff;color:#06C755;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:4px;text-align:center}
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;background:#fff;border-bottom:1px solid #e5e7eb}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#555}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #e5e7eb;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{padding:10px 14px;font-size:12.5px;font-weight:500;color:#888;border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.tab:hover{color:#333}
+.tab.active{color:#06C755;border-bottom-color:#06C755}
+.content{padding:12px 12px 30px}
+.panel{display:none}
+.panel.active{display:block}
+.root{border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.root-title{font-size:14px;font-weight:700;color:white}
+.root-sub{font-size:11px;color:rgba(255,255,255,0.85);margin-top:2px}
+.branch{margin-bottom:8px;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;background:#fff}
+.branch-hdr{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;user-select:none}
+.branch-hdr:hover{background:#fafafa}
+.branch-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.branch-q{font-size:12.5px;font-weight:500;flex:1;color:#1a1a1a}
+.branch-ql{font-size:10px;color:#888;margin-top:1px}
+.ba{font-size:11px;color:#bbb;transition:transform 0.2s;flex-shrink:0}
+.ba.open{transform:rotate(90deg)}
+.branch-body{display:none;border-top:1px solid #f0f0f0}
+.branch-body.open{display:block}
+.cr{display:flex;align-items:flex-start;gap:0;padding:9px 12px;border-bottom:1px solid #f5f5f5}
+.cr:last-child{border-bottom:none}
+.cc{display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;padding-top:3px}
+.cl{width:1px;background:#ddd;flex:1;min-height:18px}
+.cd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ccont{flex:1;padding-left:7px}
+.clabel{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.chip{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;display:flex;align-items:center;gap:2px}
+.chip.red{background:#FCEBEB;color:#A32D2D;border:1px solid #FCA5A5}
+.chip.orange{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.chip.green{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.chip-dot{width:5px;height:5px;border-radius:50%}
+.chip.red .chip-dot{background:#A32D2D}
+.chip.orange .chip-dot{background:#92400E}
+.chip.green .chip-dot{background:#166534}
+.emg-row{background:#FFF5F5}
+.emg-txt{font-size:11px;color:#A32D2D;margin-top:2px}
+.ebadge{font-size:10px;padding:2px 7px;border-radius:20px;background:#FCEBEB;color:#A32D2D;border:1px solid #FCA5A5;font-weight:600}
+.result-title{font-size:10px;font-weight:700;color:#aaa;letter-spacing:0.06em;text-transform:uppercase;margin:12px 0 6px 2px}
+.rc{border-radius:10px;overflow:hidden;border:1px solid;margin-bottom:6px;cursor:pointer}
+.rc.red{border-color:#FCA5A5;background:#FFF5F5}
+.rc.orange{border-color:#FCD34D;background:#FFFBEB}
+.rc.green{border-color:#86EFAC;background:#F0FDF4}
+.rc-hdr{display:flex;align-items:center;gap:8px;padding:8px 11px}
+.rc-hdr:hover{filter:brightness(0.97)}
+.rc-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.rc-name{font-size:12px;font-weight:700;flex:1}
+.rc-name.red{color:#A32D2D}.rc-name.orange{color:#92400E}.rc-name.green{color:#166534}
+.rc-badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.rc-badge.red{background:#FCEBEB;color:#A32D2D}
+.rc-badge.orange{background:#FEF3C7;color:#92400E}
+.rc-badge.green{background:#DCFCE7;color:#166534}
+.rc-body{display:none;padding:8px 11px;border-top:1px solid;font-size:11.5px;line-height:1.6}
+.rc-body.red{border-color:#FCA5A5;color:#7F1D1D}
+.rc-body.orange{border-color:#FCD34D;color:#78350F}
+.rc-body.green{border-color:#86EFAC;color:#14532D}
+.rc-body.open{display:block}
+.dl{font-size:10px;font-weight:700;color:#aaa;margin-bottom:2px;text-transform:uppercase}
+.sx-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.sx-tag{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.1);color:#555}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;text-align:center}
+.sc-num{font-size:26px;font-weight:700;color:#06C755}
+.sc-label{font-size:11px;color:#888;margin-top:2px}
+.stat-sec{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:8px}
+.stat-title{font-size:12px;font-weight:700;color:#555;margin-bottom:10px}
+.stat-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.stat-row:last-child{margin-bottom:0}
+.stat-label{font-size:12px;color:#555;flex:1}
+.stat-bw{width:90px;height:7px;background:#f0f0f0;border-radius:20px;overflow:hidden;flex-shrink:0}
+.stat-b{height:100%;border-radius:20px}
+.stat-c{font-size:11px;color:#888;width:28px;text-align:right;flex-shrink:0}
+.clinic-box{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:8px}
+.clinic-name{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.clinic-row{font-size:11.5px;color:#555;margin-bottom:5px;display:flex;gap:6px;align-items:flex-start;line-height:1.5}
+.clinic-row:last-child{margin-bottom:0}
+.edit-box{background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px 14px}
+.edit-title{font-size:12px;font-weight:700;color:#15803D;margin-bottom:8px}
+.edit-item{font-size:12px;color:#166534;margin-bottom:4px;display:flex;align-items:flex-start;gap:5px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-icon">&#128269;</div>
+  <div>
+    <div class="header-title">診断フロー マインドマップ</div>
+    <div class="header-sub">心身堂鍼灸・整骨院 読谷院</div>
+  </div>
+  <div class="header-right">
+    <div class="total-badge">疾患 18種</div>
+    <div class="update-badge">2026.05.08 更新</div>
+  </div>
+</div>
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#185FA5"></div>質問ステップ</div>
+  <div class="leg"><div class="leg-dot" style="background:#A32D2D"></div>早急（赤）今日〜翌日</div>
+  <div class="leg"><div class="leg-dot" style="background:#92400E"></div>早め（橙）1週間以内</div>
+  <div class="leg"><div class="leg-dot" style="background:#166534"></div>余裕（緑）1〜2週間</div>
+  <div class="leg"><div class="leg-dot" style="background:#FCEBEB;border:1px solid #FCA5A5"></div>救急案内</div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('low')" id="tab-low">&#128308; 腰・お尻</div>
+  <div class="tab" onclick="showTab('neck')" id="tab-neck">&#128309; 首・肩</div>
+  <div class="tab" onclick="showTab('knee')" id="tab-knee">&#128993; 膝・太もも</div>
+  <div class="tab" onclick="showTab('ankle')" id="tab-ankle">&#128994; 足首・足</div>
+  <div class="tab" onclick="showTab('summary')" id="tab-summary">&#128202; まとめ</div>
+</div>
+<div class="content">
+
+<!-- 腰 -->
+<div class="panel active" id="panel-low">
+  <div class="root" style="background:#EF4444">
+    <div style="font-size:20px">&#128308;</div>
+    <div><div class="root-title">腰・お尻の痛み</div><div class="root-sub">Q1で選択 → Q2で4種類に分岐 → 疾患提示</div></div>
+  </div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('l1')"><div class="branch-icon" style="background:#FEF3C7">&#9889;</div><div style="flex:1"><div class="branch-q">急に強く痛み始めた</div><div class="branch-ql">→ Q3「いつから？」へ</div></div><div class="ba" id="al1">›</div></div><div class="branch-body" id="bl1">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128197; 今日〜3日以内</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>急性腰椎捻挫（ぎっくり腰）</div><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128198; 4日〜1週間</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>急性腰椎捻挫</div><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div></div><div class="ccont"><div class="clabel">&#128202; 2週間以上</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div><div class="chip orange"><div class="chip-dot"></div>梨状筋症候群</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('l2')"><div class="branch-icon" style="background:#F3F4F6">&#128543;</div><div style="flex:1"><div class="branch-q">じわじわ長く続いている</div><div class="branch-ql">→ Q3「日常への影響は？」へ</div></div><div class="ba" id="al2">›</div></div><div class="branch-body" id="bl2">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#129681; 座っていると悪化する</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#127761; 朝起き上がるのがつらい</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#129529; 前かがみが特につらい</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div></div><div class="ccont"><div class="clabel">&#127769; 夜間も痛む</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('l3')"><div class="branch-icon" style="background:#FCEBEB">&#129461;</div><div style="flex:1"><div class="branch-q">足・すねにしびれがある</div><div class="branch-ql">→ 緊急確認あり（救急分岐）</div></div><div class="ba" id="al3">›</div></div><div class="branch-body" id="bl3">
+    <div class="cr emg-row"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl" style="background:#FCA5A5"></div></div><div class="ccont"><div class="clabel">&#128680; 排尿・排便に変化がある <span class="ebadge">救急案内へ</span></div><div class="emg-txt">馬尾症候群の可能性 → 今すぐ救急へ誘導</div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div></div><div class="ccont"><div class="clabel">&#9989; そのような症状はない</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div><div class="chip orange"><div class="chip-dot"></div>梨状筋症候群</div><div class="chip red"><div class="chip-dot"></div>腰部脊柱管狭窄症</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('l4')"><div class="branch-icon" style="background:#EEF2FF">&#128694;</div><div style="flex:1"><div class="branch-q">歩くと辛くなる</div><div class="branch-ql">→ Q3「何分で休憩が必要？」へ</div></div><div class="ba" id="al4">›</div></div><div class="branch-body" id="bl4">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#9203; 5分以内で休憩が必要</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰部脊柱管狭窄症</div><div class="chip red"><div class="chip-dot"></div>腰椎椎間板ヘルニア</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128694; 5〜15分で辛くなる</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>腰部脊柱管狭窄症</div><div class="chip orange"><div class="chip-dot"></div>梨状筋症候群</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#166634"></div></div><div class="ccont"><div class="clabel">&#127939; 15分以上歩ける</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>腰部筋筋膜症</div><div class="chip orange"><div class="chip-dot"></div>梨状筋症候群</div></div></div></div>
+  </div></div>
+  <div class="result-title">腰・お尻エリアの疾患一覧（タップで詳細）</div>
+  <div class="rc red" onclick="togD('ld1')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#129460;</div><div class="rc-name red">腰椎椎間板ヘルニア</div><div class="rc-badge red">早急な受診</div></div><div class="rc-body red" id="ld1"><div class="dl">概要</div>椎間板の髄核が飛び出し神経根を圧迫。腰痛＋足へのしびれが典型。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">腰痛</span><span class="sx-tag">足・すねのしびれ</span><span class="sx-tag">前屈で悪化</span></div><div class="dl" style="margin-top:6px">当院での対応</div>牽引・神経緩和の手技療法・鍼灸治療・整形外科連携</div></div>
+  <div class="rc red" onclick="togD('ld2')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#128694;</div><div class="rc-name red">腰部脊柱管狭窄症</div><div class="rc-badge red">早めの精査</div></div><div class="rc-body red" id="ld2"><div class="dl">概要</div>脊柱管が狭まり神経が圧迫される。間欠性跛行が特徴。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">間欠性跛行</span><span class="sx-tag">両足のしびれ</span><span class="sx-tag">座ると楽になる</span></div><div class="dl" style="margin-top:6px">当院での対応</div>姿勢改善・筋力強化・骨盤調整・整形外科連携</div></div>
+  <div class="rc orange" onclick="togD('ld3')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#9889;</div><div class="rc-name orange">急性腰椎捻挫（ぎっくり腰）</div><div class="rc-badge orange">1〜3日以内</div></div><div class="rc-body orange" id="ld3"><div class="dl">概要</div>突然の強い腰痛。椎間関節・筋膜・靭帯の急性炎症が主な原因。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">急激な腰痛</span><span class="sx-tag">前屈困難</span><span class="sx-tag">起き上がり困難</span></div><div class="dl" style="margin-top:6px">当院での対応</div>手技療法・電気療法（HV治療・超音波）で早期回復をサポート</div></div>
+  <div class="rc orange" onclick="togD('ld4')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#128308;</div><div class="rc-name orange">梨状筋症候群</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="ld4"><div class="dl">概要</div>梨状筋が坐骨神経を圧迫。お尻〜足にしびれや痛みが放散する。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">お尻の深部痛</span><span class="sx-tag">足への放散痛</span><span class="sx-tag">長時間座位で悪化</span></div><div class="dl" style="margin-top:6px">当院での対応</div>梨状筋ストレッチ・鍼灸治療・トリガーポイント施術</div></div>
+  <div class="rc green" onclick="togD('ld5')"><div class="rc-hdr"><div class="rc-ic" style="background:#DCFCE7">&#128543;</div><div class="rc-name green">腰部筋筋膜症（慢性腰痛）</div><div class="rc-badge green">1〜2週間以内</div></div><div class="rc-body green" id="ld5"><div class="dl">概要</div>筋肉・筋膜の慢性的な緊張・炎症。デスクワークや姿勢不良が主な要因。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">じわじわした腰の鈍痛</span><span class="sx-tag">長時間座位で悪化</span><span class="sx-tag">朝の腰の重さ</span></div><div class="dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・姿勢改善指導・セルフケアストレッチ指導</div></div>
+</div>
+
+<!-- 首・肩 -->
+<div class="panel" id="panel-neck">
+  <div class="root" style="background:#3B82F6">
+    <div style="font-size:20px">&#128309;</div>
+    <div><div class="root-title">首・肩の痛み</div><div class="root-sub">Q1で選択 → Q2で4種類に分岐 → 疾患提示</div></div>
+  </div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('n1')"><div class="branch-icon" style="background:#F3F4F6">&#128187;</div><div style="flex:1"><div class="branch-q">肩こり・首のこり</div><div class="branch-ql">→ Q3「スクリーン使用時間は？」へ</div></div><div class="ba" id="an1">›</div></div><div class="branch-body" id="bn1">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128241; 6時間以上</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>ストレートネック（スマホ首）</div><div class="chip green"><div class="chip-dot"></div>僧帽筋症候群（肩こり）</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128187; 3〜6時間</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>僧帽筋症候群</div><div class="chip orange"><div class="chip-dot"></div>ストレートネック</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#166634"></div></div><div class="ccont"><div class="clabel">&#9989; 3時間未満</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>僧帽筋症候群</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('n2')"><div class="branch-icon" style="background:#FEF3C7">&#127769;</div><div style="flex:1"><div class="branch-q">首が急に動かせなくなった</div><div class="branch-ql">→ 直接疾患提示</div></div><div class="ba" id="an2">›</div></div><div class="branch-body" id="bn2">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">直接提示</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>急性頸部痛（寝違え）</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('n3')"><div class="branch-icon" style="background:#FCEBEB">&#9995;</div><div style="flex:1"><div class="branch-q">手・腕・指がしびれる</div><div class="branch-ql">→ Q3「片側 or 両側？」へ</div></div><div class="ba" id="an3">›</div></div><div class="branch-body" id="bn3">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128072; 片側だけ（左または右）</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>頸椎椎間板ヘルニア</div><div class="chip orange"><div class="chip-dot"></div>胸郭出口症候群</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div></div><div class="ccont"><div class="clabel">&#129330; 両側（左右両方）</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>頸椎椎間板ヘルニア（脊髄症）</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('n4')"><div class="branch-icon" style="background:#FEF3C7">&#129308;</div><div style="flex:1"><div class="branch-q">頭痛を伴う</div><div class="branch-ql">→ Q3「頭痛の性質は？」※救急分岐あり</div></div><div class="ba" id="an4">›</div></div><div class="branch-body" id="bn4">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128309; 頭全体が締め付けられる</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>僧帽筋症候群</div><div class="chip orange"><div class="chip-dot"></div>ストレートネック</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128308; ズキズキと脈打つ</div><div class="chips"><div class="chip green"><div class="chip-dot"></div>僧帽筋症候群</div><div class="chip orange"><div class="chip-dot"></div>ストレートネック</div></div></div></div>
+    <div class="cr emg-row"><div class="cc"><div class="cd" style="background:#A32D2D"></div></div><div class="ccont"><div class="clabel">&#9889; 突然の激しい頭痛 <span class="ebadge">救急案内へ</span></div><div class="emg-txt">くも膜下出血の可能性 → 119番へ</div></div></div>
+  </div></div>
+  <div class="result-title">首・肩エリアの疾患一覧（タップで詳細）</div>
+  <div class="rc red" onclick="togD('nd1')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#9889;</div><div class="rc-name red">頸椎椎間板ヘルニア</div><div class="rc-badge red">早急な受診</div></div><div class="rc-body red" id="nd1"><div class="dl">概要</div>頸椎の椎間板が神経根を圧迫。片側の手・腕へのしびれが典型。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">片側の手・腕のしびれ</span><span class="sx-tag">頸部痛</span><span class="sx-tag">指先の感覚異常</span></div><div class="dl" style="margin-top:6px">当院での対応</div>牽引・鍼灸治療・神経緩和手技療法・整形外科連携</div></div>
+  <div class="rc orange" onclick="togD('nd2')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#128241;</div><div class="rc-name orange">ストレートネック（スマホ首）</div><div class="rc-badge orange">1〜2週間以内</div></div><div class="rc-body orange" id="nd2"><div class="dl">概要</div>頸椎の正常な前弯が失われた状態。スマホ・PC長時間使用が主因。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">首・肩のこり</span><span class="sx-tag">後頭部の重さ</span><span class="sx-tag">目の疲れ</span></div><div class="dl" style="margin-top:6px">当院での対応</div>頸部手技療法・姿勢矯正・骨盤調整・スクリーン環境改善指導</div></div>
+  <div class="rc orange" onclick="togD('nd3')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#127769;</div><div class="rc-name orange">急性頸部痛（寝違え）</div><div class="rc-badge orange">1〜2日以内</div></div><div class="rc-body orange" id="nd3"><div class="dl">概要</div>就寝中の不良姿勢で頸部の筋肉・関節に炎症が起きる。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">首の強い痛み</span><span class="sx-tag">首が動かせない</span><span class="sx-tag">一側に傾く</span></div><div class="dl" style="margin-top:6px">当院での対応</div>頸部手技療法（整復）・鍼灸治療・温熱療法</div></div>
+  <div class="rc orange" onclick="togD('nd4')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#9995;</div><div class="rc-name orange">胸郭出口症候群</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="nd4"><div class="dl">概要</div>鎖骨下で腕神経叢が絞扼される。腕を挙げると悪化することが多い。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">腕・手のしびれ</span><span class="sx-tag">腕を挙げると悪化</span><span class="sx-tag">握力低下</span></div><div class="dl" style="margin-top:6px">当院での対応</div>肩甲帯手技療法・姿勢改善・骨盤調整・筋力強化指導</div></div>
+  <div class="rc green" onclick="togD('nd5')"><div class="rc-hdr"><div class="rc-ic" style="background:#DCFCE7">&#128170;</div><div class="rc-name green">僧帽筋症候群（肩こり）</div><div class="rc-badge green">1週間以内</div></div><div class="rc-body green" id="nd5"><div class="dl">概要</div>首・肩まわりの筋肉が慢性的に緊張した状態。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">肩・首のこり</span><span class="sx-tag">後頸部の張り</span><span class="sx-tag">頭重感</span></div><div class="dl" style="margin-top:6px">当院での対応</div>手技療法（指圧）・EMS・温熱療法・セルフケアストレッチ指導</div></div>
+</div>
+
+<!-- 膝 -->
+<div class="panel" id="panel-knee">
+  <div class="root" style="background:#D97706">
+    <div style="font-size:20px">&#128993;</div>
+    <div><div class="root-title">膝・太もも</div><div class="root-sub">Q1で選択 → Q2で4種類に分岐 → 疾患提示</div></div>
+  </div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('k1')"><div class="branch-icon" style="background:#FEF3C7">&#129461;</div><div style="flex:1"><div class="branch-q">膝の前・お皿周りが痛い</div><div class="branch-ql">→ Q3「いつ悪化する？」へ</div></div><div class="ba" id="ak1">›</div></div><div class="branch-body" id="bk1">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128089; 階段を下りるとき</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>膝蓋大腿関節症（PFP）</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128088; 階段を上るとき</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>膝蓋腱炎（ジャンパー膝）</div><div class="chip orange"><div class="chip-dot"></div>膝蓋大腿関節症</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#129681; 長時間座った後</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>膝蓋大腿関節症（PFP）</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">&#127939; ジャンプや運動後</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>膝蓋腱炎（ジャンパー膝）</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('k2')"><div class="branch-icon" style="background:#F3F4F6">&#9664;</div><div style="flex:1"><div class="branch-q">膝の内側が痛い</div><div class="branch-ql">→ Q3「急性 or 慢性？」へ</div></div><div class="ba" id="ak2">›</div></div><div class="branch-body" id="bk2">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#9889; 急に痛くなった（腫れあり）</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>内側側副靭帯損傷</div><div class="chip orange"><div class="chip-dot"></div>鵞足炎</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">&#128198; じわじわ悪化してきた</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>鵞足炎</div><div class="chip red"><div class="chip-dot"></div>変形性膝関節症</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('k3')"><div class="branch-icon" style="background:#FEF2F2">&#129460;</div><div style="flex:1"><div class="branch-q">膝全体が痛い・腫れている</div><div class="branch-ql">→ Q3「詳細確認」へ</div></div><div class="ba" id="ak3">›</div></div><div class="branch-body" id="bk3">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#129460; 動き始めが特に痛い（中高年）</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>変形性膝関節症</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">&#128167; 水が溜まっている感じがある</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>変形性膝関節症</div><div class="chip red"><div class="chip-dot"></div>内側側副靭帯損傷</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('k4')"><div class="branch-icon" style="background:#FCEBEB">&#9889;</div><div style="flex:1"><div class="branch-q">スポーツ中に痛めた</div><div class="branch-ql">→ Q3「受傷状況」へ</div></div><div class="ba" id="ak4">›</div></div><div class="branch-body" id="bk4">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128552; 膝がグラつく・ロックする感じ</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>内側側副靭帯損傷</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">&#128543; 走ったり跳んだりで痛む</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>膝蓋腱炎</div><div class="chip orange"><div class="chip-dot"></div>膝蓋大腿関節症</div></div></div></div>
+  </div></div>
+  <div class="result-title">膝エリアの疾患一覧（タップで詳細）</div>
+  <div class="rc red" onclick="togD('kd1')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#129460;</div><div class="rc-name red">変形性膝関節症</div><div class="rc-badge red">早めの精査</div></div><div class="rc-body red" id="kd1"><div class="dl">概要</div>膝の軟骨が摩耗・変性する疾患。中高年に多く進行性。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">動き始めの痛み</span><span class="sx-tag">階段昇降痛</span><span class="sx-tag">膝の腫れ</span><span class="sx-tag">O脚の悪化</span></div><div class="dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・骨盤調整・体重管理・日常動作指導・整形外科連携</div></div>
+  <div class="rc red" onclick="togD('kd2')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#9889;</div><div class="rc-name red">内側側副靭帯損傷</div><div class="rc-badge red">早急な受診</div></div><div class="rc-body red" id="kd2"><div class="dl">概要</div>膝内側の靭帯の伸張・断裂。スポーツでの外反ストレスで多く発生。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">膝内側の圧痛</span><span class="sx-tag">腫脹・熱感</span><span class="sx-tag">不安定感</span></div><div class="dl" style="margin-top:6px">当院での対応</div>RICE処置・固定・段階的リハビリ・スポーツコンディショニング</div></div>
+  <div class="rc orange" onclick="togD('kd3')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#129461;</div><div class="rc-name orange">膝蓋大腿関節症（PFP症候群）</div><div class="rc-badge orange">1〜2週間以内</div></div><div class="rc-body orange" id="kd3"><div class="dl">概要</div>お皿と大腿骨の間の軟骨が障害される。若い女性・ランナーに多い。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">膝前面の鈍痛</span><span class="sx-tag">階段下りで悪化</span><span class="sx-tag">長時間座位後の痛み</span></div><div class="dl" style="margin-top:6px">当院での対応</div>大腿四頭筋強化・テーピング・インソール調整・スポーツコンディショニング</div></div>
+  <div class="rc orange" onclick="togD('kd4')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#9889;</div><div class="rc-name orange">膝蓋腱炎（ジャンパー膝）</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="kd4"><div class="dl">概要</div>膝蓋腱に繰り返しのストレスで炎症が起きる。スポーツ選手に多い。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">膝蓋骨直下の痛み</span><span class="sx-tag">階段上りで悪化</span><span class="sx-tag">ジャンプで痛む</span></div><div class="dl" style="margin-top:6px">当院での対応</div>超音波治療・HV治療・ストレッチ指導・スポーツコンディショニング</div></div>
+  <div class="rc orange" onclick="togD('kd5')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#127939;</div><div class="rc-name orange">鵞足炎</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="kd5"><div class="dl">概要</div>膝内側やや下方の鵞足部に炎症。ランナーや変形性膝関節症に合併。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">膝内側下方の圧痛</span><span class="sx-tag">階段昇降で悪化</span><span class="sx-tag">慢性化しやすい</span></div><div class="dl" style="margin-top:6px">当院での対応</div>アイシング・超音波治療・鍼灸治療・ストレッチ指導</div></div>
+</div>
+
+<!-- 足首 -->
+<div class="panel" id="panel-ankle">
+  <div class="root" style="background:#16A34A">
+    <div style="font-size:20px">&#128994;</div>
+    <div><div class="root-title">足首・足の裏</div><div class="root-sub">Q1で選択 → Q2で4種類に分岐 → 疾患提示</div></div>
+  </div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('a1')"><div class="branch-icon" style="background:#FEF3C7">&#127749;</div><div style="flex:1"><div class="branch-q">朝一歩目のかかとが痛い</div><div class="branch-ql">→ 直接疾患提示</div></div><div class="ba" id="aa1">›</div></div><div class="branch-body" id="ba1"><div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">直接提示</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>足底筋膜炎</div></div></div></div></div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('a2')"><div class="branch-icon" style="background:#FCEBEB">&#127744;</div><div style="flex:1"><div class="branch-q">捻挫をした</div><div class="branch-ql">→ Q3「いつ受傷した？」へ</div></div><div class="ba" id="aa2">›</div></div><div class="branch-body" id="ba2">
+    <div class="cr"><div class="cc"><div class="cd" style="background:#A32D2D"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#9889; 今日〜24時間以内</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>足関節外側靭帯損傷（捻挫）</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div><div class="cl"></div></div><div class="ccont"><div class="clabel">&#128197; 2〜7日前</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>足関節外側靭帯損傷</div></div></div></div>
+    <div class="cr"><div class="cc"><div class="cd" style="background:#888"></div></div><div class="ccont"><div class="clabel">&#128198; 1週間以上前</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>足関節外側靭帯損傷</div><div class="chip orange"><div class="chip-dot"></div>アキレス腱炎</div></div></div></div>
+  </div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('a3')"><div class="branch-icon" style="background:#FEF3C7">&#9889;</div><div style="flex:1"><div class="branch-q">踵の上（アキレス腱）が痛い</div><div class="branch-ql">→ 直接疾患提示</div></div><div class="ba" id="aa3">›</div></div><div class="branch-body" id="ba3"><div class="cr"><div class="cc"><div class="cd" style="background:#92400E"></div></div><div class="ccont"><div class="clabel">直接提示</div><div class="chips"><div class="chip orange"><div class="chip-dot"></div>アキレス腱炎</div></div></div></div></div></div>
+  <div class="branch"><div class="branch-hdr" onclick="togB('a4')"><div class="branch-icon" style="background:#F3F4F6">&#128543;</div><div style="flex:1"><div class="branch-q">足首全体が痛む・腫れている</div><div class="branch-ql">→ 直接疾患提示</div></div><div class="ba" id="aa4">›</div></div><div class="branch-body" id="ba4"><div class="cr"><div class="cc"><div class="cd" style="background:#888"></div></div><div class="ccont"><div class="clabel">直接提示</div><div class="chips"><div class="chip red"><div class="chip-dot"></div>足関節外側靭帯損傷</div><div class="chip orange"><div class="chip-dot"></div>アキレス腱炎</div></div></div></div></div></div>
+  <div class="result-title">足首エリアの疾患一覧（タップで詳細）</div>
+  <div class="rc red" onclick="togD('ad1')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF2F2">&#127744;</div><div class="rc-name red">足関節外側靭帯損傷（捻挫）</div><div class="rc-badge red">早急な受診</div></div><div class="rc-body red" id="ad1"><div class="dl">概要</div>足首の外側靭帯の伸張・断裂。最も多い足関節外傷。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">外くるぶし周囲の腫脹</span><span class="sx-tag">体重をかけると痛い</span><span class="sx-tag">皮下出血</span></div><div class="dl" style="margin-top:6px">当院での対応</div>RICE処置 → 固定 → 段階的リハビリ → バランストレーニングで再発予防まで対応</div></div>
+  <div class="rc orange" onclick="togD('ad2')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#128099;</div><div class="rc-name orange">足底筋膜炎</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="ad2"><div class="dl">概要</div>足底の筋膜に微細断裂・炎症。朝一歩目の踵痛が典型的。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">起床後一歩目の踵痛</span><span class="sx-tag">長時間立位後の痛み</span><span class="sx-tag">踵内側の圧痛</span></div><div class="dl" style="margin-top:6px">当院での対応</div>インソール調整・超音波治療・鍼灸治療・ストレッチ指導</div></div>
+  <div class="rc orange" onclick="togD('ad3')"><div class="rc-hdr"><div class="rc-ic" style="background:#FEF3C7">&#9889;</div><div class="rc-name orange">アキレス腱炎</div><div class="rc-badge orange">1週間以内</div></div><div class="rc-body orange" id="ad3"><div class="dl">概要</div>アキレス腱に炎症が生じた状態。踵上方の痛みが特徴。<div class="dl" style="margin-top:6px">主な症状</div><div class="sx-tags"><span class="sx-tag">踵の上部の痛み</span><span class="sx-tag">起床時・運動開始時に悪化</span><span class="sx-tag">圧痛</span></div><div class="dl" style="margin-top:6px">当院での対応</div>負荷軽減・超音波治療・HV治療・ヒールリフト・スポーツコンディショニング</div></div>
+</div>
+
+<!-- まとめ -->
+<div class="panel" id="panel-summary">
+  <div class="summary-grid">
+    <div class="sc"><div class="sc-num">4</div><div class="sc-label">対応部位</div></div>
+    <div class="sc"><div class="sc-num">18</div><div class="sc-label">収録疾患数</div></div>
+    <div class="sc"><div class="sc-num">2</div><div class="sc-label">救急誘導分岐</div></div>
+    <div class="sc"><div class="sc-num">3</div><div class="sc-label">緊急度レベル</div></div>
+  </div>
+  <div class="stat-sec">
+    <div class="stat-title">部位別 疾患数</div>
+    <div class="stat-row"><div class="stat-label">&#128308; 腰・お尻</div><div class="stat-bw"><div class="stat-b" style="width:100%;background:#EF4444"></div></div><div class="stat-c">5疾患</div></div>
+    <div class="stat-row"><div class="stat-label">&#128309; 首・肩</div><div class="stat-bw"><div class="stat-b" style="width:100%;background:#3B82F6"></div></div><div class="stat-c">5疾患</div></div>
+    <div class="stat-row"><div class="stat-label">&#128993; 膝・太もも</div><div class="stat-bw"><div class="stat-b" style="width:100%;background:#F59E0B"></div></div><div class="stat-c">5疾患</div></div>
+    <div class="stat-row"><div class="stat-label">&#128994; 足首・足の裏</div><div class="stat-bw"><div class="stat-b" style="width:60%;background:#22C55E"></div></div><div class="stat-c">3疾患</div></div>
+  </div>
+  <div class="stat-sec">
+    <div class="stat-title">緊急度別 疾患数</div>
+    <div class="stat-row"><div class="stat-label">&#128680; 早急な受診（赤）</div><div class="stat-bw"><div class="stat-b" style="width:55%;background:#EF4444"></div></div><div class="stat-c">7疾患</div></div>
+    <div class="stat-row"><div class="stat-label">&#9888; 早めの受診（橙）</div><div class="stat-bw"><div class="stat-b" style="width:70%;background:#F59E0B"></div></div><div class="stat-c">9疾患</div></div>
+    <div class="stat-row"><div class="stat-label">&#9989; 余裕あり（緑）</div><div class="stat-bw"><div class="stat-b" style="width:15%;background:#22C55E"></div></div><div class="stat-c">2疾患</div></div>
+  </div>
+  <div class="clinic-box">
+    <div class="clinic-name">&#127973; 心身堂鍼灸・整骨院 読谷院</div>
+    <div class="clinic-row"><span>&#128205;</span><span>沖縄県中頭郡読谷村古堅740 イオンタウン読谷内</span></div>
+    <div class="clinic-row"><span>&#128222;</span><span>098-956-8654</span></div>
+    <div class="clinic-row"><span>&#128336;</span><span>10:00〜13:00 / 15:00〜20:00（日祝も通常診療）</span></div>
+    <div class="clinic-row"><span>&#128680;</span><span>休診：毎月第4木曜日（院内研修）</span></div>
+    <div class="clinic-row"><span>&#127760;</span><span>ネット予約：carecle.com/booking/shinshindosyomitan</span></div>
+    <div class="clinic-row"><span>&#128172;</span><span>LINE：@205tvrxn</span></div>
+    <div class="clinic-row"><span>&#128697;</span><span>駐車場あり（イオンタウン読谷敷地内・数10台）</span></div>
+    <div class="clinic-row"><span>&#9432;&#65039;</span><span>初回カウンセリング無料（約30分）&#183; 健康保険・労災・自賠責対応</span></div>
+  </div>
+  <div class="edit-box">
+    <div class="edit-title">&#9999;&#65039; 次の修正リクエスト例</div>
+    <div class="edit-item">&#10133; 「股関節・骨盤の痛み」を新しい部位として追加</div>
+    <div class="edit-item">&#9999;&#65039; 各疾患の説明文を院のスタイルに合わせて修正</div>
+    <div class="edit-item">&#10133; 「腱鞘炎・神経痛」などの疾患を追加</div>
+    <div class="edit-item">&#128197; 選択肢の文言をさらに患者さんに伝わりやすく変更</div>
+  </div>
+</div>
+
+</div>
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function togB(id){
+  var bd=document.getElementById('b'+id);
+  var ar=document.getElementById('a'+id);
+  var open=bd.classList.contains('open');
+  bd.classList.toggle('open',!open);
+  ar.classList.toggle('open',!open);
+}
+function togD(id){
+  var el=document.getElementById(id);
+  el.classList.toggle('open');
+}
+togB('l1');
+</script>
+</body>
+</html>
