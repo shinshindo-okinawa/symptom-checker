@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>症状絞り込みチェック｜心身堂鍼灸・整骨院 読谷院</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;background:#f2f4f6;min-height:100vh}
+/* ===== 患者向け ===== */
+.patient-wrap{display:flex;flex-direction:column;align-items:center;padding:16px}
+.top-bar{width:100%;max-width:480px;background:#06C755;border-radius:16px 16px 0 0;padding:12px 14px 12px 16px;display:flex;align-items:center;gap:10px}
+.top-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.top-texts{flex:1;min-width:0}
+.top-title{color:white;font-size:13px;font-weight:700;line-height:1.3}
+.top-sub{color:rgba(255,255,255,0.85);font-size:10px;margin-top:2px}
+.lang-sw{display:flex;background:rgba(255,255,255,0.2);border-radius:20px;overflow:hidden;flex-shrink:0}
+.lang-btn{padding:5px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);cursor:pointer;border:none;background:transparent}
+.lang-btn.active{background:white;color:#06C755;border-radius:20px}
+.staff-btn{width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,0.18);border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-left:8px;transition:all 0.2s;font-size:12px;padding:0;color:rgba(255,255,255,0.5);position:relative}
+.staff-btn:hover{background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.3)}
+.staff-btn{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-left:6px;transition:background 0.2s;font-size:12px;padding:0;line-height:1;color:rgba(255,255,255,0.7)}
+.staff-btn:hover{background:rgba(255,255,255,0.22);color:white}
+.prog-wrap{width:100%;max-width:480px;background:#d4edda;height:5px}
+.prog-fill{height:100%;background:#06C755;transition:width 0.5s ease}
+.card{width:100%;max-width:480px;background:#fff;border-radius:0 0 16px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);overflow:hidden}
+.step-hdr{padding:18px 20px 14px;border-bottom:1px solid #f0f0f0}
+.step-badge{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:3px 10px;font-size:11px;color:#16a34a;font-weight:600;margin-bottom:10px}
+.step-q{font-size:16px;font-weight:700;color:#1a1a1a;line-height:1.5}
+.step-sub{font-size:12px;color:#888;margin-top:5px}
+.choices{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all 0.15s;text-align:left;width:100%}
+.choice:hover{border-color:#06C755;background:#f0fdf4}
+.choice-icon-box{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.choice-label{font-size:13px;font-weight:600;color:#1a1a1a;line-height:1.4}
+.choice-desc{font-size:11px;color:#888;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 16px}
+.choice-sm{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 8px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all 0.15s;gap:6px;width:100%}
+.choice-sm:hover{border-color:#06C755;background:#f0fdf4}
+.choice-sm .choice-icon-box{width:32px;height:32px;font-size:15px}
+.choice-sm .choice-label{font-size:11.5px}
+.result-wrap{padding:16px 16px 20px}
+.urgency-banner{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;border-radius:12px;margin-bottom:16px}
+.urgency-banner.red{background:#fef2f2;border:1.5px solid #fca5a5}
+.urgency-banner.orange{background:#fff7ed;border:1.5px solid #fdba74}
+.urgency-banner.green{background:#f0fdf4;border:1.5px solid #86efac}
+.urgency-icon{font-size:26px;flex-shrink:0;line-height:1}
+.urgency-title{font-size:14px;font-weight:700}
+.urgency-title.red{color:#b91c1c}.urgency-title.orange{color:#c2410c}.urgency-title.green{color:#15803d}
+.urgency-msg{font-size:12px;margin-top:4px;line-height:1.6}
+.urgency-msg.red{color:#7f1d1d}.urgency-msg.orange{color:#7c2d12}.urgency-msg.green{color:#14532d}
+.section-label{font-size:10px;font-weight:700;color:#aaa;letter-spacing:0.08em;margin:14px 0 8px;text-transform:uppercase}
+.dcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.dcard-hdr{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer}
+.dcard-hdr:hover{background:#fafafa}
+.dcard-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.dcard-name{font-size:13px;font-weight:700;color:#1a1a1a}
+.dcard-cat{font-size:10px;color:#888;margin-top:1px}
+.badge{font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;margin-left:auto}
+.badge-red{background:#fef2f2;color:#b91c1c}
+.badge-orange{background:#fff7ed;color:#c2410c}
+.badge-green{background:#f0fdf4;color:#15803d}
+.dcard-body{display:none;border-top:1px solid #f0f0f0;padding:12px 13px;background:#fafafa}
+.dcard-body.open{display:block}
+.abar{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:9px;margin-bottom:10px}
+.abar.red{background:#fef2f2}.abar.orange{background:#fff7ed}.abar.green{background:#f0fdf4}
+.abar-txt{font-size:11.5px;line-height:1.5}
+.abar-txt.red{color:#7f1d1d}.abar-txt.orange{color:#7c2d12}.abar-txt.green{color:#14532d}
+.dsec{margin-bottom:9px}
+.dlbl{font-size:10px;font-weight:700;color:#bbb;letter-spacing:0.05em;margin-bottom:4px;text-transform:uppercase}
+.dtxt{font-size:12px;color:#333;line-height:1.6}
+.dtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.dtag{font-size:11px;padding:3px 9px;border-radius:20px;background:#fff;border:1px solid #e5e7eb;color:#555}
+.book-timing{background:#f0fdf4;border-radius:8px;padding:9px 11px;font-size:12px;color:#15803d;font-weight:600}
+.book-panel{background:#fff;border:1px solid #e0e0e0;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-top:4px}
+.book-panel-top{background:#06C755;padding:13px 15px;display:flex;align-items:center;gap:9px}
+.book-panel-top.urgent{background:#DC2626}
+.book-panel-top-ic{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.book-panel-top-ttl{color:white;font-size:13px;font-weight:600}
+.book-panel-body{padding:12px;display:flex;flex-direction:column;gap:7px}
+.book-opt{display:flex;align-items:center;gap:10px;padding:10px 11px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;cursor:pointer;transition:background 0.12s;text-decoration:none}
+.book-opt:hover{background:#f0f0f0}
+.book-opt-ic{font-size:18px;flex-shrink:0}
+.book-opt-ttl{font-size:12.5px;font-weight:700;color:#1a1a1a}
+.book-opt-sub{font-size:10px;color:#888;margin-top:1px}
+.book-opt-urgent{border-color:#fca5a5;background:#fef2f2}
+.book-opt-urgent .book-opt-ttl{color:#b91c1c}
+.clinic-info{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:11px 13px;margin-top:8px}
+.clinic-info-row{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:#555;margin-bottom:5px;line-height:1.5}
+.clinic-info-row:last-child{margin-bottom:0}
+.restart-wrap{padding:14px 16px 20px;border-top:1px solid #f0f0f0;margin-top:6px}
+.restart-btn{width:100%;padding:11px;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;color:#555;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.restart-btn:hover{background:#f5f5f5}
+.trail{padding:8px 16px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid #f0f0f0;background:#fafafa;min-height:36px;align-items:center}
+.trail-item{font-size:11px;padding:3px 9px;border-radius:20px;background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd}
+.trail-arr{font-size:11px;color:#ccc}
+.prog-info{text-align:right;font-size:11px;color:#bbb;padding:5px 20px 0}
+.intro{padding:20px;text-align:center}
+.intro-icon{font-size:46px;margin-bottom:12px}
+.intro-title{font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:8px;line-height:1.4}
+.intro-desc{font-size:13px;color:#666;line-height:1.7;margin-bottom:14px}
+.intro-notes{background:#f0fdf4;border-radius:10px;padding:12px 14px;text-align:left;margin-bottom:14px}
+.intro-note{font-size:12px;color:#15803d;display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;line-height:1.5}
+.intro-note:last-child{margin-bottom:0}
+.intro-clinic{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:11px 14px;text-align:left;margin-bottom:14px}
+.intro-clinic-name{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.intro-clinic-row{font-size:11px;color:#666;margin-bottom:3px;display:flex;gap:6px;align-items:flex-start;line-height:1.5}
+.start-btn{width:100%;padding:14px;border-radius:14px;border:none;background:#06C755;color:white;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.start-btn:hover{background:#05b34b}
+/* admin-entry-btn removed - moved to header */
+.emg-box{background:#fef2f2;border:2px solid #fca5a5;border-radius:14px;padding:18px;margin-bottom:16px;text-align:center}
+.emg-icon{font-size:40px;margin-bottom:10px}
+.emg-title{font-size:16px;font-weight:700;color:#b91c1c;margin-bottom:8px}
+.emg-msg{font-size:13px;color:#7f1d1d;line-height:1.6}
+.emg-opt{display:flex;align-items:center;gap:10px;padding:13px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:10px}
+.emg-opt-ic{font-size:22px}
+.emg-opt-ttl{font-size:14px;font-weight:700;color:#1a1a1a}
+.emg-opt-sub{font-size:12px;color:#888;margin-top:1px}
+/* ===== パスワードモーダル ===== */
+.pw-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;padding:20px}
+.pw-ov.show{display:flex}
+.pw-box{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:340px;text-align:center}
+.pw-icon{font-size:36px;margin-bottom:12px}
+.pw-title{font-size:17px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.pw-sub{font-size:12px;color:#888;margin-bottom:20px;line-height:1.6}
+.pw-input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid #e5e7eb;font-size:16px;text-align:center;letter-spacing:3px;margin-bottom:10px;outline:none;font-family:inherit}
+.pw-input:focus{border-color:#06C755}
+.pw-input.error{border-color:#EF4444;background:#FEF2F2}
+.pw-err{font-size:12px;color:#EF4444;margin-bottom:10px;min-height:18px}
+.pw-submit{width:100%;padding:12px;border-radius:12px;border:none;background:#06C755;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.pw-submit:hover{background:#05b34b}
+.pw-cancel{width:100%;padding:10px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;color:#888;font-size:13px;cursor:pointer}
+.pw-cancel:hover{background:#f5f5f5}
+/* ===== 管理ページ ===== */
+.admin-page{display:none;min-height:100vh;background:#F1F5F9}
+.admin-page.show{display:block}
+.admin-hdr{background:#1E293B;padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.admin-hdr-icon{width:34px;height:34px;border-radius:8px;background:#334155;display:flex;align-items:center;justify-content:center;font-size:16px}
+.admin-hdr-title{color:white;font-size:15px;font-weight:700;flex:1}
+.admin-hdr-sub{color:#94A3B8;font-size:10px;margin-top:2px}
+.admin-logout{padding:6px 14px;border-radius:20px;border:1px solid #475569;background:transparent;color:#94A3B8;font-size:12px;cursor:pointer}
+.admin-logout:hover{background:#334155;color:white}
+.admin-tabs{display:flex;background:#fff;border-bottom:1px solid #E2E8F0;overflow-x:auto}
+.admin-tab{padding:12px 16px;font-size:13px;font-weight:500;color:#64748B;border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;flex-shrink:0}
+.admin-tab.active{color:#06C755;border-bottom-color:#06C755;font-weight:700}
+.admin-content{padding:14px}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+/* ===== マインドマップ ===== */
+.mm-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.mm-stat{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:12px;text-align:center}
+.mm-stat-num{font-size:22px;font-weight:700;color:#06C755}
+.mm-stat-lbl{font-size:10px;color:#64748B;margin-top:2px}
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:6px 0 10px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#555}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+.mm-tabs{display:flex;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:4px;margin-bottom:12px;overflow-x:auto}
+.mm-tab{padding:7px 12px;font-size:12px;font-weight:500;color:#64748B;white-space:nowrap;cursor:pointer;border-radius:7px;flex-shrink:0}
+.mm-tab.active{background:white;color:#1E293B;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.mm-panel{display:none}
+.mm-panel.active{display:block}
+.mm-root{border-radius:12px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.mm-root-ttl{font-size:14px;font-weight:700;color:white}
+.mm-root-sub{font-size:10px;color:rgba(255,255,255,0.85);margin-top:2px}
+.mm-branch{margin-bottom:8px;border-radius:12px;overflow:hidden;border:1px solid #E2E8F0;background:#fff}
+.mm-bhdr{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer}
+.mm-bhdr:hover{background:#F8FAFC}
+.mm-bicon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.mm-bq{font-size:12.5px;font-weight:500;flex:1;color:#1a1a1a}
+.mm-bql{font-size:10px;color:#888;margin-top:1px}
+.mm-ba{font-size:11px;color:#bbb;transition:transform 0.2s;flex-shrink:0}
+.mm-ba.open{transform:rotate(90deg)}
+.mm-bbody{display:none;border-top:1px solid #F0F0F0}
+.mm-bbody.open{display:block}
+.mm-cr{display:flex;align-items:flex-start;padding:9px 12px;border-bottom:1px solid #F5F5F5}
+.mm-cr:last-child{border-bottom:none}
+.mm-cc{display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;padding-top:3px}
+.mm-cl{width:1px;background:#ddd;flex:1;min-height:16px}
+.mm-cd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mm-cont{flex:1;padding-left:7px}
+.mm-clabel{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.mm-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.mm-chip{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500}
+.mm-chip.red{background:#FCEBEB;color:#A32D2D;border:1px solid #FCA5A5}
+.mm-chip.orange{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.mm-chip.green{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.mm-emg{background:#FFF5F5}
+.mm-emg-txt{font-size:11px;color:#A32D2D;margin-top:2px}
+.mm-ebadge{font-size:10px;padding:2px 7px;border-radius:20px;background:#FCEBEB;color:#A32D2D;border:1px solid #FCA5A5;font-weight:600}
+.mm-rtitle{font-size:10px;font-weight:700;color:#94A3B8;letter-spacing:0.06em;text-transform:uppercase;margin:12px 0 6px 2px}
+.mm-rc{border-radius:10px;overflow:hidden;border:1px solid;margin-bottom:6px;cursor:pointer}
+.mm-rc.red{border-color:#FCA5A5;background:#FFF5F5}
+.mm-rc.orange{border-color:#FCD34D;background:#FFFBEB}
+.mm-rc.green{border-color:#86EFAC;background:#F0FDF4}
+.mm-rchdr{display:flex;align-items:center;gap:8px;padding:8px 11px}
+.mm-rcic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.mm-rcname{font-size:12px;font-weight:700;flex:1}
+.mm-rcname.red{color:#A32D2D}.mm-rcname.orange{color:#92400E}.mm-rcname.green{color:#166534}
+.mm-rcbadge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.mm-rcbadge.red{background:#FCEBEB;color:#A32D2D}
+.mm-rcbadge.orange{background:#FEF3C7;color:#92400E}
+.mm-rcbadge.green{background:#DCFCE7;color:#166534}
+.mm-rcbody{display:none;padding:8px 11px;border-top:1px solid;font-size:11.5px;line-height:1.6}
+.mm-rcbody.red{border-color:#FCA5A5;color:#7F1D1D}
+.mm-rcbody.orange{border-color:#FCD34D;color:#78350F}
+.mm-rcbody.green{border-color:#86EFAC;color:#14532D}
+.mm-rcbody.open{display:block}
+.mm-dl{font-size:10px;font-weight:700;color:#aaa;margin-bottom:2px;text-transform:uppercase}
+.mm-sxtags{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.mm-sxtag{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.8);border:1px solid rgba(0,0,0,0.1);color:#555}
+/* ===== 依頼フォーム ===== */
+.form-sec{background:#fff;border-radius:12px;border:1px solid #E2E8F0;overflow:hidden;margin-bottom:12px}
+.form-sec-hdr{padding:12px 14px;background:#F8FAFC;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;gap:8px}
+.form-sec-num{width:24px;height:24px;border-radius:50%;background:#06C755;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.form-sec-ttl{font-size:13px;font-weight:700;color:#1E293B}
+.form-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.form-row{display:flex;flex-direction:column;gap:4px}
+.form-lbl{font-size:11px;font-weight:700;color:#475569}
+.form-req{font-size:10px;color:#EF4444;margin-left:4px}
+.form-inp{padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;font-size:13px;color:#1a1a1a;outline:none;width:100%;font-family:inherit}
+.form-inp:focus{border-color:#06C755}
+.form-sel{padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;font-size:13px;color:#1a1a1a;outline:none;width:100%;font-family:inherit;appearance:none;background:#fff}
+.form-sel:focus{border-color:#06C755}
+.form-ta{padding:10px 12px;border-radius:10px;border:1.5px solid #E2E8F0;font-size:13px;color:#1a1a1a;outline:none;width:100%;font-family:inherit;resize:vertical;min-height:80px}
+.form-ta:focus{border-color:#06C755}
+.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.form-submit{width:100%;padding:14px;border-radius:12px;border:none;background:#06C755;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+.form-submit:hover{background:#05b34b}
+.preview-box{background:#F0FDF4;border:1px solid #86EFAC;border-radius:12px;padding:14px;margin-top:12px;display:none}
+.preview-box.show{display:block}
+.preview-ttl{font-size:12px;font-weight:700;color:#15803D;margin-bottom:10px}
+.preview-row{font-size:12px;color:#166534;margin-bottom:5px;display:flex;gap:6px;line-height:1.5}
+.preview-lbl{font-weight:700;flex-shrink:0;min-width:90px}
+.copy-btn{width:100%;padding:11px;border-radius:12px;border:1.5px solid #06C755;background:#fff;color:#06C755;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.copy-btn:hover{background:#f0fdf4}
+.copy-btn.copied{background:#06C755;color:white}
+.disease-list{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px;margin-bottom:12px}
+.disease-list-ttl{font-size:11px;font-weight:700;color:#475569;margin-bottom:8px}
+.disease-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.d-item{font-size:11px;color:#64748B;padding:3px 0;display:flex;align-items:center;gap:4px}
+.d-num{font-size:10px;color:#94A3B8;width:16px;flex-shrink:0}
+/* ===== テンプレート ===== */
+.tmpl-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.tmpl-hdr{background:#F8FAFC;padding:10px 14px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;justify-content:space-between}
+.tmpl-hdr-ttl{font-size:12px;font-weight:700;color:#475569}
+.tmpl-copy{padding:5px 12px;border-radius:20px;border:1px solid #06C755;color:#06C755;background:white;cursor:pointer;font-size:11px;font-weight:600}
+.tmpl-copy:hover{background:#f0fdf4}
+.tmpl-copy.copied{background:#06C755;color:white}
+.tmpl-body{padding:14px;font-size:11.5px;color:#334155;line-height:1.8;white-space:pre-wrap;font-family:inherit}
+.info-note{background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:#78350F;line-height:1.6}
+.section-ttl{font-size:13px;font-weight:700;color:#1E293B;margin-bottom:10px}
+</style>
+</head>
+<body>
+<!-- ===== 患者向けページ ===== -->
+<div id="patient-page" class="patient-wrap">
+  <div class="top-bar">
+    <div class="top-icon">&#128269;</div>
+    <div class="top-texts">
+      <div class="top-title" id="hdr-title">お困りの症状 絞り込みチェック</div>
+      <div class="top-sub">心身堂鍼灸・整骨院 読谷院</div>
+    </div>
+    <div class="lang-sw">
+      <button class="lang-btn active" id="btn-ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+    </div>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);margin-left:4px;flex-shrink:0"></div>
+    <button class="staff-btn" onclick="openPw()" title="スタッフ専用">&#128272;</button>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+  <div class="card">
+    <div class="trail" id="trail"></div>
+    <div class="prog-info" id="prog-info"></div>
+    <div id="main"></div>
+  </div>
+</div>
+
+<!-- ===== パスワードモーダル ===== -->
+<div class="pw-ov" id="pw-ov">
+  <div class="pw-box">
+    <div class="pw-icon">&#128274;</div>
+    <div class="pw-title">スタッフ専用ページ</div>
+    <div class="pw-sub">管理ページはスタッフのみアクセスできます。<br>パスワードを入力してください。</div>
+    <input type="password" class="pw-input" id="pw-input" placeholder="パスワード" maxlength="20" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="pw-err" id="pw-err"></div>
+    <button class="pw-submit" onclick="checkPw()">&#128274; ログイン</button>
+    <button class="pw-cancel" onclick="closePw()">キャンセル</button>
+  </div>
+</div>
+
+<!-- ===== 管理ページ ===== -->
+<div id="admin-page" class="admin-page">
+  <div class="admin-hdr">
+    <div class="admin-hdr-icon">&#9881;</div>
+    <div>
+      <div class="admin-hdr-title">スタッフ管理ページ</div>
+      <div class="admin-hdr-sub">心身堂鍼灸・整骨院 読谷院</div>
+    </div>
+    <button class="admin-logout" onclick="adminLogout()">&#128274; ログアウト</button>
+  </div>
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="showAdminTab('map')" id="atab-map">&#128269; 症状絞り込みチェックフローマップ</div>
+    <div class="admin-tab" onclick="showAdminTab('form')" id="atab-form">&#128221; 症状追加依頼</div>
+    <div class="admin-tab" onclick="showAdminTab('tmpl')" id="atab-tmpl">&#128203; テンプレート集</div>
+  </div>
+  <div class="admin-content">
+
+    <!-- マインドマップパネル -->
+    <div class="admin-panel active" id="apanel-map">
+      <div class="mm-stats">
+        <div class="mm-stat"><div class="mm-stat-num">4</div><div class="mm-stat-lbl">対応部位</div></div>
+        <div class="mm-stat"><div class="mm-stat-num">37</div><div class="mm-stat-lbl">収録疾患数</div></div>
+        <div class="mm-stat"><div class="mm-stat-num">2</div><div class="mm-stat-lbl">救急誘導</div></div>
+      </div>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#A32D2D"></div>早急（赤）今日〜翌日</div>
+        <div class="leg"><div class="leg-dot" style="background:#92400E"></div>早め（橙）1週間以内</div>
+        <div class="leg"><div class="leg-dot" style="background:#166534"></div>余裕（緑）1〜2週間</div>
+      </div>
+      <div class="mm-tabs">
+        <div class="mm-tab active" onclick="showMMTab('hip_low')" id="mmtab-hip_low">🔴 腰・お尻・股関節</div>
+        <div class="mm-tab" onclick="showMMTab('neck_sh')" id="mmtab-neck_sh">🔵 首・肩</div>
+        <div class="mm-tab" onclick="showMMTab('arm')" id="mmtab-arm">🟣 腕・手首</div>
+        <div class="mm-tab" onclick="showMMTab('back')" id="mmtab-back">🟤 背中</div>
+        <div class="mm-tab" onclick="showMMTab('leg')" id="mmtab-leg">🟢 膝・太もも・ふくらはぎ</div>
+        <div class="mm-tab" onclick="showMMTab('posture')" id="mmtab-posture">🟤 姿勢</div>
+      </div>
+
+      <!-- =====================================================
+           🔴 腰・股関節周囲
+           腰痛・ぎっくり腰・ヘルニア・狭窄症・坐骨神経痛
+           梨状筋症候群・仙腸関節障害・股関節症・グロインペイン
+      ===================================================== -->
+      <div class="mm-panel active" id="mmpanel-hip_low">
+        <div class="mm-root" style="background:#DC2626"><div style="font-size:18px">🔴</div><div><div class="mm-root-ttl">腰・股関節周囲</div><div class="mm-root-sub">腰痛 ／ 骨盤 ／ お尻 ／ 股関節 ／ 鼠径部</div></div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:8px 4px 4px;">🔸 腰・お尻の痛み</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl1')"><div class="mm-bicon" style="background:#FEF3C7">⚡</div><div style="flex:1"><div class="mm-bq">急に強く痛めた（ぎっくり腰）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-hl1">›</div></div><div class="mm-bbody" id="mmb-hl1"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">急性腰痛（ぎっくり腰）</div><div class="mm-chip red">腰椎椎間板ヘルニア</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl2')"><div class="mm-bicon" style="background:#F3F4F6">😣</div><div style="flex:1"><div class="mm-bq">慢性的な腰の痛み・だるさ</div><div class="mm-bql">→ Q2「どのタイプ？」へ</div></div><div class="mm-ba" id="mma-hl2">›</div></div><div class="mm-bbody" id="mmb-hl2">
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#888"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">前かがみ・座位で悪化</div><div class="mm-chips"><div class="mm-chip red">腰椎椎間板ヘルニア</div><div class="mm-chip green">腰部筋筋膜症</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#888"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">腰を反らすと痛む（若い・スポーツ）</div><div class="mm-chips"><div class="mm-chip orange">脊椎分離症</div><div class="mm-chip green">腰部筋筋膜症</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#888"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">骨盤・片側の腰が痛い（立ち上がりで悪化）</div><div class="mm-chips"><div class="mm-chip orange">仙腸関節障害</div><div class="mm-chip green">腰部筋筋膜症</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#888"></div></div><div class="mm-cont"><div class="mm-clabel">お尻〜太もも裏に重だるさ・しびれ</div><div class="mm-chips"><div class="mm-chip orange">坐骨神経痛</div><div class="mm-chip orange">梨状筋症候群</div></div></div></div>
+        </div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl3')"><div class="mm-bicon" style="background:#FCEBEB">🦵</div><div style="flex:1"><div class="mm-bq">歩くと足がだるくなり・休むと楽になる</div><div class="mm-bql">→ 脊柱管狭窄症・坐骨神経痛</div></div><div class="mm-ba" id="mma-hl3">›</div></div><div class="mm-bbody" id="mmb-hl3"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip red">腰部脊柱管狭窄症</div><div class="mm-chip orange">坐骨神経痛</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl4')"><div class="mm-bicon" style="background:#FCEBEB">⚡</div><div style="flex:1"><div class="mm-bq">足・すねにしびれがある（排尿変化あり？）</div><div class="mm-bql">→ 緊急確認（救急分岐あり）</div></div><div class="mm-ba" id="mma-hl4">›</div></div><div class="mm-bbody" id="mmb-hl4">
+          <div class="mm-cr mm-emg"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div><div class="mm-cl" style="background:#FCA5A5"></div></div><div class="mm-cont"><div class="mm-clabel">排尿・排便に変化がある <span class="mm-ebadge">救急案内へ</span></div><div class="mm-emg-txt">馬尾症候群の可能性 → 119番へ誘導</div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#888"></div></div><div class="mm-cont"><div class="mm-clabel">排尿変化なし</div><div class="mm-chips"><div class="mm-chip red">腰椎椎間板ヘルニア</div><div class="mm-chip orange">坐骨神経痛</div><div class="mm-chip red">腰部脊柱管狭窄症</div></div></div></div>
+        </div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:14px 4px 4px;">🔸 股関節・鼠径部</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl5')"><div class="mm-bicon" style="background:#FEF3C7">🧘</div><div style="flex:1"><div class="mm-bq">歩き始めや長歩きで股関節前面・横が痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-hl5">›</div></div><div class="mm-bbody" id="mmb-hl5"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">変形性股関節症</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('hl6')"><div class="mm-bicon" style="background:#FEF3C7">⚽</div><div style="flex:1"><div class="mm-bq">ランニング・キック動作で鼠径部が痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-hl6">›</div></div><div class="mm-bbody" id="mmb-hl6"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">グロインペイン症候群</div></div></div></div></div></div>
+
+        <div class="mm-rtitle">腰・股関節周囲 疾患一覧（タップで詳細）</div>
+        <div class="mm-rc red" onclick="togMMD('hl-d1')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">😣</div><div class="mm-rcname red">腰椎椎間板ヘルニア</div><div class="mm-rcbadge red">早めの精査</div></div><div class="mm-rcbody red" id="hl-d1"><div class="mm-dl">概要</div>椎間板の髄核が神経を圧迫。腰痛＋足へのしびれが典型。<div class="mm-dl" style="margin-top:6px">当院での対応</div>牽引・神経緩和手技療法・鍼灸治療・整形外科連携</div></div>
+        <div class="mm-rc red" onclick="togMMD('hl-d2')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">🚶</div><div class="mm-rcname red">腰部脊柱管狭窄症</div><div class="mm-rcbadge red">早めの精査</div></div><div class="mm-rcbody red" id="hl-d2"><div class="mm-dl">概要</div>脊柱管が狭まり神経を圧迫。間欠性跛行（歩くと痛み・休むと楽）が特徴。<div class="mm-dl" style="margin-top:6px">当院での対応</div>姿勢改善・筋力強化・骨盤調整・整形外科連携</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d3')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">⚡</div><div class="mm-rcname orange">急性腰痛（ぎっくり腰）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d3"><div class="mm-dl">概要</div>突然の強い腰痛。椎間関節・筋膜・靭帯の急性炎症が主な原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・HV治療・超音波で早期回復をサポート</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d4')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">⚡</div><div class="mm-rcname orange">坐骨神経痛</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d4"><div class="mm-dl">概要</div>坐骨神経の圧迫・刺激による腰〜足の痛み・しびれ。<div class="mm-dl" style="margin-top:6px">当院での対応</div>梨状筋ストレッチ・もも裏ストレッチ・姿勢改善・鍼灸治療</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d5')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🔴</div><div class="mm-rcname orange">梨状筋症候群</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d5"><div class="mm-dl">概要</div>梨状筋が坐骨神経を圧迫。お尻〜足にしびれや痛みが放散する。<div class="mm-dl" style="margin-top:6px">当院での対応</div>梨状筋ストレッチ・鍼灸治療・トリガーポイント施術</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d6')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🧘</div><div class="mm-rcname orange">仙腸関節障害</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d6"><div class="mm-dl">概要</div>仙骨と腸骨の間の関節障害。出産後・デスクワーカーに多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>インナーマッスルトレーニング・骨盤調整・姿勢改善指導</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d7')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🧘</div><div class="mm-rcname orange">変形性股関節症</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d7"><div class="mm-dl">概要</div>股関節軟骨のすり減り。先天性臼蓋形成不全が多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>負荷コントロール・筋力強化・体重管理・整形外科連携</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d8')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">⚽</div><div class="mm-rcname orange">グロインペイン症候群</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d8"><div class="mm-dl">概要</div>鼠径部周囲の痛み。サッカー選手に多いスポーツ障害。<div class="mm-dl" style="margin-top:6px">当院での対応</div>スポーツ休止・アイシング・股関節可動域改善・協調性トレーニング</div></div>
+        <div class="mm-rc green" onclick="togMMD('hl-d9')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">😣</div><div class="mm-rcname green">腰部筋筋膜症（慢性腰痛）</div><div class="mm-rcbadge green">1〜2週間以内</div></div><div class="mm-rcbody green" id="hl-d9"><div class="mm-dl">概要</div>筋肉・筋膜の慢性的な緊張・炎症。デスクワーク・姿勢不良が主な要因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・姿勢改善指導・ストレッチ指導</div></div>
+        <div class="mm-rc orange" onclick="togMMD('hl-d10')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">脊椎分離症</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="hl-d10"><div class="mm-dl">概要</div>成長期スポーツ選手に多い腰椎の疲労骨折。腰を反らすと痛みが強まる。<div class="mm-dl" style="margin-top:6px">当院での対応</div>コルセット着用指導・ストレッチ・整形外科連携</div></div>
+      </div>
+
+      <!-- =====================================================
+           🔵 首・肩
+           肩こり・ストレートネック・頸椎ヘルニア・むち打ち
+           頸原性頭痛・五十肩・腱板炎・胸郭出口症候群
+      ===================================================== -->
+      <div class="mm-panel" id="mmpanel-neck_sh">
+        <div class="mm-root" style="background:#2563EB"><div style="font-size:18px">🔵</div><div><div class="mm-root-ttl">首・肩</div><div class="mm-root-sub">頸部 ／ 肩 ／ 頭痛 ／ しびれ</div></div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:8px 4px 4px;">🔹 首・頭部の症状</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns1')"><div class="mm-bicon" style="background:#fafafa">💻</div><div style="flex:1"><div class="mm-bq">肩・首のこりが慢性的に続いている</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns1">›</div></div><div class="mm-bbody" id="mmb-ns1"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">僧帽筋症候群（肩こり）</div><div class="mm-chip orange">ストレートネック</div><div class="mm-chip orange">頸原性頭痛</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns2')"><div class="mm-bicon" style="background:#fff7ed">🚗</div><div style="flex:1"><div class="mm-bq">事故・転倒後から首が痛くなった（むち打ち）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns2">›</div></div><div class="mm-bbody" id="mmb-ns2"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">頸椎捻挫（むち打ち）</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns3')"><div class="mm-bicon" style="background:#fafafa">😴</div><div style="flex:1"><div class="mm-bq">急に首が動かせなくなった（寝違え）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns3">›</div></div><div class="mm-bbody" id="mmb-ns3"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">急性頸部痛（寝違え）</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns4')"><div class="mm-bicon" style="background:#fef2f2">🤕</div><div style="flex:1"><div class="mm-bq">首から後頭部にかけて頭痛がある</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns4">›</div></div><div class="mm-bbody" id="mmb-ns4"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">頸原性頭痛</div><div class="mm-chip green">僧帽筋症候群</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns5')"><div class="mm-bicon" style="background:#fef2f2">🖐</div><div style="flex:1"><div class="mm-bq">首〜腕〜手にかけてしびれ・脱力がある</div><div class="mm-bql">→ Q2「どちら側？」へ</div></div><div class="mm-ba" id="mma-ns5">›</div></div><div class="mm-bbody" id="mmb-ns5">
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">片側の腕・指がしびれる</div><div class="mm-chips"><div class="mm-chip red">頸椎椎間板ヘルニア</div><div class="mm-chip orange">胸郭出口症候群</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">両手・両腕がしびれる</div><div class="mm-chips"><div class="mm-chip red">頸椎椎間板ヘルニア</div></div></div></div>
+        </div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:14px 4px 4px;">🔹 肩の症状</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns6')"><div class="mm-bicon" style="background:#fef2f2">🌙</div><div style="flex:1"><div class="mm-bq">夜間に肩が痛い・腕が上がらない</div><div class="mm-bql">→ Q2「詳細確認」へ</div></div><div class="mm-ba" id="mma-ns6">›</div></div><div class="mm-bbody" id="mmb-ns6">
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">夜間痛が強く急に動かしにくくなった</div><div class="mm-chips"><div class="mm-chip orange">肩関節周囲炎（五十肩）</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">動かすと痛いが夜間はまだ大丈夫</div><div class="mm-chips"><div class="mm-chip orange">回旋筋腱板炎</div><div class="mm-chip orange">上腕二頭筋長頭腱炎</div></div></div></div>
+        </div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns7')"><div class="mm-bicon" style="background:#fff7ed">💪</div><div style="flex:1"><div class="mm-bq">腕を上げると肩が痛い・引っかかる感じ</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns7">›</div></div><div class="mm-bbody" id="mmb-ns7"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">回旋筋腱板炎</div><div class="mm-chip orange">上腕二頭筋長頭腱炎</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('ns8')"><div class="mm-bicon" style="background:#f0f4ff">💪</div><div style="flex:1"><div class="mm-bq">腕を挙げると手・指がしびれる</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-ns8">›</div></div><div class="mm-bbody" id="mmb-ns8"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">胸郭出口症候群</div><div class="mm-chip red">頸椎椎間板ヘルニア</div></div></div></div></div></div>
+
+        <div class="mm-rtitle">首・肩 疾患一覧（タップで詳細）</div>
+        <div class="mm-rc green" onclick="togMMD('ns-d1')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">💻</div><div class="mm-rcname green">僧帽筋症候群（肩こり）</div><div class="mm-rcbadge green">余裕あり</div></div><div class="mm-rcbody green" id="ns-d1"><div class="mm-dl">概要</div>慢性的な肩・首のこり。デスクワーク・スマホの長時間使用が主原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・姿勢改善指導・ストレッチ指導</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d2')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">📱</div><div class="mm-rcname orange">ストレートネック（スマホ首）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d2"><div class="mm-dl">概要</div>頸椎の生理的弯曲が消失した状態。長時間のスマホ・デスクワークが原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎牽引・姿勢改善・インナーマッスルトレーニング</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d3')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🚗</div><div class="mm-rcname orange">頸椎捻挫（むち打ち）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d3"><div class="mm-dl">概要</div>首への急激な外力による筋・靭帯の損傷。交通事故・転倒が主な原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎回旋運動・ヒップロール・姿勢管理</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d4')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">😴</div><div class="mm-rcname orange">急性頸部痛（寝違え）</div><div class="mm-rcbadge orange">1〜3日以内</div></div><div class="mm-rcbody orange" id="ns-d4"><div class="mm-dl">概要</div>急に首が動かせなくなる急性症状。不良姿勢での睡眠が原因が多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・鍼灸治療・HV治療</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d5')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🤕</div><div class="mm-rcname orange">頸原性頭痛</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d5"><div class="mm-dl">概要</div>首の機能低下が原因の頭痛。首から後頭部への鈍痛が特徴。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎屈曲運動・ヒップロール・デスク環境改善指導</div></div>
+        <div class="mm-rc red" onclick="togMMD('ns-d6')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">🖐</div><div class="mm-rcname red">頸椎椎間板ヘルニア</div><div class="mm-rcbadge red">早めの精査</div></div><div class="mm-rcbody red" id="ns-d6"><div class="mm-dl">概要</div>椎間板の髄核が神経を圧迫。首〜腕・手のしびれ・脱力が典型。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎牽引・上位頸椎屈曲運動・ロウイング・整形外科連携</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d7')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🌙</div><div class="mm-rcname orange">肩関節周囲炎（五十肩）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d7"><div class="mm-dl">概要</div>原因不明の肩関節の痛みと可動域制限。夜間痛が最初の指標。<div class="mm-dl" style="margin-top:6px">当院での対応</div>ロウイング・サンディング・肩甲骨可動域訓練</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d8')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">💪</div><div class="mm-rcname orange">回旋筋腱板炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d8"><div class="mm-dl">概要</div>腱板の炎症・インピンジメント。使い過ぎが主原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>ロウイング・腱板エクササイズ・肩甲骨周り可動域改善</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d9')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">💪</div><div class="mm-rcname orange">上腕二頭筋長頭腱炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d9"><div class="mm-dl">概要</div>肩前方の腱炎。オーバーヘッドスポーツ・重労働者に多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>ロウイング・腱板エクササイズ・インナーマッスル強化</div></div>
+        <div class="mm-rc orange" onclick="togMMD('ns-d10')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">💪</div><div class="mm-rcname orange">胸郭出口症候群</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="ns-d10"><div class="mm-dl">概要</div>なで肩・重労働者に多い神経・血管の圧迫障害。腕挙げでしびれが特徴。<div class="mm-dl" style="margin-top:6px">当院での対応</div>広背筋ストレッチ・突き出し運動・姿勢改善指導</div></div>
+      </div>
+
+      <!-- =====================================================
+           🟣 腕（肘・手首・手）
+           テニス肘 ※重複許容
+      ===================================================== -->
+      <div class="mm-panel" id="mmpanel-arm">
+        <div class="mm-root" style="background:#7C3AED"><div style="font-size:18px">🟣</div><div><div class="mm-root-ttl">腕（肘・手首・手）</div><div class="mm-root-sub">肘 ／ 手首 ／ 手 ／ 腕のしびれ</div></div></div>
+
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('arm1')"><div class="mm-bicon" style="background:#FEF3C7">🎾</div><div style="flex:1"><div class="mm-bq">肘の外側が痛い（物を持つと悪化）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-arm1">›</div></div><div class="mm-bbody" id="mmb-arm1"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">テニス肘（上腕骨外側上顆炎）</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('arm2')"><div class="mm-bicon" style="background:#f0f4ff">🖐</div><div style="flex:1"><div class="mm-bq">手・指がしびれる</div><div class="mm-bql">→ Q2「どのあたり？」へ</div></div><div class="mm-ba" id="mma-arm2">›</div></div><div class="mm-bbody" id="mmb-arm2">
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">親指〜中指がしびれる（夜間に強い）</div><div class="mm-chips"><div class="mm-chip red">頸椎椎間板ヘルニア</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">小指側・腕を上げた時にしびれる</div><div class="mm-chips"><div class="mm-chip orange">胸郭出口症候群</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">両手・両腕がしびれる</div><div class="mm-chips"><div class="mm-chip red">頸椎椎間板ヘルニア</div></div></div></div>
+        </div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('arm3')"><div class="mm-bicon" style="background:#fff7ed">💪</div><div style="flex:1"><div class="mm-bq">肩の前側・力こぶ付近が慢性的に痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-arm3">›</div></div><div class="mm-bbody" id="mmb-arm3"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">上腕二頭筋長頭腱炎</div></div></div></div></div></div>
+
+        <div class="mm-rtitle">腕（肘・手首・手）疾患一覧（タップで詳細）</div>
+        <div class="mm-rc orange" onclick="togMMD('arm-d1')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🎾</div><div class="mm-rcname orange">上腕骨外側上顆炎（テニス肘）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="arm-d1"><div class="mm-dl">概要</div>肘外側の腱の使いすぎによる炎症。日常作業が主原因（テニスは5〜10%のみ）。<div class="mm-dl" style="margin-top:6px">当院での対応</div>前腕ストレッチ・アイスマッサージ・反対手の使用習慣づけ</div></div>
+        <div class="mm-rc orange" onclick="togMMD('arm-d2')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">💪</div><div class="mm-rcname orange">上腕二頭筋長頭腱炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="arm-d2"><div class="mm-dl">概要</div>肩前方〜力こぶ周囲の腱炎。オーバーヘッドスポーツ・重労働者に多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>ロウイング・腱板エクササイズ・インナーマッスル強化</div></div>
+        <div class="mm-rc red" onclick="togMMD('arm-d3')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">🖐</div><div class="mm-rcname red">頸椎椎間板ヘルニア（腕のしびれ）</div><div class="mm-rcbadge red">早めの精査</div></div><div class="mm-rcbody red" id="arm-d3"><div class="mm-dl">概要</div>首の椎間板が神経を圧迫し腕・手にしびれが出る。腕の症状は首が原因のことも。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎牽引・上位頸椎屈曲運動・ロウイング</div></div>
+        <div class="mm-rc orange" onclick="togMMD('arm-d4')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">💪</div><div class="mm-rcname orange">胸郭出口症候群（腕のしびれ）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="arm-d4"><div class="mm-dl">概要</div>腕を挙げる動作で上肢がしびれる。なで肩・重労働者に多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>広背筋ストレッチ・突き出し運動・姿勢改善指導</div></div>
+      </div>
+
+      <!-- =====================================================
+           🟤 背中・脊柱
+           側弯症・脊椎分離症 ※姿勢系も含む
+      ===================================================== -->
+      <div class="mm-panel" id="mmpanel-back">
+        <div class="mm-root" style="background:#92400E"><div style="font-size:18px">🟤</div><div><div class="mm-root-ttl">背中・脊柱</div><div class="mm-root-sub">背骨の歪み ／ 姿勢 ／ 脊椎の問題</div></div></div>
+
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('bk1')"><div class="mm-bicon" style="background:#f0fdf4">📐</div><div style="flex:1"><div class="mm-bq">背骨・肩・骨盤の高さが左右で違う・歪みが気になる</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-bk1">›</div></div><div class="mm-bbody" id="mmb-bk1"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">側弯症</div><div class="mm-chip orange">仙腸関節障害</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('bk2')"><div class="mm-bicon" style="background:#fff7ed">🏃</div><div style="flex:1"><div class="mm-bq">腰を反らすと痛む（成長期スポーツ選手）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-bk2">›</div></div><div class="mm-bbody" id="mmb-bk2"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">脊椎分離症</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('bk3')"><div class="mm-bicon" style="background:#fafafa">📱</div><div style="flex:1"><div class="mm-bq">頭が前に出ている・首がまっすぐに近い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-bk3">›</div></div><div class="mm-bbody" id="mmb-bk3"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">ストレートネック</div><div class="mm-chip green">僧帽筋症候群</div><div class="mm-chip orange">頸原性頭痛</div></div></div></div></div></div>
+
+        <div class="mm-rtitle">背中・脊柱 疾患一覧（タップで詳細）</div>
+        <div class="mm-rc green" onclick="togMMD('bk-d1')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">📐</div><div class="mm-rcname green">側弯症</div><div class="mm-rcbadge green">余裕あり</div></div><div class="mm-rcbody green" id="bk-d1"><div class="mm-dl">概要</div>背骨が左右に弯曲した状態。初期は痛みがなく気づきにくい。突発性が80%。<div class="mm-dl" style="margin-top:6px">当院での対応</div>CAT&DOG・胸椎側屈運動・姿勢改善指導・整形外科連携</div></div>
+        <div class="mm-rc orange" onclick="togMMD('bk-d2')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">脊椎分離症</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="bk-d2"><div class="mm-dl">概要</div>成長期スポーツ選手に多い腰椎の疲労骨折。腰を反らすと痛みが強まる。<div class="mm-dl" style="margin-top:6px">当院での対応</div>コルセット着用指導・ストレッチ・整形外科連携</div></div>
+        <div class="mm-rc green" onclick="togMMD('bk-d3')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">📱</div><div class="mm-rcname green">ストレートネック（スマホ首）</div><div class="mm-rcbadge green">余裕あり</div></div><div class="mm-rcbody green" id="bk-d3"><div class="mm-dl">概要</div>頸椎の生理的弯曲が消失した状態。姿勢改善で多くは改善する。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎牽引・姿勢改善・インナーマッスルトレーニング</div></div>
+      </div>
+
+      <!-- =====================================================
+           🟢 足（膝・足首・太もも・すね・股関節）
+      ===================================================== -->
+      <div class="mm-panel" id="mmpanel-leg">
+        <div class="mm-root" style="background:#16A34A"><div style="font-size:18px">🟢</div><div><div class="mm-root-ttl">足（膝・足首・太もも・すね・股関節）</div><div class="mm-root-sub">下肢全般の痛み・外傷・スポーツ障害</div></div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:8px 4px 4px;">🔹 膝・太もも</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg1')"><div class="mm-bicon" style="background:#fef2f2">⚡</div><div style="flex:1"><div class="mm-bq">スポーツ中に膝を強く痛めた</div><div class="mm-bql">→ Q2「どんな感じ？」へ</div></div><div class="mm-ba" id="mma-leg1">›</div></div><div class="mm-bbody" id="mmb-leg1">
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">「ガクッ」「ブチッ」と膝が抜けた</div><div class="mm-chips"><div class="mm-chip red">前十字靭帯損傷（ACL）</div><div class="mm-chip red">内側側副靭帯損傷</div><div class="mm-chip red">半月板損傷</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div><div class="mm-cl"></div></div><div class="mm-cont"><div class="mm-clabel">太もも前面に突然激痛が走った</div><div class="mm-chips"><div class="mm-chip red">大腿四頭筋の肉離れ</div></div></div></div>
+          <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">膝全体が腫れている・水が溜まった感じ</div><div class="mm-chips"><div class="mm-chip red">内側側副靭帯損傷</div><div class="mm-chip red">半月板損傷</div><div class="mm-chip red">変形性膝関節症</div></div></div></div>
+        </div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg2')"><div class="mm-bicon" style="background:#fff7ed">🦵</div><div style="flex:1"><div class="mm-bq">膝の前・お皿周りが慢性的に痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg2">›</div></div><div class="mm-bbody" id="mmb-leg2"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">膝蓋大腿関節症（PFP）</div><div class="mm-chip orange">膝蓋腱炎（ジャンパー膝）</div><div class="mm-chip orange">オスグッド・シュラッター病</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg3')"><div class="mm-bicon" style="background:#fafafa">🦵</div><div style="flex:1"><div class="mm-bq">膝の内側が慢性的に痛い・じわじわ悪化</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg3">›</div></div><div class="mm-bbody" id="mmb-leg3"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">鵞足炎</div><div class="mm-chip red">変形性膝関節症</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg4')"><div class="mm-bicon" style="background:#fff7ed">🏃</div><div style="flex:1"><div class="mm-bq">膝の外側がランニングで痛む</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg4">›</div></div><div class="mm-bbody" id="mmb-leg4"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">腸脛靭帯炎（ランナー膝）</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg5')"><div class="mm-bicon" style="background:#fef2f2">🦵</div><div style="flex:1"><div class="mm-bq">動き始めが特に痛い・膝に水が溜まる（中高年）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg5">›</div></div><div class="mm-bbody" id="mmb-leg5"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip red">変形性膝関節症</div><div class="mm-chip orange">鵞足炎</div></div></div></div></div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:14px 4px 4px;">🔹 足首・足の裏</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg6')"><div class="mm-bicon" style="background:#fef2f2">🌀</div><div style="flex:1"><div class="mm-bq">捻挫をした（足首を捻った）</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg6">›</div></div><div class="mm-bbody" id="mmb-leg6"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#A32D2D"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip red">足関節外側靭帯損傷（捻挫）</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg7')"><div class="mm-bicon" style="background:#fff7ed">👣</div><div style="flex:1"><div class="mm-bq">朝一歩目のかかとが痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg7">›</div></div><div class="mm-bbody" id="mmb-leg7"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">足底筋膜炎</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg8')"><div class="mm-bicon" style="background:#fff7ed">⚡</div><div style="flex:1"><div class="mm-bq">かかとの上（アキレス腱）が痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg8">›</div></div><div class="mm-bbody" id="mmb-leg8"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">アキレス腱炎</div></div></div></div></div></div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg9')"><div class="mm-bicon" style="background:#f0fdf4">👣</div><div style="flex:1"><div class="mm-bq">足裏全体が疲れやすい・土踏まずが低い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg9">›</div></div><div class="mm-bbody" id="mmb-leg9"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">扁平足</div><div class="mm-chip orange">足底筋膜炎</div></div></div></div></div></div>
+
+        <div style="font-size:11px;font-weight:700;color:#64748B;letter-spacing:0.06em;padding:14px 4px 4px;">🔹 すね・ふくらはぎ</div>
+        <div class="mm-branch"><div class="mm-bhdr" onclick="togMM('leg10')"><div class="mm-bicon" style="background:#fff7ed">🏃</div><div style="flex:1"><div class="mm-bq">ランニング・運動後にすね内側が痛い</div><div class="mm-bql">→ 直接疾患提示</div></div><div class="mm-ba" id="mma-leg10">›</div></div><div class="mm-bbody" id="mmb-leg10"><div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">シンスプリント</div><div class="mm-chip orange">アキレス腱炎</div></div></div></div></div></div>
+
+        <div class="mm-rtitle">足 疾患一覧（タップで詳細）</div>
+        <div class="mm-rc red" onclick="togMMD('leg-d1')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">⚡</div><div class="mm-rcname red">前十字靭帯損傷（ACL損傷）</div><div class="mm-rcbadge red">早急な受診</div></div><div class="mm-rcbody red" id="leg-d1"><div class="mm-dl">概要</div>膝の安定を保つ重要な靭帯の断裂。ほとんど自己修復しないため整形外科連携必須。<div class="mm-dl" style="margin-top:6px">当院での対応</div>急性期処置・リハビリ・整形外科連携</div></div>
+        <div class="mm-rc red" onclick="togMMD('leg-d2')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">⚡</div><div class="mm-rcname red">内側側副靭帯損傷（MCL）</div><div class="mm-rcbadge red">早急な受診</div></div><div class="mm-rcbody red" id="leg-d2"><div class="mm-dl">概要</div>膝内側靭帯の伸張・断裂。スポーツ中の外反ストレスで多く発生。<div class="mm-dl" style="margin-top:6px">当院での対応</div>RICE処置・固定・段階的リハビリ・スポーツコンディショニング</div></div>
+        <div class="mm-rc red" onclick="togMMD('leg-d3')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">⚡</div><div class="mm-rcname red">半月板損傷</div><div class="mm-rcbadge red">早急な受診</div></div><div class="mm-rcbody red" id="leg-d3"><div class="mm-dl">概要</div>膝の軟骨パッドに亀裂・欠損。引っかかり感・ロッキングが特徴。<div class="mm-dl" style="margin-top:6px">当院での対応</div>整形外科連携・アイシング・筋力維持・リハビリ</div></div>
+        <div class="mm-rc red" onclick="togMMD('leg-d4')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">⚡</div><div class="mm-rcname red">大腿四頭筋の肉離れ</div><div class="mm-rcbadge red">早急な受診</div></div><div class="mm-rcbody red" id="leg-d4"><div class="mm-dl">概要</div>太もも前面の筋断裂。ダッシュ・ジャンプ・キック動作で発生。<div class="mm-dl" style="margin-top:6px">当院での対応</div>RICE処置・テーピング・松葉杖・段階的リハビリ</div></div>
+        <div class="mm-rc red" onclick="togMMD('leg-d5')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">🦵</div><div class="mm-rcname red">変形性膝関節症</div><div class="mm-rcbadge red">早めの精査</div></div><div class="mm-rcbody red" id="leg-d5"><div class="mm-dl">概要</div>膝の軟骨が摩耗・変性する疾患。中高年に多く進行性。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・体重管理・整形外科連携</div></div>
+        <div class="mm-rc red" onclick="togMMD('leg-d6')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF2F2">🌀</div><div class="mm-rcname red">足関節外側靭帯損傷（捻挫）</div><div class="mm-rcbadge red">早急な受診</div></div><div class="mm-rcbody red" id="leg-d6"><div class="mm-dl">概要</div>足首の外側靭帯の伸張・断裂。最も多い足関節外傷。<div class="mm-dl" style="margin-top:6px">当院での対応</div>RICE処置 → 固定 → 段階的リハビリ → バランストレーニング</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d7')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🦵</div><div class="mm-rcname orange">膝蓋大腿関節症（PFP症候群）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d7"><div class="mm-dl">概要</div>お皿と大腿骨の間の軟骨が障害される。若い女性・ランナーに多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>大腿四頭筋強化・テーピング・インソール調整</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d8')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">⚡</div><div class="mm-rcname orange">膝蓋腱炎（ジャンパー膝）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d8"><div class="mm-dl">概要</div>膝蓋腱に繰り返しのストレスで炎症。バスケ・バレー選手に多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>超音波治療・HV治療・ストレッチ指導・スポーツコンディショニング</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d9')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">オスグッド・シュラッター病</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d9"><div class="mm-dl">概要</div>成長期の膝下に骨の出っ張り・炎症。小中学生スポーツ選手に多い。<div class="mm-dl" style="margin-top:6px">当院での対応</div>ストレッチ・超音波治療・アイシング・運動量調整</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d10')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🦵</div><div class="mm-rcname orange">鵞足炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d10"><div class="mm-dl">概要</div>膝内側下方の鵞足部に炎症。ランナー・変形性膝関節症に合併しやすい。<div class="mm-dl" style="margin-top:6px">当院での対応</div>アイシング・超音波治療・鍼灸治療・ストレッチ指導</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d11')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">腸脛靭帯炎（ランナー膝）</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d11"><div class="mm-dl">概要</div>膝外側の腸脛靭帯に炎症。ランニングの繰り返しが主原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>アイシング・股関節外転運動・お尻側面ストレッチ・フォームチェック</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d12')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">👣</div><div class="mm-rcname orange">足底筋膜炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d12"><div class="mm-dl">概要</div>足底の筋膜に微細断裂・炎症。朝一歩目の踵痛が典型的。<div class="mm-dl" style="margin-top:6px">当院での対応</div>インソール調整・超音波治療・鍼灸治療・ストレッチ指導</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d13')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">⚡</div><div class="mm-rcname orange">アキレス腱炎</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d13"><div class="mm-dl">概要</div>アキレス腱に炎症が生じた状態。踵上方の痛みが特徴。<div class="mm-dl" style="margin-top:6px">当院での対応</div>負荷軽減・超音波治療・HV治療・ヒールリフト・スポーツコンディショニング</div></div>
+        <div class="mm-rc orange" onclick="togMMD('leg-d14')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">シンスプリント</div><div class="mm-rcbadge orange">1週間以内</div></div><div class="mm-rcbody orange" id="leg-d14"><div class="mm-dl">概要</div>脛骨骨膜の炎症。ランニング選手に多いオーバーユース障害。<div class="mm-dl" style="margin-top:6px">当院での対応</div>安静・アイシング・ふくらはぎストレッチ・超音波治療・インソール調整</div></div>
+        <div class="mm-rc green" onclick="togMMD('leg-d15')"><div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">👣</div><div class="mm-rcname green">扁平足</div><div class="mm-rcbadge green">余裕あり</div></div><div class="mm-rcbody green" id="leg-d15"><div class="mm-dl">概要</div>足裏のアーチが低下・消失した状態。足・膝・腰への影響もある。<div class="mm-dl" style="margin-top:6px">当院での対応</div>インソール・タオルギャザー・腓腹筋ストレッチ・筋力強化</div></div>
+      </div>
+
+
+      <!-- =====================================================
+           🟡 姿勢
+           側弯症・扁平足・ストレートネック・頭部前方位・骨盤の傾き
+           ※複数タブで重複OK
+      ===================================================== -->
+      <div class="mm-panel" id="mmpanel-posture">
+        <div class="mm-root" style="background:#CA8A04">
+          <div style="font-size:18px">🟡</div>
+          <div>
+            <div class="mm-root-ttl">姿勢</div>
+            <div class="mm-root-sub">見た目の左右差 ／ 体の歪み ／ 疲れやすさ ／ 姿勢不良</div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps1')">
+            <div class="mm-bicon" style="background:#f0fdf4">📐</div>
+            <div style="flex:1">
+              <div class="mm-bq">背骨・肩・骨盤の高さが左右で違う・歪みが気になる</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps1">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps1">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">側弯症</div><div class="mm-chip orange">仙腸関節障害</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps2')">
+            <div class="mm-bicon" style="background:#f0fff4">👣</div>
+            <div style="flex:1">
+              <div class="mm-bq">土踏まずが低い・足が疲れやすい・すねが痛む</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps2">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps2">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">扁平足</div><div class="mm-chip orange">足底筋膜炎</div><div class="mm-chip orange">シンスプリント</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps3')">
+            <div class="mm-bicon" style="background:#fafafa">📱</div>
+            <div style="flex:1">
+              <div class="mm-bq">頭が前に出ている・首がまっすぐに近い（スマホ首・猫背）</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps3">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps3">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">ストレートネック</div><div class="mm-chip green">僧帽筋症候群（肩こり）</div><div class="mm-chip orange">頸原性頭痛</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps4')">
+            <div class="mm-bicon" style="background:#fff7ed">🧘</div>
+            <div style="flex:1">
+              <div class="mm-bq">股関節の動きが悪くなってきた・脚の長さが左右で違う気がする</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps4">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps4">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">変形性股関節症</div><div class="mm-chip orange">仙腸関節障害</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps5')">
+            <div class="mm-bicon" style="background:#fef2f2">🔴</div>
+            <div style="flex:1">
+              <div class="mm-bq">腰を反らすと痛む・スポーツ中の腰痛（成長期）</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps5">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps5">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#92400E"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip orange">脊椎分離症</div><div class="mm-chip green">腰部筋筋膜症</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-branch">
+          <div class="mm-bhdr" onclick="togMM('ps6')">
+            <div class="mm-bicon" style="background:#fafafa">😣</div>
+            <div style="flex:1">
+              <div class="mm-bq">長時間の同じ姿勢で全身が疲れやすい・だるい</div>
+              <div class="mm-bql">→ 直接疾患提示</div>
+            </div>
+            <div class="mm-ba" id="mma-ps6">›</div>
+          </div>
+          <div class="mm-bbody" id="mmb-ps6">
+            <div class="mm-cr"><div class="mm-cc"><div class="mm-cd" style="background:#166534"></div></div><div class="mm-cont"><div class="mm-clabel">直接提示</div><div class="mm-chips"><div class="mm-chip green">腰部筋筋膜症</div><div class="mm-chip green">僧帽筋症候群</div><div class="mm-chip orange">仙腸関節障害</div></div></div></div>
+          </div>
+        </div>
+
+        <div class="mm-rtitle">姿勢に関連する疾患一覧（タップで詳細）</div>
+
+        <div class="mm-rc green" onclick="togMMD('ps-d1')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">📐</div><div class="mm-rcname green">側弯症</div><div class="mm-rcbadge green">余裕あり</div></div>
+          <div class="mm-rcbody green" id="ps-d1">
+            <div class="mm-dl">概要</div>背骨が左右に弯曲した状態。初期は痛みがなく気づきにくい。突発性が80%。<div class="mm-dl" style="margin-top:6px">当院での対応</div>CAT&DOG・胸椎側屈運動・姿勢改善指導・整形外科連携
+          </div>
+        </div>
+
+        <div class="mm-rc green" onclick="togMMD('ps-d2')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">👣</div><div class="mm-rcname green">扁平足</div><div class="mm-rcbadge green">余裕あり</div></div>
+          <div class="mm-rcbody green" id="ps-d2">
+            <div class="mm-dl">概要</div>足裏のアーチが低下・消失した状態。足・膝・腰への連鎖的な影響もある。<div class="mm-dl" style="margin-top:6px">当院での対応</div>インソール・タオルギャザー・腓腹筋ストレッチ・下肢筋力強化
+          </div>
+        </div>
+
+        <div class="mm-rc orange" onclick="togMMD('ps-d3')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">📱</div><div class="mm-rcname orange">ストレートネック（スマホ首）</div><div class="mm-rcbadge orange">1週間以内</div></div>
+          <div class="mm-rcbody orange" id="ps-d3">
+            <div class="mm-dl">概要</div>頸椎の生理的弯曲が消失した状態。長時間のスマホ・デスクワークが原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎牽引・姿勢改善・インナーマッスルトレーニング
+          </div>
+        </div>
+
+        <div class="mm-rc green" onclick="togMMD('ps-d4')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">💻</div><div class="mm-rcname green">僧帽筋症候群（肩こり）</div><div class="mm-rcbadge green">余裕あり</div></div>
+          <div class="mm-rcbody green" id="ps-d4">
+            <div class="mm-dl">概要</div>慢性的な肩・首のこり。デスクワーク・スマホの長時間使用・姿勢不良が主原因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・姿勢改善指導・ストレッチ指導
+          </div>
+        </div>
+
+        <div class="mm-rc orange" onclick="togMMD('ps-d5')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🤕</div><div class="mm-rcname orange">頸原性頭痛</div><div class="mm-rcbadge orange">1週間以内</div></div>
+          <div class="mm-rcbody orange" id="ps-d5">
+            <div class="mm-dl">概要</div>首の機能低下が原因の頭痛。頭部前方位（スマホ首）が主因のひとつ。<div class="mm-dl" style="margin-top:6px">当院での対応</div>頸椎屈曲運動・ヒップロール・デスク環境改善指導
+          </div>
+        </div>
+
+        <div class="mm-rc orange" onclick="togMMD('ps-d6')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🧘</div><div class="mm-rcname orange">変形性股関節症</div><div class="mm-rcbadge orange">1週間以内</div></div>
+          <div class="mm-rcbody orange" id="ps-d6">
+            <div class="mm-dl">概要</div>股関節軟骨のすり減り。脚の長さの左右差・股関節の可動域制限が姿勢に影響。<div class="mm-dl" style="margin-top:6px">当院での対応</div>負荷コントロール・筋力強化・体重管理・整形外科連携
+          </div>
+        </div>
+
+        <div class="mm-rc orange" onclick="togMMD('ps-d7')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🧘</div><div class="mm-rcname orange">仙腸関節障害</div><div class="mm-rcbadge orange">1週間以内</div></div>
+          <div class="mm-rcbody orange" id="ps-d7">
+            <div class="mm-dl">概要</div>骨盤の仙腸関節の機能不全。骨盤の高さの左右差・腰部の非対称に影響する。<div class="mm-dl" style="margin-top:6px">当院での対応</div>インナーマッスルトレーニング・骨盤調整・姿勢改善指導
+          </div>
+        </div>
+
+        <div class="mm-rc orange" onclick="togMMD('ps-d8')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#FEF3C7">🏃</div><div class="mm-rcname orange">脊椎分離症</div><div class="mm-rcbadge orange">1週間以内</div></div>
+          <div class="mm-rcbody orange" id="ps-d8">
+            <div class="mm-dl">概要</div>成長期スポーツ選手に多い腰椎の疲労骨折。腰椎過前弯（腰の反り過ぎ）と関連。<div class="mm-dl" style="margin-top:6px">当院での対応</div>コルセット着用指導・ストレッチ・整形外科連携
+          </div>
+        </div>
+
+        <div class="mm-rc green" onclick="togMMD('ps-d9')">
+          <div class="mm-rchdr"><div class="mm-rcic" style="background:#DCFCE7">😣</div><div class="mm-rcname green">腰部筋筋膜症（慢性腰痛）</div><div class="mm-rcbadge green">1〜2週間以内</div></div>
+          <div class="mm-rcbody green" id="ps-d9">
+            <div class="mm-dl">概要</div>筋肉・筋膜の慢性的な緊張・炎症。デスクワーク・不良姿勢が主な要因。<div class="mm-dl" style="margin-top:6px">当院での対応</div>手技療法・EMS・姿勢改善指導・ストレッチ指導
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- end apanel-map -->
+    <!-- 症状追加依頼フォームパネル -->
+    <div class="admin-panel" id="apanel-form">
+      <div class="info-note">&#128204; このフォームに記入して「依頼内容をコピー」ボタンでコピーし、Claudeのチャットに貼り付けて送信してください。修正後に新しいHTMLファイルと更新済みマインドマップが届きます。</div>
+      <div class="disease-list">
+        <div class="disease-list-ttl">&#128203; 現在の収録疾患一覧（37疾患）</div>
+        <div class="disease-grid">
+          <div class="d-item"><span class="d-num">1</span>急性腰痛（ぎっくり腰）</div>
+          <div class="d-item"><span class="d-num">2</span>腰椎椎間板ヘルニア</div>
+          <div class="d-item"><span class="d-num">3</span>腰部脊柱管狭窄症</div>
+          <div class="d-item"><span class="d-num">4</span>腰部筋筋膜症</div>
+          <div class="d-item"><span class="d-num">5</span>梨状筋症候群</div>
+          <div class="d-item"><span class="d-num">6</span>坐骨神経痛</div>
+          <div class="d-item"><span class="d-num">7</span>仙腸関節障害</div>
+          <div class="d-item"><span class="d-num">8</span>脊椎分離症</div>
+          <div class="d-item"><span class="d-num">9</span>側弯症</div>
+          <div class="d-item"><span class="d-num">10</span>ストレートネック</div>
+          <div class="d-item"><span class="d-num">11</span>僧帽筋症候群</div>
+          <div class="d-item"><span class="d-num">12</span>頸椎椎間板ヘルニア</div>
+          <div class="d-item"><span class="d-num">13</span>胸郭出口症候群</div>
+          <div class="d-item"><span class="d-num">14</span>急性頸部痛（寝違え）</div>
+          <div class="d-item"><span class="d-num">15</span>頸椎捻挫（むち打ち）</div>
+          <div class="d-item"><span class="d-num">16</span>頸原性頭痛</div>
+          <div class="d-item"><span class="d-num">17</span>膝蓋大腿関節症</div>
+          <div class="d-item"><span class="d-num">18</span>膝蓋腱炎（ジャンパー膝）</div>
+          <div class="d-item"><span class="d-num">19</span>変形性膝関節症</div>
+          <div class="d-item"><span class="d-num">20</span>内側側副靭帯損傷</div>
+          <div class="d-item"><span class="d-num">21</span>鵞足炎</div>
+          <div class="d-item"><span class="d-num">22</span>半月板損傷</div>
+          <div class="d-item"><span class="d-num">23</span>前十字靭帯損傷（ACL）</div>
+          <div class="d-item"><span class="d-num">24</span>オスグッド・シュラッター病</div>
+          <div class="d-item"><span class="d-num">25</span>腸脛靭帯炎（ランナー膝）</div>
+          <div class="d-item"><span class="d-num">26</span>大腿四頭筋の肉離れ</div>
+          <div class="d-item"><span class="d-num">27</span>変形性股関節症</div>
+          <div class="d-item"><span class="d-num">28</span>グロインペイン症候群</div>
+          <div class="d-item"><span class="d-num">29</span>足底筋膜炎</div>
+          <div class="d-item"><span class="d-num">30</span>足関節捻挫</div>
+          <div class="d-item"><span class="d-num">31</span>アキレス腱炎</div>
+          <div class="d-item"><span class="d-num">32</span>扁平足</div>
+          <div class="d-item"><span class="d-num">33</span>シンスプリント</div>
+          <div class="d-item"><span class="d-num">34</span>テニス肘</div>
+          <div class="d-item"><span class="d-num">35</span>上腕二頭筋長頭腱炎</div>
+          <div class="d-item"><span class="d-num">36</span>回旋筋腱板炎</div>
+          <div class="d-item"><span class="d-num">37</span>肩関節周囲炎（五十肩）</div>
+        </div>
+      </div>
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">1</div><div class="form-sec-ttl">依頼の種類</div></div>
+        <div class="form-body">
+          <div class="form-row"><div class="form-lbl">依頼タイプ<span class="form-req">必須</span></div>
+            <select class="form-sel" id="f-type" onchange="upPrev()">
+              <option value="">選択してください</option>
+              <option value="疾患・症状の新規追加">疾患・症状の新規追加</option>
+              <option value="既存疾患の説明文修正">既存疾患の説明文修正</option>
+              <option value="選択肢・質問文の変更">選択肢・質問文の変更</option>
+              <option value="部位カテゴリの追加">部位カテゴリの追加</option>
+              <option value="受診レベルの変更">受診レベルの変更</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+          <div class="form-row"><div class="form-lbl">依頼者名<span class="form-req">必須</span></div>
+            <input type="text" class="form-inp" id="f-name" placeholder="例：山本院長" oninput="upPrev()">
+          </div>
+          <div class="form-row"><div class="form-lbl">依頼日</div>
+            <input type="date" class="form-inp" id="f-date" oninput="upPrev()">
+          </div>
+        </div>
+      </div>
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">2</div><div class="form-sec-ttl">疾患・症状の情報</div></div>
+        <div class="form-body">
+          <div class="form-row"><div class="form-lbl">疾患名・症状名<span class="form-req">必須</span></div>
+            <input type="text" class="form-inp" id="f-disease" placeholder="例：腱鞘炎（ド・ケルバン病）" oninput="upPrev()">
+          </div>
+          <div class="form-grid2">
+            <div class="form-row"><div class="form-lbl">分類・カテゴリ</div>
+              <input type="text" class="form-inp" id="f-cat" placeholder="例：腱疾患" oninput="upPrev()">
+            </div>
+            <div class="form-row"><div class="form-lbl">追加する部位</div>
+              <select class="form-sel" id="f-area" onchange="upPrev()">
+                <option value="">選択</option>
+                <option value="腰・お尻">腰・お尻</option>
+                <option value="首・肩">首・肩</option>
+                <option value="膝・太もも">膝・太もも</option>
+                <option value="足首・足の裏">足首・足の裏</option>
+                <option value="新しい部位として追加">新しい部位として追加</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row"><div class="form-lbl">受診の緊急度<span class="form-req">必須</span></div>
+            <select class="form-sel" id="f-urgency" onchange="upPrev()">
+              <option value="">選択してください</option>
+              <option value="赤（早急な受診が必要）今日〜翌日">&#128308; 赤（早急な受診が必要）今日〜翌日</option>
+              <option value="橙（早めの受診を推奨）1週間以内">&#128992; 橙（早めの受診を推奨）1週間以内</option>
+              <option value="緑（余裕あり）1〜2週間以内">&#128994; 緑（余裕あり）1〜2週間以内</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-sec">
+        <div class="form-sec-hdr"><div class="form-sec-num">3</div><div class="form-sec-ttl">詳細情報</div></div>
+        <div class="form-body">
+          <div class="form-row"><div class="form-lbl">疾患の概要</div>
+            <textarea class="form-ta" id="f-summary" placeholder="例：手首の親指側にある腱と腱鞘に炎症が起きる状態。育児中の母親や手をよく使う方に多い。" oninput="upPrev()"></textarea>
+          </div>
+          <div class="form-row"><div class="form-lbl">主な症状（カンマ区切り）</div>
+            <input type="text" class="form-inp" id="f-sx" placeholder="例：手首の親指側の痛み, 腫れ, 親指を動かすと悪化" oninput="upPrev()">
+          </div>
+          <div class="form-row"><div class="form-lbl">主な原因</div>
+            <input type="text" class="form-inp" id="f-cause" placeholder="例：育児・手を多く使う作業・ホルモンバランスの変化" oninput="upPrev()">
+          </div>
+          <div class="form-row"><div class="form-lbl">当院での施術・対応方針</div>
+            <textarea class="form-ta" id="f-tx" placeholder="例：超音波治療・鍼灸治療・テーピング・日常動作指導を行います" oninput="upPrev()"></textarea>
+          </div>
+          <div class="form-row"><div class="form-lbl">受診タイミングの一言</div>
+            <input type="text" class="form-inp" id="f-timing" placeholder="例：1週間以内のご来院をお勧めします" oninput="upPrev()">
+          </div>
+          <div class="form-row"><div class="form-lbl">症状絞り込みチェックの分岐への追加方法（自由記入）</div>
+            <textarea class="form-ta" id="f-flow" placeholder="例：「首・肩」の選択肢に「手首・指が痛い」という選択肢を追加してほしい" oninput="upPrev()"></textarea>
+          </div>
+          <div class="form-row"><div class="form-lbl">その他・備考</div>
+            <textarea class="form-ta" id="f-note" placeholder="追加で伝えたいことがあれば自由に記入してください" oninput="upPrev()"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="preview-box" id="preview-box">
+        <div class="preview-ttl">&#128203; 依頼内容プレビュー</div>
+        <div id="preview-body"></div>
+        <button class="copy-btn" id="copy-btn" onclick="copyReq()">&#128203; 依頼内容をコピーしてClaudeに送る</button>
+      </div>
+    </div>
+
+    <!-- テンプレート集パネル -->
+    <div class="admin-panel" id="apanel-tmpl">
+      <div class="section-ttl">&#128203; 疾患説明テンプレート</div>
+      <div class="tmpl-card">
+        <div class="tmpl-hdr"><div class="tmpl-hdr-ttl">疾患説明テンプレート（1疾患1枚）</div><button class="tmpl-copy" id="tc1" onclick="copyTmpl('tt1','tc1')">コピー</button></div>
+        <pre id="tt1" class="tmpl-body">■ 疾患名
+【例：腱鞘炎（ド・ケルバン病）】
+
+■ 分類・カテゴリ
+【例：腱疾患】
+
+■ 受診の緊急度
+□ 赤（早急な受診が必要）→ 今日〜翌日
+□ 橙（早めの受診を推奨）→ 1週間以内
+□ 緑（余裕あり）　　　　→ 1〜2週間以内
+
+■ 緊急度の説明文（患者さんへの一言）
+【例：放置すると慢性化します。早めの受診をお勧めします】
+
+■ 疾患の概要（2〜3文で）
+【例：手首の親指側にある腱と腱鞘に炎症が起きる状態。育児中の母親や手をよく使う方に多い】
+
+■ 主な症状（3〜5個）
+・【例：手首の親指側の痛み】
+・【例：腫れ・熱感】
+・【例：親指を動かすと悪化】
+
+■ 主な原因
+【例：育児・手を多く使う作業・ホルモンバランスの変化】
+
+■ 当院での施術・対応方針
+【例：超音波治療・鍼灸治療・テーピング・日常動作指導を行います】
+
+■ 受診タイミングの一言
+【例：1週間以内のご来院をお勧めします】
+
+■ 追加する部位・分岐
+【例：「首・肩の痛み」に「手首・指が痛い」という選択肢を追加してほしい】</pre>
+      </div>
+      <div class="section-ttl" style="margin-top:14px">&#127973; 院内情報（現在の登録情報）</div>
+      <div class="tmpl-card">
+        <div class="tmpl-hdr"><div class="tmpl-hdr-ttl">現在の院内情報</div><button class="tmpl-copy" id="tc2" onclick="copyTmpl('tt2','tc2')">コピー</button></div>
+        <pre id="tt2" class="tmpl-body">■ 院名：心身堂鍼灸・整骨院 読谷院
+■ 住所：沖縄県中頭郡読谷村古堅740 イオンタウン読谷内
+■ 電話：098-956-8654
+■ 受付：10:00〜13:00 / 15:00〜20:00（日祝も通常診療）
+■ 休診：毎月第4木曜日（院内研修）
+■ ネット予約：https://carecle.com/booking/shinshindosyomitan
+■ LINE：@205tvrxn / https://lin.ee/o3YQEit
+■ 駐車場：あり（イオンタウン読谷敷地内・数10台）
+■ 保険：健康保険・労災保険・自賠責保険（交通事故）
+■ 初回カウンセリング：無料（約30分）</pre>
+      </div>
+    </div>
+
+  </div><!-- end admin-content -->
+</div><!-- end admin-page -->
+
+<script>
+/* ===== パスワード ===== */
+var PW='0989568654';
+function openPw(){document.getElementById('pw-ov').classList.add('show');setTimeout(function(){document.getElementById('pw-input').focus();},100);}
+function closePw(){document.getElementById('pw-ov').classList.remove('show');document.getElementById('pw-input').value='';document.getElementById('pw-err').textContent='';document.getElementById('pw-input').classList.remove('error');}
+function checkPw(){
+  var v=document.getElementById('pw-input').value;
+  if(v===PW){closePw();showAdminPage();}
+  else{document.getElementById('pw-err').textContent='パスワードが違います。もう一度お試しください。';document.getElementById('pw-input').classList.add('error');document.getElementById('pw-input').value='';document.getElementById('pw-input').focus();}
+}
+function showAdminPage(){
+  document.getElementById('patient-page').style.display='none';
+  document.getElementById('admin-page').classList.add('show');
+  var t=new Date();var m=String(t.getMonth()+1).padStart(2,'0');var d=String(t.getDate()).padStart(2,'0');
+  document.getElementById('f-date').value=t.getFullYear()+'-'+m+'-'+d;
+}
+function adminLogout(){document.getElementById('admin-page').classList.remove('show');document.getElementById('patient-page').style.display='flex';}
+
+/* ===== 管理タブ ===== */
+function showAdminTab(id){
+  document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.admin-panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('atab-'+id).classList.add('active');
+  document.getElementById('apanel-'+id).classList.add('active');
+}
+
+/* ===== マインドマップ ===== */
+function showMMTab(id){
+  document.querySelectorAll('.mm-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.mm-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.mm-panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('mmtab-'+id).classList.add('active');
+  document.getElementById('mmpanel-'+id).classList.add('active');
+}
+function togMM(id){var b=document.getElementById('mmb-'+id);var a=document.getElementById('mma-'+id);var o=b.classList.contains('open');b.classList.toggle('open',!o);a.classList.toggle('open',!o);}
+function togMMD(id){document.getElementById(id).classList.toggle('open');}
+
+/* ===== フォームプレビュー ===== */
+function g(id){return document.getElementById(id).value;}
+function upPrev(){
+  var type=g('f-type'),name=g('f-name'),disease=g('f-disease'),urgency=g('f-urgency');
+  if(!type&&!disease){document.getElementById('preview-box').classList.remove('show');return;}
+  var rows=[['依頼タイプ',type],['依頼者名',name],['依頼日',g('f-date')],['疾患名・症状名',disease],['分類・カテゴリ',g('f-cat')],['追加する部位',g('f-area')],['受診の緊急度',urgency],['疾患の概要',g('f-summary')],['主な症状',g('f-sx')],['主な原因',g('f-cause')],['施術・対応方針',g('f-tx')],['受診タイミング',g('f-timing')],['分岐への追加方法',g('f-flow')],['その他・備考',g('f-note')]];
+  var html='';
+  rows.forEach(function(r){if(r[1])html+='<div class="preview-row"><span class="preview-lbl">'+r[0]+'</span><span>'+r[1].replace(/\n/g,'<br>')+'</span></div>';});
+  document.getElementById('preview-body').innerHTML=html;
+  document.getElementById('preview-box').classList.add('show');
+}
+function buildReqText(){
+  var txt='【症状絞り込みチェック修正依頼】\n━━━━━━━━━━━━━━━━\n';
+  var rows=[['依頼タイプ',g('f-type')],['依頼者名',g('f-name')],['依頼日',g('f-date')],['疾患名・症状名',g('f-disease')],['分類・カテゴリ',g('f-cat')],['追加する部位',g('f-area')],['受診の緊急度',g('f-urgency')],['疾患の概要',g('f-summary')],['主な症状',g('f-sx')],['主な原因',g('f-cause')],['施術・対応方針',g('f-tx')],['受診タイミング',g('f-timing')],['分岐への追加方法',g('f-flow')],['その他・備考',g('f-note')]];
+  rows.forEach(function(r){if(r[1])txt+='■ '+r[0]+'：\n'+r[1]+'\n\n';});
+  txt+='━━━━━━━━━━━━━━━━\n以上の内容で症状絞り込みチェックとマインドマップを更新してください。';
+  return txt;
+}
+function copyReq(){
+  var btn=document.getElementById('copy-btn');
+  navigator.clipboard.writeText(buildReqText()).then(function(){btn.textContent='✓ コピー完了！Claudeに貼り付けてください';btn.classList.add('copied');setTimeout(function(){btn.textContent='&#128203; 依頼内容をコピーしてClaudeに送る';btn.classList.remove('copied');},3000);}).catch(function(){var ta=document.createElement('textarea');ta.value=buildReqText();document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ コピー完了！';btn.classList.add('copied');setTimeout(function(){btn.textContent='&#128203; 依頼内容をコピー';btn.classList.remove('copied');},3000);});
+}
+function copyTmpl(tid,bid){
+  var text=document.getElementById(tid).innerText;
+  var btn=document.getElementById(bid);
+  navigator.clipboard.writeText(text).then(function(){btn.textContent='✓ コピー完了！';btn.classList.add('copied');setTimeout(function(){btn.textContent='コピー';btn.classList.remove('copied');},2000);}).catch(function(){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ コピー完了！';btn.classList.add('copied');setTimeout(function(){btn.textContent='コピー';btn.classList.remove('copied');},2000);});
+}
+
+/* ===== 言語切替 ===== */
+var LANG='ja';
+function setLang(l){LANG=l;document.getElementById('btn-ja').classList.toggle('active',l==='ja');document.getElementById('btn-en').classList.toggle('active',l==='en');document.getElementById('hdr-title').textContent=l==='ja'?'お困りの症状 絞り込みチェック':'Symptom Check';if(currentStep==='result')showResult(pendingDiseases);else if(currentStep==='emergency_lumbar')showEmergency(false);else if(currentStep==='emergency_head')showEmergency(true);else if(currentStep==='__intro__')showIntro();else render();}
+function Tc(obj,key){return LANG==='en'?(obj[key+'_en']||obj[key+'_ja']):(obj[key+'_ja']||obj[key+'_en']);}
+
+/* ===== 院情報 ===== */
+var CL={name_ja:'心身堂鍼灸・整骨院 読谷院',name_en:'Shinshin-do Acupuncture & Orthopedic Clinic — Yomitan',tel:'098-956-8654',hours_ja:'10:00〜13:00 / 15:00〜20:00（日祝も通常診療）',hours_en:'10:00–13:00 / 15:00–20:00 (Open Sundays & holidays)',closed_ja:'毎月第4木曜日（院内研修）',closed_en:'Every 4th Thursday (staff training)',address_ja:'沖縄県中頭郡読谷村古堅740 イオンタウン読谷内',address_en:'740 Furugenn, Yomitan, Okinawa (inside AEON Town Yomitan)',parking_ja:'あり（イオンタウン読谷敷地内・数10台）',parking_en:'Available (AEON Town Yomitan parking lot, 30+ spaces)',booking_url:'https://carecle.com/booking/shinshindosyomitan',line_url:'https://lin.ee/o3YQEit',line_id:'@205tvrxn'};
+
+/* ===== 疾患データ ===== */
+var DD={stenosis:{name_ja:'腰部脊柱管狭窄症',name_en:'Lumbar Spinal Stenosis',cat_ja:'脊椎変性疾患',cat_en:'Degenerative Spine Disorder',icon:'&#128694;',ibg:'#fef2f2',urgency:'red',ulabel_ja:'早めの精査が必要',ulabel_en:'Evaluation recommended soon',uai:'&#128680;',umsg_ja:'歩行困難が進行している場合、整形外科との連携が必要になる場合があります。',umsg_en:'If walking difficulty is worsening, orthopedic referral may be needed.',summary_ja:'脊柱管が狭まり神経が圧迫される。歩行で悪化・休憩で改善する間欠性跛行が特徴。',summary_en:'Spinal canal narrowing. Classic sign: pain while walking that improves with rest.',sx_ja:['歩行で下肢痛・しびれが出る','座ると楽になる','両足のしびれ'],sx_en:['Leg pain/numbness while walking','Relieved by sitting','Numbness in both legs'],cause_ja:'加齢による骨・靭帯の変性',cause_en:'Age-related bone and ligament degeneration',tx_ja:'姿勢改善・筋力強化・骨盤調整・整形外科連携',tx_en:'Posture correction, strengthening, pelvic alignment, orthopedic referral',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'},muscle_lumbar:{name_ja:'腰部筋筋膜症（慢性腰痛）',name_en:'Myofascial Low Back Pain',cat_ja:'筋肉・筋膜疾患',cat_en:'Muscle/Fascia Disorder',icon:'&#128543;',ibg:'#fafafa',urgency:'green',ulabel_ja:'1週間以内の受診でOK',ulabel_en:'Visit within one week',uai:'&#9989;',umsg_ja:'緊急性は高くありませんが、放置すると慢性化します。',umsg_en:'Not urgent, but ignoring it may lead to chronic pain.',summary_ja:'筋肉・筋膜の慢性的な緊張・炎症。デスクワークや姿勢不良が主な要因です。',summary_en:'Chronic muscle and fascial tension, commonly from desk work and poor posture.',sx_ja:['じわじわした腰の鈍痛','長時間座位で悪化','朝の腰の重さ'],sx_en:['Dull aching low back pain','Worse after prolonged sitting','Morning stiffness'],cause_ja:'長時間の同一姿勢・運動不足・ストレス',cause_en:'Prolonged static posture, lack of exercise, stress',tx_ja:'手技療法・EMS・姿勢改善指導・セルフケアストレッチ指導',tx_en:'Manual therapy, EMS, posture coaching, self-care stretch guidance',book_msg_ja:'&#128197; お早めのご来院で慢性化を防ぎましょう',book_msg_en:'&#128197; Early treatment prevents the pain from becoming chronic'},piriformis:{name_ja:'梨状筋症候群',name_en:'Piriformis Syndrome',cat_ja:'神経絞扼',cat_en:'Nerve Entrapment',icon:'&#128308;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1週間以内の受診を推奨',ulabel_en:'See us within one week',uai:'&#9888;&#65039;',umsg_ja:'ヘルニアとの鑑別が重要です。適切な施術で多くの場合は改善します。',umsg_en:'Differentiation from disc herniation is important. Most cases improve with treatment.',summary_ja:'梨状筋が坐骨神経を圧迫し、お尻〜足にしびれや痛みが放散します。',summary_en:'The piriformis muscle compresses the sciatic nerve, causing buttock-to-leg pain and numbness.',sx_ja:['お尻の深部痛','足への放散痛','長時間座位で悪化'],sx_en:['Deep buttock pain','Pain radiating to leg','Worse with prolonged sitting'],cause_ja:'筋肉の過緊張・長時間の座位・外傷',cause_en:'Muscle tightness, prolonged sitting, trauma',tx_ja:'梨状筋ストレッチ・鍼灸治療・トリガーポイント施術',tx_en:'Piriformis stretching, acupuncture, trigger point therapy',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'},straight_neck:{name_ja:'ストレートネック（スマホ首）',name_en:'Straight Neck (Tech Neck)',cat_ja:'姿勢異常',cat_en:'Postural Disorder',icon:'&#128241;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1〜2週間以内の受診を推奨',ulabel_en:'See us within 1–2 weeks',uai:'&#9888;&#65039;',umsg_ja:'放置すると頸椎症・椎間板ヘルニアへ進行する可能性があります。',umsg_en:'Without treatment, this can progress to cervical spondylosis or disc herniation.',summary_ja:'頸椎の正常な前弯が失われた状態。スマホ・PCの長時間使用が主因です。',summary_en:'Loss of normal cervical lordosis, mainly from long hours on smartphones and computers.',sx_ja:['首・肩のこり','後頭部の重さ・頭痛','目の疲れ'],sx_en:['Neck and shoulder stiffness','Head heaviness/headache','Eye fatigue'],cause_ja:'スマホ・PC長時間使用・前傾姿勢',cause_en:'Long-term smartphone/PC use, forward head posture',tx_ja:'頸部手技療法・姿勢矯正・骨盤調整・スクリーン環境改善指導',tx_en:'Cervical manual therapy, posture correction, pelvic alignment, ergonomic guidance',book_msg_ja:'&#128197; 1〜2週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within 1–2 weeks'},trapezius:{name_ja:'僧帽筋症候群（肩こり）',name_en:'Trapezius Syndrome',cat_ja:'筋肉疾患',cat_en:'Muscle Disorder',icon:'&#128170;',ibg:'#fafafa',urgency:'green',ulabel_ja:'1週間以内の受診でOK',ulabel_en:'Visit within one week',uai:'&#9989;',umsg_ja:'頭痛・吐き気を伴う場合は早めに受診してください。',umsg_en:'If accompanied by headache or nausea, please visit sooner.',summary_ja:'首・肩まわりの筋肉が慢性的に緊張した状態。',summary_en:'Chronic tension of neck and shoulder muscles.',sx_ja:['肩・首のこり','後頸部の張り','頭重感'],sx_en:['Shoulder and neck stiffness','Tension at back of neck','Heaviness in the head'],cause_ja:'ストレス・長時間の同一姿勢・冷え・運動不足',cause_en:'Stress, prolonged static posture, cold, lack of exercise',tx_ja:'手技療法（指圧）・EMS・温熱療法・セルフケアストレッチ指導',tx_en:'Manual therapy, EMS, heat therapy, self-care stretch guidance',book_msg_ja:'&#128197; お気軽にご来院ください',book_msg_en:'&#128197; Feel free to visit at your convenience'},wry_neck:{name_ja:'急性頸部痛（寝違え）',name_en:'Acute Neck Pain (Stiff Neck)',cat_ja:'急性症状',cat_en:'Acute Condition',icon:'&#127769;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'早めの受診を推奨（1〜2日以内）',ulabel_en:'Visit within 1–2 days',uai:'&#9888;&#65039;',umsg_ja:'早期施術で回復が大幅に早まります。放置すると数週間長引くことがあります。',umsg_en:'Early treatment greatly speeds recovery. Left untreated, it can last for weeks.',summary_ja:'就寝中の不良姿勢や急激な動作で頸部の筋肉・関節に炎症が起きます。',summary_en:'Inflammation of neck muscles and joints from awkward sleeping position or sudden movement.',sx_ja:['首の強い痛み','首が動かせない','一側に傾く'],sx_en:['Severe neck pain','Cannot move neck','Head tilted to one side'],cause_ja:'不良睡眠姿勢・急激な頸部回旋',cause_en:'Poor sleeping posture, sudden neck rotation',tx_ja:'頸部手技療法（整復）・鍼灸治療・温熱療法で早期回復をサポートします',tx_en:'Cervical manipulation, acupuncture, heat therapy',book_msg_ja:'&#128197; 今日〜明日のご来院をお勧めします',book_msg_en:'&#128197; Please visit today or tomorrow'},pfp:{name_ja:'膝蓋大腿関節症（PFP症候群）',name_en:'Patellofemoral Pain Syndrome',cat_ja:'関節疾患',cat_en:'Joint Disorder',icon:'&#129461;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1〜2週間以内の受診を推奨',ulabel_en:'See us within 1–2 weeks',uai:'&#9888;&#65039;',umsg_ja:'放置すると慢性化しやすいです。早めの施術と筋力トレーニングで多くは改善します。',umsg_en:'Tends to become chronic. Most cases improve with early care and strengthening.',summary_ja:'お皿と大腿骨の間の軟骨が障害される。若い女性・ランナーに多いです。',summary_en:'Cartilage between the kneecap and femur is damaged. Common in young women and runners.',sx_ja:['膝前面の鈍痛','階段下りで悪化','長時間座位後の痛み'],sx_en:['Dull front knee pain','Worse going down stairs','Pain after prolonged sitting'],cause_ja:'筋力不均衡・オーバーユース・扁平足',cause_en:'Muscle imbalance, overuse, flat feet',tx_ja:'大腿四頭筋強化・テーピング・インソール調整・スポーツコンディショニング',tx_en:'Quad strengthening, taping, insole adjustment, sports conditioning',book_msg_ja:'&#128197; 1〜2週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within 1–2 weeks'},jumper_knee:{name_ja:'膝蓋腱炎（ジャンパー膝）',name_en:"Patellar Tendinitis (Jumper's Knee)",cat_ja:'腱疾患',cat_en:'Tendon Disorder',icon:'&#9889;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1週間以内の受診を推奨',ulabel_en:'See us within one week',uai:'&#9888;&#65039;',umsg_ja:'無理に動かし続けると腱断裂のリスクがあります。',umsg_en:'Continuing to push through pain risks tendon rupture.',summary_ja:'膝蓋腱に繰り返しのストレスで炎症が起きる。スポーツ選手に多いです。',summary_en:'Patellar tendon inflammation from repetitive stress. Common in athletes.',sx_ja:['膝蓋骨直下の押すと痛む','階段上りで悪化','ジャンプで痛む'],sx_en:['Tenderness just below kneecap','Worse going up stairs','Pain when jumping'],cause_ja:'スポーツの過負荷・急激な運動量の増加',cause_en:'Sports overload, sudden increase in training',tx_ja:'超音波治療・HV治療・ストレッチ指導・スポーツコンディショニング',tx_en:'Ultrasound, HV therapy, stretching, sports conditioning',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'},oa_knee:{name_ja:'変形性膝関節症',name_en:'Knee Osteoarthritis',cat_ja:'変性疾患',cat_en:'Degenerative Disorder',icon:'&#129460;',ibg:'#fef2f2',urgency:'red',ulabel_ja:'早めの精査が必要',ulabel_en:'Evaluation recommended soon',uai:'&#128680;',umsg_ja:'進行性の疾患です。早期介入で進行を遅らせられます。',umsg_en:'Progressive condition. Early intervention can slow progression.',summary_ja:'膝の軟骨が摩耗・変性する疾患。中高年に多く、放置すると進行します。',summary_en:'Gradual wearing of knee cartilage. Common in middle-aged and older adults.',sx_ja:['動き始めの痛み','階段昇降痛','膝の腫れ'],sx_en:['Pain when starting to move','Pain on stairs','Knee swelling'],cause_ja:'加齢・肥満・O脚・過去の外傷',cause_en:'Aging, obesity, bow legs, previous injury',tx_ja:'手技療法・EMS・骨盤調整・体重管理・整形外科連携',tx_en:'Manual therapy, EMS, pelvic alignment, weight management, orthopedic referral',book_msg_ja:'&#128197; なるべく早いご来院をお勧めします',book_msg_en:'&#128197; Please visit as soon as possible'},mcl:{name_ja:'内側側副靭帯損傷',name_en:'Medial Collateral Ligament Injury',cat_ja:'靭帯外傷',cat_en:'Ligament Injury',icon:'&#9889;',ibg:'#fef2f2',urgency:'red',ulabel_ja:'できるだけ早急な受診が必要',ulabel_en:'Urgent — seek care promptly',uai:'&#128680;',umsg_ja:'半月板・前十字靭帯の合併損傷の可能性があります。',umsg_en:'Associated meniscus or ACL injury is possible.',summary_ja:'膝内側の靭帯の伸張・断裂。スポーツでの外反ストレスで多く発生します。',summary_en:'Stretching or tearing of the inner knee ligament, often from sports.',sx_ja:['膝内側の強い圧痛','腫脹・熱感','膝の不安定感'],sx_en:['Severe inner knee tenderness','Swelling and warmth','Knee instability'],cause_ja:'外反強制・スポーツ外傷・接触プレー',cause_en:'Forced valgus stress, sports trauma, contact play',tx_ja:'RICE処置・固定・段階的リハビリ・スポーツコンディショニング',tx_en:'RICE protocol, immobilization, progressive rehab, sports conditioning',book_msg_ja:'&#128197; 本日または翌営業日のご来院を強くお勧めします',book_msg_en:'&#128197; Please visit today or the next business day'},goose_foot:{name_ja:'鵞足炎',name_en:'Pes Anserine Bursitis',cat_ja:'腱・滑液包炎',cat_en:'Tendon/Bursa Inflammation',icon:'&#127939;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1週間以内の受診を推奨',ulabel_en:'See us within one week',uai:'&#9888;&#65039;',umsg_ja:'放置すると慢性化します。原因の改善が重要です。',umsg_en:'Can become chronic without treatment.',summary_ja:'膝内側やや下方の鵞足部に炎症。ランナーや変形性膝関節症に合併することが多いです。',summary_en:'Inflammation at the inner knee, common in runners and osteoarthritis patients.',sx_ja:['膝内側下方の押すと痛む','階段昇降で悪化','慢性化しやすい'],sx_en:['Tenderness below inner knee','Worse on stairs','Prone to becoming chronic'],cause_ja:'ランニング・過負荷・O脚・変形性膝関節症',cause_en:'Running, overload, bow legs, knee osteoarthritis',tx_ja:'アイシング・超音波治療・鍼灸治療・ストレッチ指導',tx_en:'Icing, ultrasound therapy, acupuncture, stretching',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'},plantar:{name_ja:'足底筋膜炎',name_en:'Plantar Fasciitis',cat_ja:'腱・筋膜疾患',cat_en:'Tendon/Fascia Disorder',icon:'&#128099;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1週間以内の受診を推奨',ulabel_en:'See us within one week',uai:'&#9888;&#65039;',umsg_ja:'慢性化すると骨棘が形成されることもあります。早期施術で多くは改善します。',umsg_en:'Chronic cases can develop heel spurs. Most improve with early treatment.',summary_ja:'足底の筋膜に微細断裂・炎症が生じる。朝一歩目の踵痛が典型的です。',summary_en:'Micro-tears and inflammation of the plantar fascia. Classic sign: heel pain with first morning step.',sx_ja:['起床後一歩目の踵痛','長時間立位後の痛み','踵内側の圧痛'],sx_en:['Heel pain with first morning step','Pain after prolonged standing','Inner heel tenderness'],cause_ja:'扁平足・体重増加・長時間の立位・オーバートレーニング',cause_en:'Flat feet, weight gain, prolonged standing, overtraining',tx_ja:'インソール調整・超音波治療・鍼灸治療・ストレッチ指導',tx_en:'Insole adjustment, ultrasound, acupuncture, stretching',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'},ankle_sprain:{name_ja:'足関節外側靭帯損傷（捻挫）',name_en:'Lateral Ankle Ligament Sprain',cat_ja:'靭帯外傷',cat_en:'Ligament Injury',icon:'&#127744;',ibg:'#fef2f2',urgency:'red',ulabel_ja:'できるだけ早急な受診が必要',ulabel_en:'Urgent — seek care promptly',uai:'&#128680;',umsg_ja:'骨折との鑑別が必要です。靭帯断裂の場合は固定・リハビリが不可欠です。',umsg_en:'Fracture must be ruled out. Ligament rupture requires immobilization and rehab.',summary_ja:'足首の外側靭帯の伸張・断裂。最も多い足関節外傷です。',summary_en:'Stretching or tearing of the outer ankle ligament — the most common ankle injury.',sx_ja:['外くるぶし周囲の腫脹・痛み','体重をかけると痛い','皮下出血'],sx_en:['Swelling and pain around outer ankle','Pain bearing weight','Bruising'],cause_ja:'内反強制・スポーツ外傷・段差での踏み外し',cause_en:'Forced inversion, sports injury, missed step',tx_ja:'RICE処置 → 固定 → 段階的リハビリ → バランストレーニングで再発予防まで対応します',tx_en:'RICE → immobilization → progressive rehab → balance training',book_msg_ja:'&#128197; 本日または翌営業日のご来院を強くお勧めします',book_msg_en:'&#128197; Please visit today or the next business day'},achilles:{name_ja:'アキレス腱炎',name_en:'Achilles Tendinitis',cat_ja:'腱疾患',cat_en:'Tendon Disorder',icon:'&#9889;',ibg:'#fff7ed',urgency:'orange',ulabel_ja:'1週間以内の受診を推奨',ulabel_en:'See us within one week',uai:'&#9888;&#65039;',umsg_ja:'腱断裂予防のために無理な運動は禁物です。',umsg_en:'Avoid pushing through the pain — you risk a tendon rupture.',summary_ja:'アキレス腱に炎症が生じた状態。踵上方の痛みが特徴です。',summary_en:'Inflammation of the Achilles tendon. Classic sign: pain above the heel.',sx_ja:['踵の上部の痛み','起床時・運動開始時に悪化','圧痛'],sx_en:['Pain above the heel','Worse in the morning or at start of exercise','Tender to touch'],cause_ja:'ランニング過負荷・急激な運動増加・不適切な靴',cause_en:'Running overload, sudden training increase, improper footwear',tx_ja:'負荷軽減・超音波治療・HV治療・ヒールリフト・スポーツコンディショニング',tx_en:'Load reduction, ultrasound, HV therapy, heel lift, sports conditioning',book_msg_ja:'&#128197; 1週間以内のご来院をお勧めします',book_msg_en:'&#128197; Please visit within one week'}};
+
+/* ===== フロー ===== */
+var FLOW={
+
+/* =====================================================
+   STEP 1: 今の状態（症状の性質・きっかけ）で分岐
+   部位より先に「どんな状態か」を聞くことで
+   代償動作による複数部位の疾患にも自然に到達できる
+===================================================== */
+start:{
+  q_ja:'痛みや不調がある部位・状態を選んでください',
+  q_en:'Select the area or condition that bothers you most',
+  sub_ja:'複数ある場合は最も気になるものを選んでください',
+  sub_en:'If more than one applies, choose the most bothersome',
+  badge_ja:'STEP 1 / 部位・状態の確認',
+  badge_en:'STEP 1 / Area & Condition',
+  p:10,grid:false,
+  choices:[
+    {icon:'&#128308;',ibg:'#fff0f0',
+     label_ja:'🔴 腰・お尻・股関節',label_en:'🔴 Lower back / Buttock / Hip',
+     desc_ja:'腰痛・ぎっくり腰・お尻・股関節・鼠径部の痛みなど',desc_en:'Back pain, buttock pain, hip/groin pain',
+     next:'low_condition',diseases:[]},
+    {icon:'&#128309;',ibg:'#f0f4ff',
+     label_ja:'🔵 首・肩',label_en:'🔵 Neck / Shoulder',
+     desc_ja:'肩こり・頸部痛・頭痛・五十肩・しびれなど',desc_en:'Stiffness, neck pain, headache, frozen shoulder',
+     next:'neck_condition',diseases:[]},
+    {icon:'&#128995;',ibg:'#fdf0ff',
+     label_ja:'🟣 腕・手首',label_en:'🟣 Arm / Wrist',
+     desc_ja:'肘・手首・手の痛み・腕のしびれなど',desc_en:'Elbow, wrist, hand pain or arm numbness',
+     next:'arm_condition',diseases:[]},
+    {icon:'&#128993;',ibg:'#fffbf0',
+     label_ja:'🟡 膝・太もも・ふくらはぎ',label_en:'🟡 Knee / Thigh / Calf',
+     desc_ja:'膝・太もも・すね・ふくらはぎの痛みなど',desc_en:'Knee, thigh, shin, or calf pain',
+     next:'knee_condition',diseases:[]},
+    {icon:'&#128994;',ibg:'#f0fff4',
+     label_ja:'🟢 足首・足の裏',label_en:'🟢 Ankle / Sole of foot',
+     desc_ja:'捻挫・かかとの痛み・足底の痛みなど',desc_en:'Sprain, heel pain, plantar pain',
+     next:'ankle_condition',diseases:[]},
+    {icon:'&#128998;',ibg:'#fffef0',
+     label_ja:'🟤 姿勢',label_en:'🟤 Posture',
+     desc_ja:'背骨の歪み・左右差・疲れやすさ・体型の気になりなど',desc_en:'Spinal asymmetry, fatigue, postural concerns',
+     next:'posture_type',diseases:[]}
+  ]
+},
+
+/* =====================================================
+   STEP 1-A: 腰・お尻の状態確認
+===================================================== */
+low_condition:{
+  q_ja:'腰・お尻の状態はどのタイプですか？',
+  q_en:'What type of lower back or buttock symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 腰の状態',
+  badge_en:'STEP 2 / Back Condition',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#9889;',ibg:'#fef2f2',
+     label_ja:'急に強く痛めた（ぎっくり腰など）',
+     label_en:'Sudden severe pain (sudden back pain)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['acute_lbp','lumbar_hernia']},
+    {icon:'&#129534;',ibg:'#fff7ed',
+     label_ja:'腰を後ろに反らすと痛みが強まる（若い・スポーツをしている）',
+     label_en:'Pain worsens bending backward (young / active)',
+     desc_ja:'脊椎分離症・筋筋膜症が疑われる',
+     desc_en:'Possible spondylolysis or myofascial pain',
+     next:'result',diseases:['spondylolysis','muscle_lumbar']},
+    {icon:'&#129681;',ibg:'#fafafa',
+     label_ja:'前かがみ・長時間の座位で悪化する',
+     label_en:'Worse when bending forward or sitting long',
+     desc_ja:'椎間板・筋筋膜症が疑われる',
+     desc_en:'Possible disc or myofascial issue',
+     next:'result',diseases:['lumbar_hernia','muscle_lumbar','si_joint']},
+    {icon:'&#128099;',ibg:'#fff7ed',
+     label_ja:'お尻〜太もも裏にかけて重だるさ・しびれがある',
+     label_en:'Heaviness or numbness from buttock to back of thigh',
+     desc_ja:'坐骨神経痛・梨状筋症候群が疑われる',
+     desc_en:'Possible sciatica or piriformis syndrome',
+     next:'result',diseases:['sciatica','piriformis','si_joint','lumbar_hernia']},
+    {icon:'&#128694;',ibg:'#fef2f2',
+     label_ja:'歩くと足がだるくなり・休むと楽になる',
+     label_en:'Leg fatigue when walking, better with rest',
+     desc_ja:'脊柱管狭窄症が疑われる',
+     desc_en:'Possible spinal stenosis',
+     next:'result',diseases:['stenosis','sciatica']},
+    {icon:'&#129485;',ibg:'#fafafa',
+     label_ja:'骨盤・仙骨あたりが痛い（立ち上がり・デスクワークで悪化）',
+     label_en:'Pelvis or sacrum pain (worse standing or desk work)',
+     desc_ja:'仙腸関節障害が疑われる',
+     desc_en:'Possible SI joint dysfunction',
+     next:'result',diseases:['si_joint','muscle_lumbar']},
+    {icon:'&#129468;',ibg:'#f0fdf4',
+     label_ja:'背骨・肩・骨盤の高さが左右で違う・歪みが気になる',
+     label_en:'Uneven spine, shoulders, or pelvis height',
+     desc_ja:'側弯症・仙腸関節障害が疑われる',
+     desc_en:'Possible scoliosis or SI joint issue',
+     next:'result',diseases:['scoliosis','si_joint']},
+    {icon:'&#129485;',ibg:'#fff7ed',
+     label_ja:'歩き始めや長歩きで股関節前面・横が痛い',
+     label_en:'Front or side hip pain at start of walking or long walks',
+     desc_ja:'変形性股関節症が疑われる',
+     desc_en:'Possible hip osteoarthritis',
+     next:'result',diseases:['hip_oa']},
+    {icon:'&#9917;',ibg:'#fff7ed',
+     label_ja:'ランニング・キック動作で鼠径部が痛い（スポーツ選手）',
+     label_en:'Groin pain with running or kicking',
+     desc_ja:'グロインペイン症候群が疑われる',
+     desc_en:'Possible groin pain syndrome',
+     next:'result',diseases:['groin_pain']},
+    {icon:'&#129485;',ibg:'#fafafa',
+     label_ja:'骨盤周囲・片側の腰が痛い（立ち上がりで特に悪化）',
+     label_en:'Pelvic or one-sided low back pain (worst when standing)',
+     desc_ja:'仙腸関節障害・坐骨神経痛が疑われる',
+     desc_en:'Possible SI joint dysfunction or sciatica',
+     next:'result',diseases:['si_joint','sciatica','piriformis']}
+  ]
+},
+
+/* =====================================================
+   STEP 1-B: 首・肩の状態確認
+===================================================== */
+neck_condition:{
+  q_ja:'首・肩の状態はどのタイプですか？',
+  q_en:'What type of neck or shoulder symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 首・肩の状態',
+  badge_en:'STEP 2 / Neck & Shoulder Condition',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#128663;',ibg:'#fef2f2',
+     label_ja:'事故・転倒後から首が痛くなった（むち打ち）',
+     label_en:'Neck pain after accident or fall (whiplash)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['whiplash','wry_neck']},
+    {icon:'&#127769;',ibg:'#fef2f2',
+     label_ja:'急に首が動かせなくなった（寝違え）',
+     label_en:'Sudden neck stiffness (stiff neck)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['wry_neck','whiplash']},
+    {icon:'&#128187;',ibg:'#fafafa',
+     label_ja:'肩・首のこりが慢性的に続いている',
+     label_en:'Chronic neck and shoulder stiffness',
+     desc_ja:'デスクワーク・スマホの使い過ぎなど',
+     desc_en:'Desk work or excessive smartphone use',
+     next:'result',diseases:['trapezius','straight_neck','cervicogenic_ha']},
+    {icon:'&#129298;',ibg:'#fff7ed',
+     label_ja:'首から後頭部にかけて頭痛がある',
+     label_en:'Headache from neck to back of head',
+     desc_ja:'頸原性頭痛が疑われる',
+     desc_en:'Possible cervicogenic headache',
+     next:'result',diseases:['cervicogenic_ha','trapezius']},
+    {icon:'&#9995;',ibg:'#f0f4ff',
+     label_ja:'首〜腕〜手にかけてしびれ・脱力がある',
+     label_en:'Numbness or weakness from neck to arm or hand',
+     desc_ja:'頸椎椎間板ヘルニアが疑われる',
+     desc_en:'Possible cervical disc herniation',
+     next:'nerve_neck',diseases:[]},
+    {icon:'&#128170;',ibg:'#fff7ed',
+     label_ja:'腕を上げると肩が痛い・引っかかる感じ',
+     label_en:'Shoulder pain or catching when raising arm',
+     desc_ja:'腱板炎・上腕二頭筋腱炎が疑われる',
+     desc_en:'Possible rotator cuff or biceps tendinitis',
+     next:'result',diseases:['rotator_cuff_tendinitis','biceps_tendinitis','frozen_shoulder']},
+    {icon:'&#127769;',ibg:'#fef2f2',
+     label_ja:'夜間に肩が痛い・腕が上がらない（五十肩）',
+     label_en:'Night shoulder pain or arm difficult to raise',
+     desc_ja:'肩関節周囲炎が疑われる',
+     desc_en:'Possible frozen shoulder',
+     next:'result',diseases:['frozen_shoulder','rotator_cuff_tendinitis']},
+    {icon:'&#128170;',ibg:'#f0f4ff',
+     label_ja:'腕を挙げると手・指がしびれる',
+     label_en:'Hand or finger numbness when raising arm',
+     desc_ja:'胸郭出口症候群が疑われる',
+     desc_en:'Possible thoracic outlet syndrome',
+     next:'result',diseases:['toc2','cervical_hernia2']}
+  ]
+},
+
+/* =====================================================
+   STEP 1-C: 膝・太ももの状態確認
+===================================================== */
+knee_condition:{
+  q_ja:'膝・太ももの状態はどのタイプですか？',
+  q_en:'What type of knee or thigh symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 膝の状態',
+  badge_en:'STEP 2 / Knee Condition',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#128552;',ibg:'#fef2f2',
+     label_ja:'スポーツ中に膝を痛めた・「ブチッ」と音がした',
+     label_en:'Knee injury during sports or popping sound',
+     desc_ja:'靭帯・半月板損傷が疑われる',
+     desc_en:'Possible ligament or meniscus injury',
+     next:'result',diseases:['acl','mcl','meniscus']},
+    {icon:'&#9889;',ibg:'#fef2f2',
+     label_ja:'太もも前面に突然激痛が走った（肉離れ）',
+     label_en:'Sudden severe pain in front of thigh (strain)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['quad_strain']},
+    {icon:'&#129461;',ibg:'#fff7ed',
+     label_ja:'膝の前・お皿周りが慢性的に痛い',
+     label_en:'Chronic pain at front of knee or around kneecap',
+     desc_ja:'PFP・膝蓋腱炎・オスグッドが疑われる',
+     desc_en:'Possible PFP, patellar tendinitis, Osgood-Schlatter',
+     next:'result',diseases:['pfp','jumper_knee','osgood']},
+    {icon:'&#9664;',ibg:'#fafafa',
+     label_ja:'膝の内側が痛い・じわじわ悪化している',
+     label_en:'Inner knee pain gradually worsening',
+     desc_ja:'鵞足炎・変形性膝関節症が疑われる',
+     desc_en:'Possible goose foot bursitis or knee OA',
+     next:'result',diseases:['goose_foot','oa_knee']},
+    {icon:'&#127939;',ibg:'#fff7ed',
+     label_ja:'膝の外側が痛い（ランニングで悪化）',
+     label_en:'Outer knee pain worse with running',
+     desc_ja:'腸脛靭帯炎（ランナー膝）が疑われる',
+     desc_en:'Possible IT band syndrome',
+     next:'result',diseases:['iliotibial']},
+    {icon:'&#129460;',ibg:'#fef2f2',
+     label_ja:'動き始めが特に痛い・膝に水が溜まる感じ（中高年）',
+     label_en:'Worst at start of movement, joint fluid feeling',
+     desc_ja:'変形性膝関節症が疑われる',
+     desc_en:'Possible knee osteoarthritis',
+     next:'result',diseases:['oa_knee','goose_foot']},
+    {icon:'&#128552;',ibg:'#fafafa',
+     label_ja:'膝に引っかかり感・ロッキングがある',
+     label_en:'Catching or locking sensation in the knee',
+     desc_ja:'半月板損傷が疑われる',
+     desc_en:'Possible meniscus injury',
+     next:'result',diseases:['meniscus','acl']},
+    {icon:'&#127939;',ibg:'#f0fff4',
+     label_ja:'すね内側・ふくらはぎがランニング・運動後に痛い',
+     label_en:'Inner shin or calf pain after running or exercise',
+     desc_ja:'シンスプリント・アキレス腱炎が疑われる',
+     desc_en:'Possible shin splints or Achilles tendinitis',
+     next:'result',diseases:['shin_splints','achilles']}
+  ]
+},
+
+/* =====================================================
+   STEP 1-D: 足首・足の状態確認
+===================================================== */
+ankle_condition:{
+  q_ja:'足首・足の裏の状態はどのタイプですか？',
+  q_en:'What type of ankle or foot symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 足首・足の状態',
+  badge_en:'STEP 2 / Ankle & Foot Condition',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#127744;',ibg:'#fef2f2',
+     label_ja:'捻挫をした（足首を捻った）',
+     label_en:'Sprained ankle (twisted foot)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['ankle_sprain']},
+    {icon:'&#127749;',ibg:'#fff7ed',
+     label_ja:'朝一歩目のかかとが痛い',
+     label_en:'Heel pain with first step in morning',
+     desc_ja:'足底筋膜炎が疑われる',
+     desc_en:'Possible plantar fasciitis',
+     next:'result',diseases:['plantar']},
+    {icon:'&#9889;',ibg:'#fff7ed',
+     label_ja:'かかとの上（アキレス腱）が痛い',
+     label_en:'Pain above heel (Achilles tendon)',
+     desc_ja:'アキレス腱炎が疑われる',
+     desc_en:'Possible Achilles tendinitis',
+     next:'result',diseases:['achilles']},
+    {icon:'&#128099;',ibg:'#f0fdf4',
+     label_ja:'足裏全体が疲れやすい・土踏まずが低い・平らな足',
+     label_en:'Whole foot fatigue or flat arch',
+     desc_ja:'扁平足が疑われる',
+     desc_en:'Possible flat foot',
+     next:'result',diseases:['flatfoot','plantar']}
+  ]
+},
+
+/* =====================================================
+   STEP 1-E: その他エリア
+===================================================== */
+
+arm_condition:{
+  q_ja:'腕・手首の症状はどのタイプですか？',
+  q_en:'What type of arm or wrist symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 腕・手首の状態',
+  badge_en:'STEP 2 / Arm & Wrist Condition',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#127934;',ibg:'#fff7ed',
+     label_ja:'肘の外側が痛い（物を持つと悪化）',
+     label_en:'Outer elbow pain (worse when lifting)',
+     desc_ja:'テニス肘が疑われる',
+     desc_en:'Possible tennis elbow',
+     next:'result',diseases:['tennis_elbow']},
+    {icon:'&#128170;',ibg:'#fff0f0',
+     label_ja:'肩の前側・力こぶ付近が痛い',
+     label_en:'Pain in front of shoulder near biceps',
+     desc_ja:'上腕二頭筋長頭腱炎が疑われる',
+     desc_en:'Possible biceps tendinitis',
+     next:'result',diseases:['biceps_tendinitis','rotator_cuff_tendinitis']},
+    {icon:'&#9995;',ibg:'#f0f4ff',
+     label_ja:'腕を上げると手・指がしびれる',
+     label_en:'Hand or finger numbness when raising arm',
+     desc_ja:'胸郭出口症候群・頸椎ヘルニアが疑われる',
+     desc_en:'Possible thoracic outlet syndrome or cervical herniation',
+     next:'result',diseases:['toc2','cervical_hernia2']},
+    {icon:'&#9995;',ibg:'#fef2f2',
+     label_ja:'首〜腕〜手にかけてしびれ・脱力がある',
+     label_en:'Numbness or weakness from neck to arm or hand',
+     desc_ja:'頸椎椎間板ヘルニアが疑われる',
+     desc_en:'Possible cervical disc herniation',
+     next:'nerve_neck',diseases:[]}
+  ]
+},
+
+other_area:{
+  q_ja:'その他の部位・状態はどのタイプですか？',
+  q_en:'Which other area or condition applies?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / その他の部位',
+  badge_en:'STEP 2 / Other Area',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#128308;',ibg:'#fff0f0',
+     label_ja:'腰・お尻・股関節・鼠径部の痛みはこちら',
+     label_en:'Lower back, buttock, hip or groin pain',
+     desc_ja:'',desc_en:'',
+     next:'low_condition',diseases:[]},
+    {icon:'&#128995;',ibg:'#fdf0ff',
+     label_ja:'腕・肘・手首・手のしびれはこちら',
+     label_en:'Arm, elbow, wrist or hand symptoms',
+     desc_ja:'',desc_en:'',
+     next:'arm_condition',diseases:[]},
+    {icon:'&#128993;',ibg:'#fffbf0',
+     label_ja:'すね・ふくらはぎ・膝・太ももはこちら',
+     label_en:'Shin, calf, knee or thigh symptoms',
+     desc_ja:'',desc_en:'',
+     next:'knee_condition',diseases:[]},
+    {icon:'&#128998;',ibg:'#fffef0',
+     label_ja:'姿勢・左右差・疲れやすさはこちら',
+     label_en:'Posture, asymmetry or fatigue',
+     desc_ja:'',desc_en:'',
+     next:'posture_type',diseases:[]},
+    {icon:'&#9995;',ibg:'#f0f4ff',
+     label_ja:'手足のしびれ・神経症状はこちら',
+     label_en:'Numbness or nerve symptoms',
+     desc_ja:'',desc_en:'',
+     next:'nerve_area',diseases:[]}
+  ]
+},
+
+other_hip:{
+  q_ja:'股関節・鼠径部の状態はどのタイプですか？',
+  q_en:'What type of hip or groin symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 股関節の詳細',
+  badge_en:'STEP 3 / Hip Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#129485;',ibg:'#fff7ed',
+     label_ja:'歩き始めや長歩きで股関節前面・横が痛い',
+     label_en:'Front or side hip pain at start of walking or long walks',
+     desc_ja:'変形性股関節症が疑われる',
+     desc_en:'Possible hip osteoarthritis',
+     next:'result',diseases:['hip_oa']},
+    {icon:'&#9917;',ibg:'#fff7ed',
+     label_ja:'ランニング・キック動作で鼠径部が痛い（スポーツ選手）',
+     label_en:'Groin pain with running or kicking (athletes)',
+     desc_ja:'グロインペイン症候群が疑われる',
+     desc_en:'Possible groin pain syndrome',
+     next:'result',diseases:['groin_pain']},
+    {icon:'&#129485;',ibg:'#fafafa',
+     label_ja:'骨盤周囲・片側の腰が痛い（立ち上がりで特に悪化）',
+     label_en:'Pelvic or one-sided low back pain (worst when standing)',
+     desc_ja:'仙腸関節障害・坐骨神経痛が疑われる',
+     desc_en:'Possible SI joint dysfunction or sciatica',
+     next:'result',diseases:['si_joint','sciatica','piriformis']}
+  ]
+},
+
+/* =====================================================
+   STEP 2-A: 急性外傷系
+===================================================== */
+trauma_area:{
+  q_ja:'どこを痛めましたか？',
+  q_en:'Which area did you injure?',
+  sub_ja:'最も痛みの強い部位を選んでください',
+  sub_en:'Select the most painful area',
+  badge_ja:'STEP 2 / 受傷部位',
+  badge_en:'STEP 2 / Injury Area',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#127744;',ibg:'#fef2f2',
+     label_ja:'足首・足（捻挫・打撲）',
+     label_en:'Ankle / Foot (sprain, bruise)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['ankle_sprain']},
+    {icon:'&#129460;',ibg:'#fef2f2',
+     label_ja:'膝・太もも',
+     label_en:'Knee / Thigh',
+     desc_ja:'',desc_en:'',
+     next:'trauma_knee',diseases:[]},
+    {icon:'&#9889;',ibg:'#fff7ed',
+     label_ja:'腰・背中（ぎっくり腰など）',
+     label_en:'Lower back (sudden back pain)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['acute_lbp','lumbar_hernia']},
+    {icon:'&#128663;',ibg:'#fef2f2',
+     label_ja:'首（交通事故・転倒後）',
+     label_en:'Neck (after accident or fall)',
+     desc_ja:'むち打ち・寝違えなど',
+     desc_en:'Whiplash, stiff neck, etc.',
+     next:'result',diseases:['whiplash']},
+    {icon:'&#128170;',ibg:'#fff7ed',
+     label_ja:'肩・腕',
+     label_en:'Shoulder / Arm',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['rotator_cuff_tendinitis','mcl']}
+  ]
+},
+
+trauma_knee:{
+  q_ja:'膝・太ももの状態を教えてください',
+  q_en:'Tell us more about your knee or thigh injury',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 膝・太もも詳細',
+  badge_en:'STEP 3 / Knee & Thigh Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#128552;',ibg:'#fef2f2',
+     label_ja:'膝が「ガクッ」と抜けた・「ブチッ」と音がした',
+     label_en:'Knee gave way or popping sound',
+     desc_ja:'靭帯・半月板損傷が疑われる',
+     desc_en:'Possible ligament or meniscus injury',
+     next:'result',diseases:['acl','mcl','meniscus']},
+    {icon:'&#9889;',ibg:'#fef2f2',
+     label_ja:'太もも前面に突然激痛が走った',
+     label_en:'Sudden severe pain in front of thigh',
+     desc_ja:'肉離れが疑われる',
+     desc_en:'Possible muscle strain',
+     next:'result',diseases:['quad_strain']},
+    {icon:'&#128167;',ibg:'#fff7ed',
+     label_ja:'膝全体が腫れている・水が溜まった感じ',
+     label_en:'Whole knee swelling or fluid feeling',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['mcl','meniscus','oa_knee']},
+    {icon:'&#128543;',ibg:'#fafafa',
+     label_ja:'膝の前（お皿周り）を打った・擦った',
+     label_en:'Hit or scraped the front of the knee',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['pfp','jumper_knee']}
+  ]
+},
+
+/* =====================================================
+   STEP 2-B: 慢性痛・だるさ系
+===================================================== */
+chronic_area:{
+  q_ja:'慢性的な痛み・だるさはどのあたりですか？',
+  q_en:'Where is your chronic pain or fatigue?',
+  sub_ja:'複数ある場合は最も気になる部位を選んでください',
+  sub_en:'If multiple, choose the most bothersome area',
+  badge_ja:'STEP 2 / 部位',
+  badge_en:'STEP 2 / Area',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#128308;',ibg:'#fff0f0',
+     label_ja:'腰・お尻・骨盤周囲',
+     label_en:'Lower back / Buttock / Pelvis',
+     desc_ja:'腰痛・骨盤の痛みなど',
+     desc_en:'Back pain, pelvic pain, etc.',
+     next:'chronic_lumbar',diseases:[]},
+    {icon:'&#128309;',ibg:'#f0f4ff',
+     label_ja:'首・肩・頭',
+     label_en:'Neck / Shoulder / Head',
+     desc_ja:'肩こり・頸部痛・頭痛など',
+     desc_en:'Stiffness, neck pain, headache',
+     next:'chronic_neck',diseases:[]},
+    {icon:'&#128993;',ibg:'#fffbf0',
+     label_ja:'膝・太もも',
+     label_en:'Knee / Thigh',
+     desc_ja:'膝の痛み・腫れ・違和感など',
+     desc_en:'Knee pain, swelling, or discomfort',
+     next:'chronic_knee',diseases:[]},
+    {icon:'&#128994;',ibg:'#f0fff4',
+     label_ja:'足首・足の裏・かかと',
+     label_en:'Ankle / Sole / Heel',
+     desc_ja:'足底痛・かかと痛・足の疲れなど',
+     desc_en:'Foot pain, heel pain, or foot fatigue',
+     next:'chronic_foot',diseases:[]},
+    {icon:'&#127939;',ibg:'#f0fff4',
+     label_ja:'すね・ふくらはぎ',
+     label_en:'Shin / Calf',
+     desc_ja:'すねの痛み・走ると悪化など',
+     desc_en:'Shin pain, worse with running',
+     next:'result',diseases:['shin_splints','achilles']},
+    {icon:'&#129485;',ibg:'#fff7ed',
+     label_ja:'股関節・鼠径部（足の付け根）',
+     label_en:'Hip / Groin',
+     desc_ja:'股関節の痛み・鼠径部の痛みなど',
+     desc_en:'Hip pain, groin pain, etc.',
+     next:'chronic_hip',diseases:[]},
+    {icon:'&#127934;',ibg:'#fef2f2',
+     label_ja:'肘・手首・手',
+     label_en:'Elbow / Wrist / Hand',
+     desc_ja:'テニス肘・腱炎など',
+     desc_en:'Tennis elbow, tendinitis, etc.',
+     next:'result',diseases:['tennis_elbow']},
+    {icon:'&#128170;',ibg:'#fff0f0',
+     label_ja:'肩（慢性的な痛み）',
+     label_en:'Shoulder (chronic pain)',
+     desc_ja:'肩の可動域制限・繰り返す痛みなど',
+     desc_en:'Limited ROM or recurring pain',
+     next:'chronic_shoulder',diseases:[]}
+  ]
+},
+
+chronic_lumbar:{
+  q_ja:'腰・お尻の痛みはどのタイプですか？',
+  q_en:'What type of lower back or buttock pain?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 腰の詳細',
+  badge_en:'STEP 3 / Back Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#129534;',ibg:'#fff7ed',
+     label_ja:'腰を後ろに反らすと痛みが強まる（若い・スポーツをしている）',
+     label_en:'Pain worsens when bending backward (young / active)',
+     desc_ja:'脊椎分離症・筋筋膜症が疑われる',
+     desc_en:'Possible spondylolysis or myofascial pain',
+     next:'result',diseases:['spondylolysis','muscle_lumbar']},
+    {icon:'&#129681;',ibg:'#fafafa',
+     label_ja:'前かがみ・長時間の座位で悪化する',
+     label_en:'Worse when bending forward or sitting long',
+     desc_ja:'椎間板・筋筋膜症が疑われる',
+     desc_en:'Possible disc or myofascial issue',
+     next:'result',diseases:['lumbar_hernia','muscle_lumbar','si_joint']},
+    {icon:'&#128099;',ibg:'#fff7ed',
+     label_ja:'お尻〜太もも裏にかけて重だるさ・痛みがある',
+     label_en:'Heaviness or pain from buttock to back of thigh',
+     desc_ja:'坐骨神経痛・梨状筋症候群が疑われる',
+     desc_en:'Possible sciatica or piriformis syndrome',
+     next:'result',diseases:['sciatica','piriformis','si_joint']},
+    {icon:'&#129485;',ibg:'#fafafa',
+     label_ja:'骨盤・仙骨あたりが痛い（立ち上がりで悪化）',
+     label_en:'Pelvis or sacrum pain (worse when standing up)',
+     desc_ja:'仙腸関節障害が疑われる',
+     desc_en:'Possible SI joint dysfunction',
+     next:'result',diseases:['si_joint','muscle_lumbar','sciatica']},
+    {icon:'&#129468;',ibg:'#f0fdf4',
+     label_ja:'背骨・肩・骨盤の高さが左右で違う・歪みが気になる',
+     label_en:'Uneven spine, shoulders, or pelvis height',
+     desc_ja:'側弯症・仙腸関節障害が疑われる',
+     desc_en:'Possible scoliosis or SI joint issue',
+     next:'result',diseases:['scoliosis','si_joint']}
+  ]
+},
+
+chronic_neck:{
+  q_ja:'首・肩・頭の症状はどのタイプですか？',
+  q_en:'What type of neck, shoulder, or head symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 首・肩の詳細',
+  badge_en:'STEP 3 / Neck & Shoulder Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#128187;',ibg:'#fafafa',
+     label_ja:'肩・首がこる（デスクワーク・スマホの使い過ぎ）',
+     label_en:'Neck and shoulder stiffness (desk work / smartphone)',
+     desc_ja:'肩こり・ストレートネックが疑われる',
+     desc_en:'Possible stiffness or straight neck',
+     next:'result',diseases:['trapezius','straight_neck']},
+    {icon:'&#129298;',ibg:'#fff7ed',
+     label_ja:'首から後頭部にかけて頭痛がある',
+     label_en:'Headache from neck to back of head',
+     desc_ja:'頸原性頭痛が疑われる',
+     desc_en:'Possible cervicogenic headache',
+     next:'result',diseases:['cervicogenic_ha','trapezius','straight_neck']},
+    {icon:'&#128663;',ibg:'#fef2f2',
+     label_ja:'交通事故・転倒後から首が痛くなった',
+     label_en:'Neck pain after accident or fall',
+     desc_ja:'むち打ちが疑われる',
+     desc_en:'Possible whiplash',
+     next:'result',diseases:['whiplash','wry_neck','cervicogenic_ha']},
+    {icon:'&#128170;',ibg:'#fff7ed',
+     label_ja:'腕を上げると肩が痛い・引っかかる感じ',
+     label_en:'Shoulder pain or catching when raising arm',
+     desc_ja:'腱板炎・上腕二頭筋腱炎が疑われる',
+     desc_en:'Possible rotator cuff or biceps tendinitis',
+     next:'result',diseases:['rotator_cuff_tendinitis','biceps_tendinitis','frozen_shoulder']},
+    {icon:'&#128170;',ibg:'#f0f4ff',
+     label_ja:'腕を挙げると手・指がしびれる',
+     label_en:'Hand or finger numbness when raising arm',
+     desc_ja:'胸郭出口症候群が疑われる',
+     desc_en:'Possible thoracic outlet syndrome',
+     next:'result',diseases:['toc2','cervical_hernia2']}
+  ]
+},
+
+chronic_knee:{
+  q_ja:'膝・太ももの慢性症状はどのタイプですか？',
+  q_en:'What type of chronic knee or thigh symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 膝の詳細',
+  badge_en:'STEP 3 / Knee Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#129461;',ibg:'#fff7ed',
+     label_ja:'膝の前・お皿の周りが痛い（階段・長座りで悪化）',
+     label_en:'Front knee or kneecap pain (stairs or sitting)',
+     desc_ja:'PFP・膝蓋腱炎・オスグッドが疑われる',
+     desc_en:'Possible PFP, patellar tendinitis, or Osgood-Schlatter',
+     next:'result',diseases:['pfp','jumper_knee','osgood']},
+    {icon:'&#9664;',ibg:'#fafafa',
+     label_ja:'膝の内側が痛い・じわじわ悪化している',
+     label_en:'Inner knee pain gradually worsening',
+     desc_ja:'鵞足炎・変形性膝関節症が疑われる',
+     desc_en:'Possible goose foot bursitis or knee OA',
+     next:'result',diseases:['goose_foot','oa_knee']},
+    {icon:'&#127939;',ibg:'#fff7ed',
+     label_ja:'膝の外側が痛い（ランニングで悪化）',
+     label_en:'Outer knee pain worse with running',
+     desc_ja:'腸脛靭帯炎（ランナー膝）が疑われる',
+     desc_en:'Possible IT band syndrome',
+     next:'result',diseases:['iliotibial']},
+    {icon:'&#129460;',ibg:'#fef2f2',
+     label_ja:'動き始めが特に痛い・膝に水が溜まる感じ（中高年）',
+     label_en:'Worst at start of movement, joint fluid feeling (middle-aged+)',
+     desc_ja:'変形性膝関節症が疑われる',
+     desc_en:'Possible knee osteoarthritis',
+     next:'result',diseases:['oa_knee','goose_foot']},
+    {icon:'&#128552;',ibg:'#fef2f2',
+     label_ja:'膝に引っかかり感・ロッキングがある',
+     label_en:'Catching or locking sensation in the knee',
+     desc_ja:'半月板損傷が疑われる',
+     desc_en:'Possible meniscus injury',
+     next:'result',diseases:['meniscus','acl']}
+  ]
+},
+
+chronic_foot:{
+  q_ja:'足・かかとの症状はどのタイプですか？',
+  q_en:'What type of foot or heel symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 足の詳細',
+  badge_en:'STEP 3 / Foot Details',
+  p:55,grid:true,
+  choices:[
+    {icon:'&#127749;',ibg:'#fff7ed',
+     label_ja:'朝一歩目のかかとが痛い',
+     label_en:'Heel pain with first step in morning',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['plantar']},
+    {icon:'&#9889;',ibg:'#fff7ed',
+     label_ja:'かかとの上（アキレス腱）が痛い',
+     label_en:'Pain above heel (Achilles tendon)',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['achilles']},
+    {icon:'&#128099;',ibg:'#f0fdf4',
+     label_ja:'足裏全体が疲れやすい・土踏まずが低い',
+     label_en:'Whole foot fatigue or flat arch',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['flatfoot','plantar']},
+    {icon:'&#127744;',ibg:'#fef2f2',
+     label_ja:'捻挫をした（数日〜数週間前）',
+     label_en:'Sprained ankle recently',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['ankle_sprain']}
+  ]
+},
+
+chronic_hip:{
+  q_ja:'股関節・鼠径部の症状はどのタイプですか？',
+  q_en:'What type of hip or groin symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 股関節の詳細',
+  badge_en:'STEP 3 / Hip Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#129485;',ibg:'#fff7ed',
+     label_ja:'歩き始めや長歩きで股関節前面・横が痛い',
+     label_en:'Front or side hip pain at start of walking or long walks',
+     desc_ja:'変形性股関節症が疑われる',
+     desc_en:'Possible hip osteoarthritis',
+     next:'result',diseases:['hip_oa']},
+    {icon:'&#9917;',ibg:'#fff7ed',
+     label_ja:'ランニング・キック動作で鼠径部が痛い（スポーツ選手）',
+     label_en:'Groin pain with running or kicking (athletes)',
+     desc_ja:'グロインペイン症候群が疑われる',
+     desc_en:'Possible groin pain syndrome',
+     next:'result',diseases:['groin_pain']},
+    {icon:'&#129485;',ibg:'#fafafa',
+     label_ja:'骨盤周囲・片側の腰が痛い（立ち上がりで特に悪化）',
+     label_en:'Pelvic or one-sided low back pain (worst when standing)',
+     desc_ja:'仙腸関節障害・坐骨神経痛が疑われる',
+     desc_en:'Possible SI joint or sciatica',
+     next:'result',diseases:['si_joint','sciatica','piriformis']}
+  ]
+},
+
+chronic_shoulder:{
+  q_ja:'肩の慢性症状はどのタイプですか？',
+  q_en:'What type of chronic shoulder symptom?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / 肩の詳細',
+  badge_en:'STEP 3 / Shoulder Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#127769;',ibg:'#fef2f2',
+     label_ja:'夜間に肩が痛い・最近腕が上がりにくくなった',
+     label_en:'Night shoulder pain or arm becoming hard to raise',
+     desc_ja:'五十肩・腱板炎が疑われる',
+     desc_en:'Possible frozen shoulder or rotator cuff issue',
+     next:'result',diseases:['frozen_shoulder','rotator_cuff_tendinitis']},
+    {icon:'&#128170;',ibg:'#fff7ed',
+     label_ja:'腕を上げる特定の角度で鋭い痛みがある',
+     label_en:'Sharp pain at a specific angle when raising arm',
+     desc_ja:'インピンジメント・腱炎が疑われる',
+     desc_en:'Possible impingement or tendinitis',
+     next:'result',diseases:['rotator_cuff_tendinitis','biceps_tendinitis']},
+    {icon:'&#128170;',ibg:'#fff0f0',
+     label_ja:'肩の前側・力こぶ付近が慢性的に痛い',
+     label_en:'Chronic pain in front of shoulder near biceps',
+     desc_ja:'上腕二頭筋長頭腱炎が疑われる',
+     desc_en:'Possible biceps long head tendinitis',
+     next:'result',diseases:['biceps_tendinitis','rotator_cuff_tendinitis']},
+    {icon:'&#9886;',ibg:'#fafafa',
+     label_ja:'腕を挙げると手がしびれる',
+     label_en:'Hand numbness when raising arm',
+     desc_ja:'胸郭出口症候群が疑われる',
+     desc_en:'Possible thoracic outlet syndrome',
+     next:'result',diseases:['toc2']}
+  ]
+},
+
+/* =====================================================
+   STEP 2-C: しびれ・神経症状系
+===================================================== */
+nerve_area:{
+  q_ja:'しびれ・神経症状はどのあたりですか？',
+  q_en:'Where are your nerve symptoms or numbness?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / しびれの部位',
+  badge_en:'STEP 2 / Numbness Area',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#128099;',ibg:'#fff7ed',
+     label_ja:'腰〜お尻〜足にかけて痛み・しびれが広がる',
+     label_en:'Pain or numbness spreading from back to buttock to leg',
+     desc_ja:'坐骨神経痛・椎間板ヘルニアが疑われる',
+     desc_en:'Possible sciatica or disc herniation',
+     next:'result',diseases:['sciatica','stenosis','lumbar_hernia','piriformis']},
+    {icon:'&#9995;',ibg:'#f0f4ff',
+     label_ja:'首〜腕〜手にかけてしびれ・脱力がある',
+     label_en:'Numbness or weakness from neck to arm or hand',
+     desc_ja:'頸椎由来の神経症状が疑われる',
+     desc_en:'Possible cervical nerve involvement',
+     next:'nerve_neck',diseases:[]},
+    {icon:'&#128170;',ibg:'#fff7ed',
+     label_ja:'腕を上げた時・特定の姿勢でだけしびれる',
+     label_en:'Numbness only when raising arm or in certain positions',
+     desc_ja:'胸郭出口症候群が疑われる',
+     desc_en:'Possible thoracic outlet syndrome',
+     next:'result',diseases:['toc2','cervical_hernia2']},
+    {icon:'&#128694;',ibg:'#fef2f2',
+     label_ja:'歩くと足がしびれ・だるくなり、休むと楽になる',
+     label_en:'Leg numbness or fatigue when walking, relieved by rest',
+     desc_ja:'脊柱管狭窄症が疑われる',
+     desc_en:'Possible spinal stenosis',
+     next:'result',diseases:['stenosis','sciatica']}
+  ]
+},
+
+nerve_neck:{
+  q_ja:'首・腕のしびれについて教えてください',
+  q_en:'Tell us more about your neck or arm numbness',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 3 / しびれの詳細',
+  badge_en:'STEP 3 / Numbness Details',
+  p:55,grid:false,
+  choices:[
+    {icon:'&#128072;',ibg:'#fff7ed',
+     label_ja:'片側の腕・指がしびれる（首を動かすと増悪）',
+     label_en:'One-sided arm or finger numbness (worse with neck movement)',
+     desc_ja:'頸椎椎間板ヘルニアが疑われる',
+     desc_en:'Possible cervical disc herniation',
+     next:'result',diseases:['cervical_hernia2','toc2']},
+    {icon:'&#129330;',ibg:'#fef2f2',
+     label_ja:'両手・両腕がしびれる・細かい作業がしにくい',
+     label_en:'Both hands numb or difficulty with fine motor tasks',
+     desc_ja:'頸髄症が疑われる',
+     desc_en:'Possible cervical myelopathy',
+     next:'result',diseases:['cervical_hernia2']},
+    {icon:'&#128073;',ibg:'#fafafa',
+     label_ja:'小指側・手の内側がしびれる',
+     label_en:'Numbness on the pinky or inner hand side',
+     desc_ja:'胸郭出口症候群が疑われる',
+     desc_en:'Possible thoracic outlet syndrome',
+     next:'result',diseases:['toc2','cervical_hernia2']}
+  ]
+},
+
+/* =====================================================
+   STEP 2-D: 姿勢・見た目・疲れやすい系
+===================================================== */
+posture_type:{
+  q_ja:'姿勢・見た目で気になるのはどのタイプですか？',
+  q_en:'What postural or appearance concern do you have?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 姿勢の詳細',
+  badge_en:'STEP 2 / Posture Details',
+  p:30,grid:false,
+  choices:[
+    {icon:'&#129468;',ibg:'#f0fdf4',
+     label_ja:'背骨・肩・骨盤の高さが左右で違う',
+     label_en:'Uneven spine, shoulders, or pelvis',
+     desc_ja:'側弯症・仙腸関節障害が疑われる',
+     desc_en:'Possible scoliosis or SI joint issue',
+     next:'result',diseases:['scoliosis','si_joint']},
+    {icon:'&#128099;',ibg:'#f0fff4',
+     label_ja:'土踏まずが低い・足が疲れやすい・すねが痛む',
+     label_en:'Flat arch, easy foot fatigue, or shin pain',
+     desc_ja:'扁平足・シンスプリントが疑われる',
+     desc_en:'Possible flat foot or shin splints',
+     next:'result',diseases:['flatfoot','plantar','shin_splints']},
+    {icon:'&#128241;',ibg:'#fafafa',
+     label_ja:'頭が前に出ている・首がまっすぐに近い',
+     label_en:'Forward head posture or straight neck',
+     desc_ja:'ストレートネック・頸原性頭痛が疑われる',
+     desc_en:'Possible straight neck or cervicogenic headache',
+     next:'result',diseases:['straight_neck','trapezius','cervicogenic_ha']},
+    {icon:'&#129485;',ibg:'#fff7ed',
+     label_ja:'股関節の動きが悪くなってきた・脚の長さが違う気がする',
+     label_en:'Hip becoming stiff or leg length difference',
+     desc_ja:'変形性股関節症が疑われる',
+     desc_en:'Possible hip osteoarthritis',
+     next:'result',diseases:['hip_oa','si_joint']}
+  ]
+},
+
+/* =====================================================
+   STEP 2-E: 夜間・安静時痛系
+===================================================== */
+night_area:{
+  q_ja:'夜間・安静時の痛みはどのあたりですか？',
+  q_en:'Where is your night or resting pain?',
+  sub_ja:'最もあてはまるものを選んでください',
+  sub_en:'Choose the best match',
+  badge_ja:'STEP 2 / 夜間痛の部位',
+  badge_en:'STEP 2 / Night Pain Area',
+  p:30,grid:true,
+  choices:[
+    {icon:'&#128170;',ibg:'#fef2f2',
+     label_ja:'肩が痛い',
+     label_en:'Shoulder pain',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['frozen_shoulder','rotator_cuff_tendinitis']},
+    {icon:'&#128308;',ibg:'#fff0f0',
+     label_ja:'腰・お尻が痛い',
+     label_en:'Lower back or buttock pain',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['lumbar_hernia','stenosis','si_joint']},
+    {icon:'&#128993;',ibg:'#fffbf0',
+     label_ja:'膝が痛い',
+     label_en:'Knee pain',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['oa_knee','meniscus']},
+    {icon:'&#128309;',ibg:'#f0f4ff',
+     label_ja:'首・頭が痛い',
+     label_en:'Neck or head pain',
+     desc_ja:'',desc_en:'',
+     next:'result',diseases:['cervicogenic_ha','whiplash','trapezius']}
+  ]
+},
+
+/* =====================================================
+   緊急系（そのまま維持）
+===================================================== */
+emergency_lumbar:{q_ja:'緊急サインの確認',q_en:'Safety check',
+  sub_ja:'',sub_en:'',badge_ja:'緊急確認',badge_en:'Emergency Check',p:100,grid:false,choices:[]},
+emergency_head:{q_ja:'緊急サインの確認',q_en:'Safety check',
+  sub_ja:'',sub_en:'',badge_ja:'緊急確認',badge_en:'Emergency Check',p:100,grid:false,choices:[]}
+
+};
+
+/* ===== 追加DD（23疾患） ===== */
+
+/* 腰・脊柱 */
+DD['acute_lbp']={name_ja:'急性腰痛（ぎっくり腰）',name_en:'Acute Low Back Pain',cat_ja:'筋・関節障害 ／ 腰椎',cat_en:'Muscle & Joint / Lumbar',icon:'&#9889;',ibg:'#FFF7ED',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'座る・寝る姿勢など日常生活における快適な姿勢の確保が回復に不可欠です。お薬に関してはお医者さんに確認して処方してもらいましょう。',umsg_en:'Maintaining a comfortable posture during daily activities is essential for recovery. Please consult a doctor regarding medication.',summary_ja:'いわゆるぎっくり腰。姿勢不良や長時間の同一姿勢、繰り返し動作による筋肉の過緊張によって機能不全になり、普段の動作で腰の筋肉・関節・筋膜を痛めてしまう。正しい対処とエクササイズで数週間以内に改善することが多い。',summary_en:'Sudden severe back pain caused by muscle overactivity from poor posture or repetitive movements. Usually improves within a few weeks with proper care and exercise.',sx_ja:['突然の強い腰痛','動作で悪化','前屈困難','立ち上がりで痛む','歩行困難になることも'],sx_en:['Sudden severe low back pain','Worsens with movement','Difficulty bending forward','Pain when standing up','May cause difficulty walking'],cause_ja:'姿勢不良・長時間の同一姿勢・繰り返し動作による筋肉の過活動',cause_en:'Poor posture, prolonged same position, or repetitive movements',tx_ja:'膝抱えストレッチ・大殿筋ストレッチ・日常姿勢指導。痛みが落ち着いたら有酸素運動へ。',tx_en:'Knee-to-chest stretch, gluteus stretch, posture guidance. Progress to aerobic exercise as pain eases.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['lumbar_hernia']={name_ja:'腰椎椎間板ヘルニア',name_en:'Lumbar Disc Herniation',cat_ja:'神経障害 ／ 腰椎',cat_en:'Nerve Disorder / Lumbar Spine',icon:'&#128543;',ibg:'#FEF2F2',urgency:'red',ulabel_ja:'早めの精査',ulabel_en:'Please seek care soon',uai:'&#128680;',umsg_ja:'デスクワークなどの不良姿勢（屈曲姿勢の持続）が原因になりやすいです。正しい姿勢を意識し、30分間隔でこまめに姿勢を変えましょう。',umsg_en:'Poor posture from desk work is a common cause. Maintain proper posture and change positions every 30 minutes.',summary_ja:'椎間板の変性により髄核が突出し神経を圧迫。腰やお尻・下半身に痛みやしびれが放散する。88%は突出したヘルニアが自然吸引されるといわれている。',summary_en:'The nucleus pulposus protrudes through the disc and compresses nerves, causing pain and numbness radiating to the buttock and lower limbs. 88% resolve naturally.',sx_ja:['腰痛・お尻への放散痛','下肢のしびれ・痛み','前屈で悪化','長時間の同一姿勢で悪化','重症では感覚障害・握力低下'],sx_en:['Low back pain radiating to buttock','Leg numbness and pain','Worsens with forward bending','Worsens with prolonged posture','Sensory loss in severe cases'],cause_ja:'椎間板の変性・不良姿勢・喫煙・過度な負荷',cause_en:'Disc degeneration, poor posture, smoking, or excessive loading',tx_ja:'もも裏ストレッチ・腹式呼吸（体幹強化）・姿勢改善指導・デスク環境の見直し。',tx_en:'Hamstring stretch, diaphragmatic breathing (core strengthening), posture correction, desk environment review.',book_msg_ja:'お早めのご来院をお勧めします',book_msg_en:'We recommend visiting as soon as possible'};
+
+DD['spondylolysis']={name_ja:'脊椎分離症',name_en:'Spondylolysis',cat_ja:'疲労骨折 ／ 腰椎',cat_en:'Stress Fracture / Lumbar Spine',icon:'&#127939;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'分離初期は運動制限とコルセットの装着により骨癒合を促すことが優先されます。身体を大きく回す動作・大きく反らす動作・ジャンプは避けてください。',umsg_en:'In the early stage, activity restriction and a brace are prioritized. Avoid large rotations, hyperextension, and jumping.',summary_ja:'成長期に背骨の軟骨部へ繰り返しの負荷がかかり腰椎に亀裂が生じる疲労骨折の一種。野球・サッカー・バレーボールなどのスポーツで多く発生し、腰を後方へ反らすと痛みが強まる。',summary_en:'A stress fracture in the lumbar vertebrae caused by repetitive stress during the growth period. Common in baseball, soccer, and volleyball. Pain worsens with back extension.',sx_ja:['腰を反らすと強まる腰痛','前後屈・腰部ひねりで悪化','運動後の腰部痛','片側または両側の腰〜お尻の痛み'],sx_en:['Back pain worsening with extension','Worsens with flexion/rotation','Post-exercise low back pain','Unilateral or bilateral back to buttock pain'],cause_ja:'成長期のスポーツによる繰り返しストレス',cause_en:'Repetitive stress from sports during growth period',tx_ja:'股関節付け根ストレッチ・もも裏ストレッチ・コルセット着用指導・整形外科連携。',tx_en:'Hip flexor stretch, hamstring stretch, brace guidance, orthopedic collaboration.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['sciatica']={name_ja:'坐骨神経痛',name_en:'Sciatica',cat_ja:'神経症状 ／ 腰・下肢',cat_en:'Nerve Pain / Lumbar & Lower Limb',icon:'&#9889;',ibg:'#FEF2F2',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'坐骨神経痛は腰椎椎間板ヘルニアや脊柱管狭窄症・梨状筋症候群などの一症状として捉えられ、原因によって治療方法が異なります。足を組む姿勢は悪化リスクになります。',umsg_en:'Sciatica is a symptom of lumbar disc herniation, spinal stenosis, or piriformis syndrome. Crossing the legs worsens symptoms.',summary_ja:'腰から足にかけて伸びている坐骨神経が圧迫・刺激されることで、痛みや痺れ・脱力感などを誘発する症状。多くの場合、腰痛に引き続いてお尻や太ももの後ろ・すね・足先などに症状が広がる。約6週間のリハビリで半数以上が日常生活を取り戻せる。',summary_en:'Compression or irritation of the sciatic nerve causing pain, numbness, and weakness from the lower back to the foot. More than half recover to daily function within about 6 weeks.',sx_ja:['腰から足にかけての痛み・しびれ','お尻・太もも後面・すねの痛み','脱力感','長時間の座位・足を組む姿勢で悪化','腰痛に続いて発症することが多い'],sx_en:['Pain and numbness from low back to foot','Buttock, hamstring, and shin pain','Weakness','Worsens with sitting or leg crossing','Often follows back pain'],cause_ja:'腰椎椎間板ヘルニア・脊柱管狭窄症・梨状筋症候群など',cause_en:'Lumbar disc herniation, spinal stenosis, or piriformis syndrome',tx_ja:'梨状筋ストレッチ・もも裏ストレッチ・姿勢改善指導・鍼灸治療。',tx_en:'Piriformis stretch, hamstring stretch, posture correction, acupuncture.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['si_joint']={name_ja:'仙腸関節障害',name_en:'Sacroiliac Joint Dysfunction',cat_ja:'関節障害 ／ 骨盤・腰',cat_en:'Joint Dysfunction / Pelvis & Lower Back',icon:'&#129485;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'日常生活やデスクワークにおける左右非対称の動作や不良姿勢が痛みの原因となります。足を組まない正しい姿勢を心がけましょう。',umsg_en:'Asymmetric movement and poor posture in daily life or desk work can worsen symptoms. Maintain proper posture and avoid crossing your legs.',summary_ja:'仙骨と腸骨の間にある関節が不用意な動作や繰り返しの負荷により機能不全を起こす障害。出産後・中腰での作業・スポーツの着地動作が原因となることが多い。仙腸関節の動きは2〜3mmとわずかで、骨盤に左右非対称の力が加わることで発症しやすい。70%の方は保存療法で改善する。',summary_en:'Dysfunction of the sacroiliac joint caused by awkward movements or repetitive stress. Common after childbirth, stooped work, or sports landings. About 70% improve with conservative treatment.',sx_ja:['骨盤周囲・仙骨部の痛み','立ち上がり・歩行で悪化','片側に多い腰痛','下肢への放散痛','長時間のデスクワーク後に悪化'],sx_en:['Pain around the pelvis and sacrum','Worsens with standing and walking','Unilateral low back pain','Radiating pain into the leg','Worsens after prolonged desk work'],cause_ja:'出産・重労働・スポーツ着地動作・骨盤への左右非対称な負荷',cause_en:'Childbirth, heavy labor, sports landings, or asymmetric pelvic loading',tx_ja:'インナーマッスルトレーニング・大殿筋ストレッチ・座位姿勢改善指導・骨盤調整。',tx_en:'Inner muscle training, gluteus stretch, desk posture guidance, and pelvic adjustment.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+/* 首・肩 */
+DD['cervical_hernia2']={name_ja:'頸椎椎間板ヘルニア',name_en:'Cervical Disc Herniation',cat_ja:'神経障害 ／ 頸椎',cat_en:'Nerve Disorder / Cervical Spine',icon:'&#128544;',ibg:'#FEF2F2',urgency:'red',ulabel_ja:'早めの精査',ulabel_en:'Please seek care soon',uai:'&#128680;',umsg_ja:'デスクワークなどの不良姿勢（屈曲姿勢の持続）が原因で生じると言われています。正しい姿勢を意識し、30分間隔でこまめにストレッチを行いましょう。神経症状が重度な場合は早期に手術療法が推奨されます。',umsg_en:'Poor posture from desk work is a common cause. Maintain proper posture and stretch every 30 minutes. Early surgery may be recommended for severe nerve symptoms.',summary_ja:'椎間板の変性により髄核が突出し神経を圧迫。軽症では首の痛み・肩こり・軽い手のしびれが生じ、重症化すると手や腕の感覚低下・握力低下・細かい手指作業の支障をきたす。6ヶ月で約55%の人が症状改善する。',summary_en:'Herniation of the cervical disc compresses nerves. Mild symptoms include neck pain and hand tingling; severe cases cause reduced sensation and grip strength. About 55% improve within 6 months.',sx_ja:['首の痛み・肩こり','軽い手のしびれ（軽症）','手・腕の感覚低下（重症）','握力低下','細かい手指作業の支障'],sx_en:['Neck pain and shoulder stiffness','Mild hand tingling (early)','Reduced sensation in hand/arm (severe)','Reduced grip strength','Difficulty with fine hand movements'],cause_ja:'椎間板の変性・不良姿勢・スポーツによる外傷',cause_en:'Disc degeneration, poor posture, or sports trauma',tx_ja:'上位頸椎屈曲運動・ロウイング・デスク環境の改善指導（ディスプレイの高さ・30分間隔のストレッチ）。',tx_en:'Upper cervical flexion exercise, rowing, desk environment guidance (monitor height, 30-min stretch breaks).',book_msg_ja:'お早めのご来院をお勧めします',book_msg_en:'We recommend visiting as soon as possible'};
+
+DD['whiplash']={name_ja:'頸椎捻挫（むち打ち）',name_en:'Cervical Sprain (Whiplash)',cat_ja:'筋・靭帯外傷 ／ 頸椎',cat_en:'Muscle & Ligament Injury / Cervical Spine',icon:'&#128663;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'首を守る装具による固定は文献上効果的ではないと報告されています（医師の指示に従ってください）。長期間の過度な安静は必要なく、なるべく早めに通常の生活へ復帰することが推奨されています。',umsg_en:'Cervical collar immobilization is generally not recommended (consult your doctor). Return to daily activities as soon as possible.',summary_ja:'首への急激な外力（追突事故・転倒など）により首が前後に振られ、周りの筋肉や靭帯が過度に伸張されるけが。長時間の不良姿勢で生じる痛み（寝違え）も含まれる。40%が1ヶ月以内に回復する。',summary_en:'Injury caused by sudden force on the neck (rear-end collision, fall) overstretching muscles and ligaments. Stiff neck from poor posture is also included. 40% recover within 1 month.',sx_ja:['首・後頭部の違和感・張り感（軽症）','手のしびれ・脱力感（重症）','頭痛・めまい','肩・背中の痛み','手足の麻痺（重症）'],sx_en:['Neck and occipital discomfort/stiffness (mild)','Hand tingling and weakness (severe)','Headache and dizziness','Shoulder and back pain','Limb paralysis (severe)'],cause_ja:'交通事故（追突）・転倒・長時間の不良姿勢',cause_en:'Rear-end collisions, falls, or prolonged poor posture',tx_ja:'頸椎回旋運動・ヒップロール・姿勢管理。過度な安静は不要で可能な範囲で動かしていきましょう。',tx_en:'Cervical rotation exercise, hip roll, posture management. Avoid prolonged rest; move as much as possible.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['cervicogenic_ha']={name_ja:'頸原性頭痛',name_en:'Cervicogenic Headache',cat_ja:'神経・筋障害 ／ 頸椎',cat_en:'Nerve & Muscle / Cervical Spine',icon:'&#129298;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'同じ姿勢を長時間続けないようにしましょう。頭が前に出た姿勢（頭部前方位）を続けると首の筋肉がこわばり頭痛が悪化しやすくなります。定期的に休憩をとり肩と首をやさしく動かしましょう。',umsg_en:'Avoid prolonged same posture. Forward head posture tightens neck muscles and worsens headaches. Take regular breaks and gently move your shoulders and neck.',summary_ja:'長時間のデスクワークや悪い姿勢・過去のむち打ちなどがきっかけで、首から後頭部にかけて鈍い痛みが出る頭痛。頸椎（C1〜C3）周囲の関節や筋肉の機能低下が原因で、ストレッチ・姿勢改善・有酸素運動を組み合わせることで多くの場合2〜3ヶ月ほどで改善できる。',summary_en:'Headache originating from the neck, characterized by dull ache from neck to occiput. Caused by C1-C3 dysfunction. Most cases improve within 2-3 months with stretches and posture correction.',sx_ja:['首から後頭部にかけての鈍い痛み','首を動かすと痛みが強くなる','片側の首や頭の痛み','肩・背中のこわばり','デスクワーク・スマホ使用で悪化'],sx_en:['Dull ache from neck to occiput','Pain worsens with neck movement','Unilateral neck or head pain','Shoulder and back stiffness','Worsens with desk work or screen use'],cause_ja:'長時間のデスクワーク・不良姿勢・過去のむち打ち・C1〜C3の機能低下',cause_en:'Prolonged desk work, poor posture, past whiplash, or C1-C3 dysfunction',tx_ja:'頸椎屈曲運動・ヒップロール・デスク環境の改善指導（ディスプレイの高さ・定期的な休憩）。',tx_en:'Cervical flexion exercise, hip roll, desk environment improvement (monitor height, regular breaks).',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['rotator_cuff_tendinitis']={name_ja:'回旋筋腱板炎',name_en:'Rotator Cuff Tendinitis',cat_ja:'腱炎・インピンジメント ／ 肩',cat_en:'Tendinitis / Shoulder Impingement',icon:'&#128170;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'痛みが強い時期はアイシングや肩関節周辺を柔らかくするエクササイズが効果的です。夜間痛が強い場合は注射による治療が行われます（医師の指示に従ってください）。',umsg_en:'Icing and gentle exercises are effective in the acute phase. Severe night pain may require injection therapy (follow your doctor instructions).',summary_ja:'肩甲骨から上腕骨に付く回旋筋腱板（棘上筋・棘下筋・小円筋・肩甲下筋）が使い過ぎにより炎症を起こす病気。棘上筋が肩峰との間にはさみ込まれ炎症を起こすインピンジメントが代表的。軽症は3ヶ月以内に改善し、慢性化すると3〜18ヶ月かかることがある。',summary_en:'Inflammation of the rotator cuff tendons due to overuse. Supraspinatus impingement between the humerus and acromion is typical. Mild cases improve within 3 months; chronic cases may take 3-18 months.',sx_ja:['肩の可動時痛','夜間痛','重いものを持つ際の肩の痛み','腕を上げると痛みが出る','特定の角度で鋭い痛み（インピンジメント）'],sx_en:['Shoulder pain with movement','Night pain','Pain when lifting heavy objects','Pain when raising the arm','Sharp pain at a specific angle (impingement)'],cause_ja:'オーバーヘッドスポーツによる使い過ぎ・インピンジメント',cause_en:'Overuse in overhead sports or impingement',tx_ja:'ロウイング・腱板エクササイズ・肩甲骨周り可動域改善。肩甲骨の動きを良くすることが重要です。',tx_en:'Rowing exercise, rotator cuff exercise, scapular mobilization. Improving scapular movement is key.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['biceps_tendinitis']={name_ja:'上腕二頭筋長頭腱炎',name_en:'Biceps Long Head Tendinitis',cat_ja:'腱炎 ／ 肩',cat_en:'Tendinitis / Shoulder',icon:'&#128170;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'痛みが強い時期は薬物療法で痛みを抑えることが優先されます。夜間痛が強い場合は注射による治療が行われます（医師の指示に従ってください）。症状初期には痛みの強い動作は避けましょう。',umsg_en:'Medication is the priority in the acute phase. Severe night pain may require injection therapy (follow your doctor instructions). Avoid pain-provoking movements early on.',summary_ja:'上腕二頭筋（力こぶの筋肉）が肩関節前方で摩擦による炎症を起こす病態。オーバーヘッドスポーツ選手・トレーニング愛好家・重労働者に多く見られる。進行すると腱断裂のリスクがある。',summary_en:'Inflammation of the long head of the biceps tendon at the front of the shoulder. Common in overhead athletes, gym enthusiasts, and heavy laborers. Risk of tendon rupture if untreated.',sx_ja:['肩前方の痛み','腕を上げると悪化','荷物を持ち上げる際の痛み','夜間痛を伴うことも','進行すると腱断裂のリスク'],sx_en:['Front shoulder pain','Worsens when lifting the arm','Pain when carrying loads','May include night pain','Risk of tendon rupture if untreated'],cause_ja:'オーバーヘッドスポーツ・重労働・繰り返しの肩の使い過ぎ',cause_en:'Overhead sports, heavy labor, or repetitive shoulder overuse',tx_ja:'ロウイング・腱板エクササイズ・インナーマッスル強化。肩甲骨の動きを良くし上腕二頭筋への負担を減らすことが重要。',tx_en:'Rowing exercise, rotator cuff exercise, inner muscle strengthening. Improving scapular movement reduces load on the biceps tendon.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['frozen_shoulder']={name_ja:'肩関節周囲炎（五十肩）',name_en:'Adhesive Capsulitis (Frozen Shoulder)',cat_ja:'関節包炎 ／ 肩',cat_en:'Capsulitis / Shoulder',icon:'&#129333;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'肩関節の痛みを適切に管理し動きを注意深くコントロールすることで症状の悪化を最小限に抑えられます。寝る姿勢を工夫し、腕は脇腹の近くに置くようにしてください。こまめにストレッチを行いましょう。',umsg_en:'Carefully managing shoulder pain and controlling movement can minimize worsening. Place your arm near your side when sleeping. Stretch regularly.',summary_ja:'五十肩とも呼ばれ、原因不明の肩関節の痛みと可動域制限が主症状。関節包が硬くなり滑液包と癒着して炎症を起こすことで痛みとこわばりを感じる。夜間の痛みが最初の指標のひとつ。人口の2〜5%が罹患し、1〜2年程度で大半は機能回復する。',summary_en:'Also known as frozen shoulder. Characterized by shoulder pain and restricted ROM with no identifiable cause. The joint capsule stiffens and adhesions form. Affects 2-5% of people; most recover within 1-2 years.',sx_ja:['肩の痛み（夜間痛が特徴）','腕を横に上げにくい','背中に手を回しにくい','肩関節のこわばり','可動域制限（外転・内旋・外旋）'],sx_en:['Shoulder pain (night pain is characteristic)','Difficulty raising arm to the side','Difficulty reaching behind the back','Shoulder stiffness','Restricted ROM (abduction, internal/external rotation)'],cause_ja:'原因不明（腱損傷・骨折の既往・糖尿病が危険因子）',cause_en:'Unknown cause; risk factors include previous injury, fracture, or diabetes',tx_ja:'ロウイング・サンディング・肩甲骨可動域訓練。腕を上げる際には背骨・肩甲骨の動きも重要です。痛みのない範囲で繰り返し動かしましょう。',tx_en:'Rowing exercise, sanding exercise, scapular mobilization. Spinal and scapular movement is crucial when raising the arm.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['toc2']={name_ja:'胸郭出口症候群',name_en:'Thoracic Outlet Syndrome',cat_ja:'神経・血管障害 ／ 頸椎・肩',cat_en:'Nerve & Vascular / Cervical & Shoulder',icon:'&#128170;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'以下の動作は症状悪化の原因となります。①上肢を挙上した位置での仕事・家事、②重量物を持ち上げる運動や労働、③リュックサックで重いものを持つこと。姿勢改善と肩周りの筋力トレーニングで症状の緩和が期待できます。',umsg_en:'The following worsen symptoms: raising arms overhead for work/housework, lifting heavy objects, or carrying a heavy backpack. Posture correction and shoulder strengthening can help.',summary_ja:'腕を挙げる動作で上肢にしびれや肩・腕・肩甲骨周囲の痛みが生じる病気。不良姿勢や過活動が原因となり腕神経叢・鎖骨下動脈・鎖骨下静脈が圧迫される。なで肩の女性や重労働者に多く、1000人中3〜80人が罹患し、リハビリにより6ヶ月以内に症状が改善することが多い。',summary_en:'Arm numbness and shoulder pain when raising the arm, caused by compression of the brachial plexus and subclavian vessels. More common in women with drooping shoulders and heavy laborers. Most improve within 6 months with rehabilitation.',sx_ja:['腕を挙げる動作で上肢のしびれ','肩・腕・肩甲骨周囲の痛み','手の小指側の感覚障害','握力低下・細かい動作が困難','頸部痛・頭痛・僧帽筋の痛み'],sx_en:['Arm numbness when raising arm','Shoulder, arm, and scapular pain','Sensory disturbance on pinky side','Reduced grip strength and fine motor difficulty','Neck pain, headache, and trapezius pain'],cause_ja:'不良姿勢（なで肩）・過活動による神経・血管の圧迫',cause_en:'Poor posture (drooping shoulders) or overactivity compressing nerves and blood vessels',tx_ja:'広背筋ストレッチ・突き出し運動・姿勢改善指導・禁忌動作の指導。',tx_en:'Lat stretch, serratus push exercise, posture correction, and avoidance of aggravating movements.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+/* 膝・太もも */
+DD['acl']={name_ja:'前十字靭帯損傷（ACL損傷）',name_en:'Anterior Cruciate Ligament (ACL) Injury',cat_ja:'靭帯外傷 ／ 膝（整形外科連携必須）',cat_en:'Ligament Injury / Knee (Orthopedic required)',icon:'&#9889;',ibg:'#FEF2F2',urgency:'red',ulabel_ja:'早急な受診',ulabel_en:'Seek care urgently',uai:'&#128680;',umsg_ja:'ACLはほとんどの場合自己修復されません。放置すると半月板・軟骨に二次的な損傷が生じるリスクがあります。ジャンプ・急な方向転換・深いしゃがみ動作は避けてください。整形外科との連携が必須です。',umsg_en:'ACL rarely heals on its own. Untreated injuries risk secondary damage to the meniscus and cartilage. Avoid jumping, sudden turns, and deep squatting. Orthopedic collaboration is essential.',summary_ja:'膝関節の前後安定を保つ前十字靭帯の損傷。損傷すると「膝崩れ（膝が抜ける感覚）」や強い痛み・腫れが出るのが特徴。サッカー・バスケットボール・スキーなどで急な方向転換・ジャンプ後の着地・急停止動作で多く発生する。',summary_en:'Injury to the ACL maintaining front-to-back knee stability. Causes knee giving way, severe pain, and swelling. Common in soccer, basketball, and skiing during sudden direction changes, landings, or stops.',sx_ja:['「ガクッ」と膝が抜ける感覚（膝崩れ）','強い膝の痛み・腫れ','受傷時の「ブチッ」という感覚・音','膝の不安定感','走る・切り返し・ジャンプが困難'],sx_en:['Knee giving way (buckling)','Severe pain and swelling','Popping sensation or sound at injury','Knee instability','Difficulty running, cutting, or jumping'],cause_ja:'スポーツ中の急な方向転換・ジャンプ後の着地・急停止動作など',cause_en:'Sudden direction changes, landings after jumps, or rapid stops during sports',tx_ja:'整形外科への紹介・連携が最優先。急性期：アイシング・圧迫固定・松葉杖・膝装具。リハビリ段階では可動域訓練・スポーツコンディショニングで競技復帰をサポートします。',tx_en:'Orthopedic referral is the top priority. Acute phase: icing, compression, crutches, knee brace. Rehabilitation: ROM training and sports conditioning.',book_msg_ja:'本日または翌営業日以内の受診を強くお勧めします',book_msg_en:'We strongly recommend visiting today or the next business day'};
+
+DD['meniscus']={name_ja:'半月板損傷',name_en:'Meniscus Injury',cat_ja:'軟骨・半月板損傷 ／ 膝',cat_en:'Meniscus / Knee',icon:'&#129460;',ibg:'#FEF2F2',urgency:'red',ulabel_ja:'早急な受診',ulabel_en:'Seek care urgently',uai:'&#128680;',umsg_ja:'膝をひねるような動き・深いしゃがみ込みは避けてください。慢性化すると膝の組織が硬くなる恐れがあります。損傷の程度によっては手術が必要です。整形外科との連携が必要です。',umsg_en:'Avoid twisting the knee or deep squatting. Chronic cases may cause joint stiffness. Surgery may be required. Orthopedic collaboration is essential.',summary_ja:'膝関節を保護する半月板（軟骨でできた三日月形のパッド）に亀裂が生じたり欠けたりした状態。急な方向転換などで体重をかけながら膝をひねることで引き起こされる。慢性化すると変形性膝関節症を引き起こす可能性もある。',summary_en:'A condition in which the meniscus (crescent-shaped cartilage pad) is cracked or chipped. Often caused by twisting the knee under load. May progress to osteoarthritis if untreated.',sx_ja:['運動時の膝の痛み','膝を曲げ伸ばしした際の引っかかり感','膝の腫れ','深いしゃがみ込みで痛む','膝のロッキング（動かせなくなる）'],sx_en:['Knee pain during activity','Catching sensation with bending/straightening','Knee swelling','Pain with deep squatting','Knee locking'],cause_ja:'スポーツ中の急な方向転換・ひねり動作・加齢による変性',cause_en:'Sudden direction changes or twisting during sports; degenerative changes with aging',tx_ja:'整形外科との連携・MRI等での確認を推奨。リハビリ段階ではタオルつぶし・股関節外転・アイシング・有酸素運動で筋力維持・スポーツコンディショニングを行います。',tx_en:'Orthopedic referral and MRI recommended. Rehabilitation includes towel squeeze, hip abduction, icing, aerobic exercise, and sports conditioning.',book_msg_ja:'本日または翌営業日以内の受診を強くお勧めします',book_msg_en:'We strongly recommend visiting today or the next business day'};
+
+DD['quad_strain']={name_ja:'大腿四頭筋の肉離れ',name_en:'Quadriceps Muscle Strain',cat_ja:'筋断裂（スポーツ外傷） ／ 太もも',cat_en:'Muscle Tear / Thigh',icon:'&#9889;',ibg:'#FEF2F2',urgency:'red',ulabel_ja:'早急な受診',ulabel_en:'Seek care urgently',uai:'&#128680;',umsg_ja:'発症後48時間は安静・冷却・圧迫（テーピング）・挙上が重要です。無理に動かすと損傷が拡大します。歩行の際は松葉杖を使用してください。本日または翌営業日以内の受診を強くお勧めします。',umsg_en:'For the first 48 hours, rest, ice, compression, and elevation are essential. Forced movement worsens injury. Use crutches for walking. Please visit today or the next business day.',summary_ja:'大腿前面の大腿四頭筋がダッシュ・ジャンプ・急な切り返し動作などで急激に収縮し筋線維が断裂する。スポーツ活動中に生じやすく、全力疾走・キック動作後の突然の減速時に多く発生する。',summary_en:'A tear in the quadriceps muscles at the front of the thigh caused by sudden forceful contraction during sprinting, jumping, or rapid direction changes.',sx_ja:['太もも前面の突然の激痛','損傷部位の腫れ・内出血','膝の曲げ伸ばしが困難','歩行困難','患部を押すと強く痛む'],sx_en:['Sudden severe pain in the front of the thigh','Swelling and bruising','Difficulty bending or straightening the knee','Difficulty walking','Strong pain when pressing the area'],cause_ja:'筋の急激な収縮（ジャンプ・ダッシュ・急な方向転換）・準備運動不足',cause_en:'Sudden forceful muscle contraction or insufficient warm-up',tx_ja:'急性期（48時間）：安静・アイシング・テーピング圧迫・松葉杖使用。受傷後3日目から：タオルつぶし運動→レッグカール→段階的なスポーツコンディショニング。',tx_en:'Acute phase (48h): rest, icing, taping, crutches. From day 3: towel squeeze, leg curls, and staged sports conditioning.',book_msg_ja:'本日または翌営業日以内の受診を強くお勧めします',book_msg_en:'We strongly recommend visiting today or the next business day'};
+
+DD['osgood']={name_ja:'オスグッド・シュラッター病',name_en:'Osgood-Schlatter Disease',cat_ja:'成長期スポーツ障害 ／ 膝',cat_en:'Growth-related Sports Injury / Knee',icon:'&#127947;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'90%が適切なリハビリで4〜6週間でスポーツ復帰できます。ただし10%は成人になっても痛みが残存する場合があります。早めの適切な対処が重要です。',umsg_en:'90% return to sports within 4-6 weeks with proper rehabilitation. However, 10% may have residual pain into adulthood. Early and appropriate treatment is important.',summary_ja:'小中学生男子に多い成長期特有の病気で、脚の使い過ぎにより脛骨粗面（膝蓋骨の腱が付着する箇所）の骨と軟骨に痛みを伴う炎症が起きる。膝蓋骨の腱が繰り返し強く引っ張られることで炎症が起こり、脛骨粗面の骨の出っ張りが特徴的。',summary_en:'A growth-related condition common in adolescent boys causing painful inflammation at the tibial tuberosity due to overuse. Characterized by a bony prominence below the knee.',sx_ja:['膝のやや下・すね上部の痛み・腫れ','下腿骨上部の骨の出っ張り','ジャンプ・ランニングで悪化','運動後の痛みの増強','正座やしゃがみ込みで痛む'],sx_en:['Pain and swelling just below the knee','Bony prominence at the tibial tuberosity','Worsens with jumping and running','Pain increases after exercise','Painful with kneeling or squatting'],cause_ja:'成長期の骨への繰り返しストレス（オーバーユース）・スポーツ活動',cause_en:'Repetitive stress on growing bone during sports activities',tx_ja:'もも前のストレッチ・もも裏のストレッチ・超音波治療・アイシング（運動後）・スポーツコンディショニング。完全安静より痛みの程度に応じた運動量の制限が推奨されます。',tx_en:'Quadriceps stretch, hamstring stretch, ultrasound therapy, post-exercise icing, and sports conditioning. Activity modification rather than complete rest is recommended.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['iliotibial']={name_ja:'腸脛靭帯炎（ランナー膝）',name_en:'Iliotibial Band Syndrome (Runners Knee)',cat_ja:'腱・靭帯疾患 ／ 膝外側',cat_en:'IT Band / Lateral Knee',icon:'&#127939;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'軽度であれば約2週間で改善しますが、重度であれば約6週間かかります。再発率が高いため、根本原因（股関節筋力・フォーム）の改善が重要です。',umsg_en:'Mild cases improve in about 2 weeks; severe cases may take 6 weeks. Recurrence is common, so addressing root causes (hip strength and running form) is key.',summary_ja:'ランニングによる膝障害の代表。膝の屈伸運動の繰り返しにより膝関節外側の腸脛靭帯にストレスが加わり痛みが発症する。オーバーユースのほか、股関節筋力不足・硬いシューズ・硬い路面での走行など様々な要因が影響する。',summary_en:'A leading running-related knee injury caused by repetitive stress on the IT band on the outside of the knee. Influenced by overuse, weak hip muscles, or hard running surfaces.',sx_ja:['膝の外側の痛み','ランニング中・後に悪化','大腿骨外側上顆付近の圧痛','下り坂・下り階段で特に悪化','再発しやすい'],sx_en:['Lateral knee pain','Worsens during and after running','Tenderness near lateral femoral condyle','Especially worse going downhill','High recurrence rate'],cause_ja:'オーバーユース・股関節筋力不足・不適切なフォームや路面',cause_en:'Overuse, weak hip muscles, poor running form, or hard surfaces',tx_ja:'発症初期1週間は運動中止・アイシング→股関節外転運動（お尻の筋力強化）・お尻の側面のストレッチ・超音波治療・鍼灸治療・フォームチェック。',tx_en:'1 week of rest and icing, then hip abduction exercises, lateral hip stretches, ultrasound therapy, acupuncture, and gait retraining.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+/* 股関節 */
+DD['hip_oa']={name_ja:'変形性股関節症',name_en:'Hip Osteoarthritis',cat_ja:'変性疾患 ／ 股関節',cat_en:'Degenerative Disease / Hip Joint',icon:'&#129485;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'失われた軟骨は完全に自然治癒することがないため、長期的な経過観察が必要です。股関節の負荷をコントロールするリハビリと体重管理が重要です。状況によっては手術も検討されます。',umsg_en:'Lost cartilage cannot fully regenerate, so long-term monitoring is needed. Rehabilitation to control hip load and weight management are essential. Surgery may be considered in severe cases.',summary_ja:'股関節の軟骨がすり減り痛みを引き起こす病気。多くは股関節の臼蓋（受け皿）が生まれつき変形していることが原因。明らかな原因なく軟骨が摩耗・変性して起こる方もいる。',summary_en:'A condition in which the hip joint cartilage wears down, causing pain. Often related to congenital hip dysplasia, though some cases occur without a clear cause.',sx_ja:['股関節の前面・横の痛み','歩き始めの痛み','長距離歩行での悪化','股関節の可動域制限（特に内旋）','脚の長さの左右差'],sx_en:['Pain in the front or side of the hip','Pain at the start of walking','Worsens with long-distance walking','Limited hip ROM (especially internal rotation)','Leg length discrepancy'],cause_ja:'先天性臼蓋形成不全・加齢による軟骨摩耗・肥満・外傷',cause_en:'Congenital hip dysplasia, age-related cartilage wear, obesity, or past trauma',tx_ja:'股関節への負荷コントロール・体重管理指導・大腿四頭筋強化・股関節外転運動・プール歩行など衝撃の少ない有酸素運動・整形外科と連携します。',tx_en:'Load management, weight control, quad strengthening, hip abduction exercises, low-impact aerobics (pool walking), and orthopedic collaboration.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['groin_pain']={name_ja:'グロインペイン症候群',name_en:'Groin Pain Syndrome',cat_ja:'スポーツ障害 ／ 股関節・鼠径部',cat_en:'Sports Injury / Groin & Hip',icon:'&#9917;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'痛みを我慢してスポーツを続けると症状が慢性化し復帰が遅くなります。軽症例では2〜3ヶ月、重症例では1年程度かかることもあります。90%以上はスポーツ復帰できます。',umsg_en:'Continuing to play through pain worsens and prolongs recovery. Mild cases: 2-3 months; severe cases: up to 1 year. Over 90% return to sports.',summary_ja:'股関節前面（鼠径部）周囲の痛みを総称した呼び名。ランニングやキック動作などで痛みが出るのが主な症状。腸腰筋・大腿直筋・内転筋の炎症によって痛みが生じる。再発も15〜31%に起こる疾患。',summary_en:'An umbrella term for pain around the groin caused by inflammation of the iliopsoas, rectus femoris, or adductor muscles. Main symptoms include pain during running or kicking. Recurrence occurs in 15-31%.',sx_ja:['鼠径部・股関節前面の痛み','ランニング・キック動作で悪化','下腹部にも痛みが広がることも','運動後に悪化・翌朝に痛み残存','内転動作（股を閉じる）で痛む'],sx_en:['Groin and front hip pain','Worsens with running and kicking','May spread to the lower abdomen','Worsens after exercise; residual pain next morning','Pain with adduction'],cause_ja:'腸腰筋・大腿直筋・内転筋の炎症・オーバーユース',cause_en:'Inflammation and overuse of the iliopsoas, rectus femoris, or adductor muscles',tx_ja:'痛みが強い場合はスポーツ休止・アイシング。大殿筋ストレッチ・座位四股捻転（内もも柔軟性向上）・股関節可動域改善・協調性トレーニング。',tx_en:'Rest from sports and icing during pain. Gluteus stretch, seated sumo twist, hip ROM exercises, and coordination training.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+/* 腕・手 */
+DD['tennis_elbow']={name_ja:'上腕骨外側上顆炎（テニス肘）',name_en:'Lateral Epicondylitis (Tennis Elbow)',cat_ja:'腱付着部炎 ／ 肘',cat_en:'Tendinopathy / Elbow',icon:'&#127934;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'腱に刺激を与えるような動作を減らすことが症状改善に重要です。手首を過度に使用するような動作（瓶の蓋を開ける・買い物袋を持つなど）はなるべく避け、反対側の手を使うようにしましょう。炎症が強い時期は1日数回アイスマッサージを行いましょう。',umsg_en:'Reducing movements that stress the tendon is key. Avoid excessive wrist use and use the other hand instead. Ice massage several times daily when inflammation is strong.',summary_ja:'肘の外側の腱の使いすぎによる病気で別名テニス肘とも呼ばれる。ほとんどの場合は日々の仕事などが原因で、実際にテニスが原因となるのは5〜10%程度。ものを持ち上げたり手をひねったりする動作を繰り返すことで症状が発症する。',summary_en:'An overuse injury of the tendons on the outer elbow. In most cases, daily work rather than tennis is the cause (tennis accounts for only 5-10%). Repetitive gripping or wrist extension causes the pain.',sx_ja:['肘外側の痛み','ものを持ち上げると痛む','手をひねる動作で悪化','握力低下','重症では日常動作に支障'],sx_en:['Outer elbow pain','Pain when lifting objects','Worsens with forearm rotation','Reduced grip strength','Daily activities affected in severe cases'],cause_ja:'日常的な手首・前腕の反復動作・オーバーユース',cause_en:'Repetitive wrist and forearm use or overuse in daily work',tx_ja:'前腕外側ストレッチ・胸郭回旋ストレッチ・アイスマッサージ指導・反対側の手を使う習慣づけの指導。',tx_en:'Forearm extensor stretch, thoracic rotation stretch, ice massage guidance, and habit of using the other hand.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+/* その他 */
+DD['shin_splints']={name_ja:'シンスプリント（脛骨過労性骨膜炎）',name_en:'Shin Splints (Medial Tibial Stress Syndrome)',cat_ja:'スポーツ障害 ／ すね・下腿',cat_en:'Sports Injury / Shin',icon:'&#127939;',ibg:'#FEF3C7',urgency:'orange',ulabel_ja:'1週間以内',ulabel_en:'Within 1 week',uai:'&#9888;&#65039;',umsg_ja:'症状発症後2〜6週間は安静が必要です。3ヶ月以上慢性化している場合は回復が遅いと報告されています。慢性化前の早めの受診をお勧めします。',umsg_en:'Rest for 2-6 weeks after onset. Chronic cases (3+ months) take longer to recover. Early treatment is recommended.',summary_ja:'下腿骨の内側（脛骨）の周りにある骨膜が炎症を起こすスポーツ障害。脛骨過労性骨膜炎とも呼ばれる。運動時や運動後にすね内側の中央から下方1/3にかけてズキズキとした痛みが生じる。一般的にオーバーユース（使い過ぎ）が原因。',summary_en:'A sports injury in which the periosteum around the inner tibia becomes inflamed. Aching pain occurs along the middle to lower inner shin during and after exercise, typically caused by overuse.',sx_ja:['すね内側の中央〜下1/3のズキズキした痛み','運動時・運動後に悪化','押すと広範囲に圧痛','走り始めは痛いがウォームアップで楽になることも'],sx_en:['Aching pain along the middle-to-lower inner shin','Worsens during and after exercise','Diffuse tenderness on palpation','May ease after warm-up'],cause_ja:'オーバーユース・硬い路面・不適切なシューズ・足のアーチ低下など',cause_en:'Overuse, hard surfaces, inappropriate footwear, or reduced foot arch',tx_ja:'安静・アイシング・ふくらはぎのストレッチ・足趾エクササイズ・超音波治療・インソール調整・フォームチェック。',tx_en:'Rest, icing, calf stretches, toe exercises, ultrasound therapy, insole adjustment, and gait analysis.',book_msg_ja:'1週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1 week'};
+
+DD['flatfoot']={name_ja:'扁平足',name_en:'Flat Foot',cat_ja:'足部形態異常 ／ 足首・足の裏',cat_en:'Flat Foot / Ankle & Foot',icon:'&#128099;',ibg:'#F0FDF4',urgency:'green',ulabel_ja:'余裕あり',ulabel_en:'Non-urgent',uai:'&#9989;',umsg_ja:'緊急性は高くありませんが、放置すると足底筋膜炎・膝痛・腰痛の原因にもなります。インソールと筋力強化で多くの場合は改善します。1〜2週間以内にご来院ください。',umsg_en:'Not urgent, but untreated flat foot can lead to plantar fasciitis, knee pain, and back pain. Insoles and strengthening exercises improve most cases.',summary_ja:'足裏にある縦のアーチ（土踏まず）が低下または消失した状態。歩行や長時間の立位で足裏やふくらはぎに疲れや痛みを感じることが多く、ひどい場合は膝や腰にも負担がかかる。',summary_en:'A condition in which the arch of the foot flattens out, causing fatigue or pain in the sole and calf during walking or prolonged standing, and in severe cases affecting the knees and lower back.',sx_ja:['足裏・ふくらはぎの疲れや痛み','長時間の立位・歩行で悪化','土踏まずがない・低い','ひどい場合は膝や腰への影響も'],sx_en:['Fatigue or pain in the sole and calf','Worsens with prolonged standing/walking','Flat or absent arch','May affect knees and lower back in severe cases'],cause_ja:'先天的な骨格・筋力低下・体重増加・不適切な靴など',cause_en:'Congenital bone structure, weak muscles, weight gain, or inappropriate footwear',tx_ja:'インソール（足底板）・タオルギャザー・腓腹筋ストレッチ・下肢筋力強化・体重管理指導。長時間の立位・歩行では休憩をこまめに取るよう指導します。',tx_en:'Insoles, towel gather exercises, calf stretches, lower limb strengthening, and weight management guidance.',book_msg_ja:'1〜2週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 1-2 weeks'};
+
+DD['scoliosis']={name_ja:'側弯症',name_en:'Scoliosis',cat_ja:'脊柱変形 ／ 脊柱',cat_en:'Spinal Deformity / Spine',icon:'&#129468;',ibg:'#F0FDF4',urgency:'green',ulabel_ja:'余裕あり',ulabel_en:'Non-urgent',uai:'&#9989;',umsg_ja:'30〜35度以下の変形は予後良好。ただし35度以上の場合は年齢とともに進行し将来手術になることもあります。成長期の軽い側弯症の場合は3〜6ヶ月ごとのレントゲンチェックが必要です。機能性側弯症は姿勢改善エクササイズで改善が期待できます。',umsg_en:'Curves under 30-35 degrees have a favorable prognosis. Curves over 35 degrees may progress with age. Growing adolescents with mild scoliosis need X-ray checks every 3-6 months.',summary_ja:'背骨が左右に弯曲した状態。通常小児期にみられる脊柱変形を指す。左右の肩の高さの違い・肩甲骨の突出・腰の高さの非対称などの変形が生じる。初期段階では痛みもないため気づきにくいのが特徴。突発性側弯症（原因不明）が80%を占める。',summary_en:'Abnormal lateral curvature of the spine, typically seen in childhood. Characterized by unequal shoulder height, protruding shoulder blades, and asymmetric waist. Often painless in early stages. Idiopathic scoliosis accounts for 80% of cases.',sx_ja:['左右の肩・腰の高さの非対称','肩甲骨の突出（左右差）','肋骨・腰部の隆起','初期は痛みなし（気づきにくい）','進行すると腰背部痛・呼吸器症状'],sx_en:['Unequal shoulder and waist height','Protruding shoulder blade (asymmetry)','Rib or lumbar hump','No pain in early stages (often unnoticed)','Back pain and respiratory symptoms as it progresses'],cause_ja:'突発性（原因不明・80%）・姿勢不良などによる機能性側弯症（20%）',cause_en:'Idiopathic (unknown cause, 80%) or functional scoliosis from poor posture (20%)',tx_ja:'機能性側弯症：CAT&DOG・胸椎側屈曲運動・姿勢改善指導。突発性側弯症は整形外科と連携し必要であれば装具を装着し経過を観察します。',tx_en:'Functional scoliosis: CAT&DOG exercises, thoracic lateral flexion, posture correction. Idiopathic scoliosis: orthopedic collaboration and bracing if needed.',book_msg_ja:'2週間以内のご来院をお勧めします',book_msg_en:'We recommend visiting within 2 weeks'};
+
+var currentStep='__intro__';var pendingDiseases=[];var breadcrumb=[];
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function go(stepKey,diseases,label){breadcrumb.push(label);var t=document.getElementById('trail');var h='';breadcrumb.forEach(function(b,i){if(i>0)h+='<span class="trail-arr">&#x203A;</span>';h+='<span class="trail-item">'+esc(b)+'</span>';});t.innerHTML=h;pendingDiseases=diseases||[];currentStep=stepKey;render();window.scrollTo({top:0,behavior:'smooth'});}
+
+function render(){
+  var m=document.getElementById('main');
+  if(currentStep==='result'){showResult(pendingDiseases);return;}
+  if(currentStep==='emergency_lumbar'){showEmergency(false);return;}
+  if(currentStep==='emergency_head'){showEmergency(true);return;}
+  if(currentStep==='__intro__'){showIntro();return;}
+  var step=FLOW[currentStep];if(!step)return;
+  document.getElementById('prog').style.width=step.p+'%';
+  document.getElementById('prog-info').textContent=(LANG==='en'?'Progress ':'進捗 ')+step.p+'%';
+  var q=Tc(step,'q'),sub=Tc(step,'sub'),badge=Tc(step,'badge');
+  var h='<div class="step-hdr"><div class="step-badge">&#128269; '+badge+'</div><div class="step-q">'+q+'</div>'+(sub?'<div class="step-sub">'+sub+'</div>':'')+'</div>';
+  if(step.grid){h+='<div class="grid2">';step.choices.forEach(function(c,i){h+='<button class="choice-sm" id="ch'+i+'"><div class="choice-icon-box" style="background:'+c.ibg+'">'+c.icon+'</div><div class="choice-label">'+Tc(c,'label')+'</div></button>';});h+='</div>';}
+  else{h+='<div class="choices">';step.choices.forEach(function(c,i){var d=Tc(c,'desc');h+='<button class="choice" id="ch'+i+'"><div class="choice-icon-box" style="background:'+c.ibg+'">'+c.icon+'</div><div><div class="choice-label">'+Tc(c,'label')+'</div>'+(d?'<div class="choice-desc">'+d+'</div>':'')+'</div></button>';});h+='</div>';}
+  m.innerHTML=h;
+  step.choices.forEach(function(c,i){var btn=document.getElementById('ch'+i);if(btn)btn.addEventListener('click',(function(ch){return function(){go(ch.next,ch.diseases,Tc(ch,'label'));};})(c));});
+}
+
+function showResult(dkeys){
+  var m=document.getElementById('main');
+  document.getElementById('prog').style.width='100%';document.getElementById('prog-info').textContent='';
+  var diseases=dkeys.map(function(k){return DD[k]?Object.assign({key:k},DD[k]):null;}).filter(Boolean);
+  if(!diseases.length){init();return;}
+  var rmap={red:3,orange:2,green:1};
+  var top=diseases.reduce(function(best,d){return rmap[d.urgency]>rmap[best]?d.urgency:best;},'green');
+  var ucm={red:{ai:'&#128680;',title_ja:'早急な受診が必要です',title_en:'Please seek care urgently',msg_ja:'今すぐ〜翌営業日以内のご来院を強くお勧めします。症状が急に悪化したり、新たなしびれ・麻痺が出た場合は救急へ。',msg_en:'We strongly recommend visiting today or the next business day. Go to the emergency room if symptoms worsen suddenly.',cls:'red'},orange:{ai:'&#9888;&#65039;',title_ja:'早めの受診をお勧めします',title_en:'We recommend visiting soon',msg_ja:'1週間以内にご来院ください。放置すると慢性化・悪化の可能性があります。',msg_en:'Please visit within one week. Left untreated, your condition may become chronic or worsen.',cls:'orange'},green:{ai:'&#9989;',title_ja:'1週間以内の受診でOKです',title_en:'A visit within one week is sufficient',msg_ja:'緊急性は高くありませんが、早めのケアで回復が早まります。お気軽にご相談ください。',msg_en:'Not urgent, but early care speeds recovery. Feel free to contact us.',cls:'green'}};
+  var uc=ucm[top];var isU=top==='red';
+  var h='<div class="result-wrap"><div class="urgency-banner '+uc.cls+'"><div class="urgency-icon">'+uc.ai+'</div><div><div class="urgency-title '+uc.cls+'">'+Tc(uc,'title')+'</div><div class="urgency-msg '+uc.cls+'">'+Tc(uc,'msg')+'</div></div></div>';
+  h+='<div class="section-label">'+(LANG==='en'?'Possible conditions (tap for details)':'考えられる状態（タップで詳細表示）')+'</div><div id="dcards"></div>';
+  h+='<div class="section-label">'+(LANG==='en'?'Book an appointment':'ご予約・ご相談')+'</div>';
+  h+='<div class="book-panel"><div class="book-panel-top'+(isU?' urgent':'')+'"><div class="book-panel-top-ic">'+(isU?'&#128680;':'&#128197;')+'</div><div class="book-panel-top-ttl">'+(isU?(LANG==='en'?'Urgent enquiry':'お急ぎの方へ'):(LANG==='en'?'Book / Enquire':'ご予約・お問い合わせ'))+'</div></div><div class="book-panel-body">';
+  if(isU)h+='<a class="book-opt book-opt-urgent" href="tel:098-956-8654"><span class="book-opt-ic">&#9889;</span><div><div class="book-opt-ttl">'+(LANG==='en'?'Call now':'今すぐ電話する')+'</div><div class="book-opt-sub">098-956-8654</div></div></a>';
+  h+='<a class="book-opt" href="'+CL.booking_url+'" target="_blank"><span class="book-opt-ic">&#127760;</span><div><div class="book-opt-ttl">'+(LANG==='en'?'Online booking (24/7)':'ネット予約（24時間受付）')+'</div><div class="book-opt-sub">carecle.com/booking/shinshindosyomitan</div></div></a>';
+  h+='<a class="book-opt" href="tel:098-956-8654"><span class="book-opt-ic">&#128222;</span><div><div class="book-opt-ttl">'+(LANG==='en'?'Call us':'お電話でのご予約')+'</div><div class="book-opt-sub">098-956-8654</div></div></a>';
+  h+='<a class="book-opt" href="'+CL.line_url+'" target="_blank"><span class="book-opt-ic">&#128172;</span><div><div class="book-opt-ttl">'+(LANG==='en'?'Chat on LINE':'LINEで相談・予約')+'</div><div class="book-opt-sub">@205tvrxn</div></div></a></div></div>';
+  h+='<div class="clinic-info" style="margin-top:8px"><div class="clinic-info-row"><span>&#127973;</span><span><strong>'+Tc(CL,'name')+'</strong></span></div><div class="clinic-info-row"><span>&#128205;</span><span>'+Tc(CL,'address')+'</span></div><div class="clinic-info-row"><span>&#128336;</span><span>'+Tc(CL,'hours')+'</span></div><div class="clinic-info-row"><span>&#128697;</span><span>'+Tc(CL,'parking')+'</span></div><div class="clinic-info-row"><span>&#9432;&#65039;</span><span>'+(LANG==='en'?'Free first consultation (30 min) · Insurance accepted':'初回カウンセリング無料（約30分）· 健康保険対応')+'</span></div></div>';
+  h+='<div style="font-size:10.5px;color:#aaa;text-align:center;margin-top:10px;line-height:1.6">'+(LANG==='en'?'* Reference only. Accurate diagnosis will be made at your visit.':'※この絞り込みチェックは参考情報です。症状の特定・診断は医療機関にて行われます。')+'</div></div>';
+  h+='<div class="restart-wrap"><button class="restart-btn" id="rb2">&#128260; '+(LANG==='en'?'Start over':'最初からやり直す（別の症状を確認する）')+'</button></div>';
+  m.innerHTML=h;
+  var dc=document.getElementById('dcards');
+  diseases.forEach(function(d,i){
+    var bc=d.urgency==='red'?'badge-red':d.urgency==='orange'?'badge-orange':'badge-green';
+    var ac=d.urgency==='red'?'red':d.urgency==='orange'?'orange':'green';
+    var card=document.createElement('div');card.className='dcard';
+    card.innerHTML='<div class="dcard-hdr" id="dh'+i+'"><div class="dcard-icon" style="background:'+d.ibg+'">'+d.icon+'</div><div style="flex:1;min-width:0"><div class="dcard-name">'+Tc(d,'name')+'</div><div class="dcard-cat">'+Tc(d,'cat')+'</div></div><div class="badge '+bc+'">'+Tc(d,'ulabel')+'</div></div><div class="dcard-body" id="db'+i+'"><div class="abar '+ac+'"><span style="font-size:15px;flex-shrink:0">'+d.uai+'</span><span class="abar-txt '+ac+'">'+Tc(d,'umsg')+'</span></div><div class="dsec"><div class="dlbl">'+(LANG==='en'?'Overview':'疾患・病態の概要')+'</div><div class="dtxt">'+Tc(d,'summary')+'</div></div><div class="dsec"><div class="dlbl">'+(LANG==='en'?'Main symptoms':'主な症状')+'</div><div class="dtags">'+((LANG==='en'?d.sx_en:d.sx_ja)||[]).map(function(s){return'<span class="dtag">'+s+'</span>';}).join('')+'</div></div><div class="dsec"><div class="dlbl">'+(LANG==='en'?'Common causes':'主な原因')+'</div><div class="dtxt">'+Tc(d,'cause')+'</div></div><div class="dsec"><div class="dlbl">'+(LANG==='en'?'Our approach':'当院での施術・対応方針')+'</div><div class="dtxt">'+Tc(d,'tx')+'</div></div><div class="book-timing">'+Tc(d,'book_msg')+'</div></div>';
+    card.querySelector('#dh'+i).addEventListener('click',function(){var b=document.getElementById('db'+i);var o=b.classList.contains('open');dc.querySelectorAll('.dcard-body').forEach(function(x){x.classList.remove('open');});if(!o){b.classList.add('open');b.scrollIntoView({behavior:'smooth',block:'nearest'});}});
+    dc.appendChild(card);
+  });
+  document.getElementById('rb2').addEventListener('click',init);
+}
+
+function showEmergency(isHead){
+  var m=document.getElementById('main');
+  document.getElementById('prog').style.width='100%';document.getElementById('prog-info').textContent='';
+  var title=isHead?(LANG==='en'?'Call emergency services now':'今すぐ救急へ連絡してください'):(LANG==='en'?'Seek emergency care immediately':'今すぐ救急・整形外科を受診してください');
+  var msg=isHead?(LANG==='en'?'A sudden severe headache may indicate subarachnoid hemorrhage. Call 119 immediately.':'突然の激しい頭痛は、くも膜下出血など重篤な疾患の可能性があります。'):(LANG==='en'?'Bladder or bowel changes with back pain may indicate cauda equina syndrome. Seek emergency care immediately.':'排尿・排便の異常を伴う腰痛は、馬尾症候群が疑われます。緊急受診が必要です。');
+  m.innerHTML='<div style="padding:20px"><div class="emg-box"><div class="emg-icon">&#128680;</div><div class="emg-title">'+title+'</div><div class="emg-msg">'+msg+'</div></div><div class="emg-opt"><span class="emg-opt-ic">&#128657;</span><div><div class="emg-opt-ttl">'+(LANG==='en'?'Ambulance':'救急車')+'</div><div class="emg-opt-sub">'+(LANG==='en'?'Call 119':'119番に電話する')+'</div></div></div><div class="emg-opt"><span class="emg-opt-ic">&#127973;</span><div><div class="emg-opt-ttl">'+(LANG==='en'?'Emergency department':'救急外来・整形外科')+'</div><div class="emg-opt-sub">'+(LANG==='en'?'Go to the nearest emergency hospital':'近隣の救急対応病院へ')+'</div></div></div></div><div class="restart-wrap"><button class="restart-btn" id="er-rb">&#128260; '+(LANG==='en'?'Start over':'最初からやり直す')+'</button></div>';
+  document.getElementById('er-rb').addEventListener('click',init);
+}
+
+function showIntro(){
+  var m=document.getElementById('main');
+  document.getElementById('prog').style.width='0%';document.getElementById('prog-info').textContent='';document.getElementById('trail').innerHTML='';
+  var e=LANG==='en';
+  m.innerHTML='<div class="intro"><div class="intro-icon">&#128269;</div><div class="intro-title">'+(e?'Symptom Check':'お困りの症状<br>絞り込みチェック')+'</div><div class="intro-desc">'+(e?'Answer a few simple questions to find out what may be causing your symptoms and how urgently you should visit us.':'いくつかの質問に答えるだけで、考えられる疾患名・病態と受診の緊急度をお伝えします。')+'</div><div class="intro-notes"><div class="intro-note"><span>&#9989;</span><span>'+(e?'Up to 3 quick steps':'質問は最大3ステップで完了します')+'</span></div><div class="intro-note"><span>&#9989;</span><span>'+(e?'See possible conditions, causes, and our treatment approach':'疾患名・原因・施術方針をカードで確認できます')+'</span></div><div class="intro-note"><span>&#9989;</span><span>'+(e?'Know how urgently you should visit':'受診の緊急度（今すぐ・1週間以内・余裕あり）をお伝えします')+'</span></div><div class="intro-note"><span>&#9888;&#65039;</span><span>'+(e?'For reference only. Diagnosis is performed by medical institutions.':'この絞り込みチェックは参考情報です。症状の特定・診断は医療機関にて行われます')+'</span></div></div><div class="intro-clinic"><div class="intro-clinic-name">&#127973; '+(e?CL.name_en:CL.name_ja)+'</div><div class="intro-clinic-row"><span>&#128205;</span><span>'+Tc(CL,'address')+'</span></div><div class="intro-clinic-row"><span>&#128336;</span><span>'+Tc(CL,'hours')+'</span></div><div class="intro-clinic-row"><span>&#128680;</span><span>'+(e?'Closed: '+CL.closed_en:'休診：'+CL.closed_ja)+'</span></div><div class="intro-clinic-row"><span>&#128697;</span><span>'+Tc(CL,'parking')+'</span></div></div><button class="start-btn" id="start-btn">&#128269; '+(e?'Start Symptom Check':'症状絞り込みチェックをはじめる')+'</button></div>';
+  document.getElementById('start-btn').addEventListener('click',function(){currentStep='start';pendingDiseases=[];render();});
+}
+
+function init(){breadcrumb=[];currentStep='__intro__';pendingDiseases=[];showIntro();window.scrollTo({top:0,behavior:'smooth'});}
+init();
+</script>
+</body>
+</html>
